@@ -393,7 +393,7 @@
         }
     </style>
 </head>
-<body data-theme="dark">
+<body data-theme="light">
     <div class="scanlines"></div>
 
     <header class="header">
@@ -411,7 +411,7 @@
                         <span>&#128279;</span> Link
                     </button>
                     <button class="btn-icon" id="themeToggle" onclick="toggleTheme()" title="Alternar Tema">
-                        &#9790;
+                        &#9788;
                     </button>
                 </div>
             </div>
@@ -579,7 +579,7 @@
 
         let currentPlatform = 'Todos';
         let filteredGames = [...games];
-        let currentSort = { field: 'nome', dir: 'asc' };
+        let currentSort = { field: 'status', dir: 'asc' };
 
         function init() {
             buildPlatformFilters();

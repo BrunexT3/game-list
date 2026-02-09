@@ -166,6 +166,7 @@
         .progress-segment.concluido { background: linear-gradient(135deg, #2e7d32, #43a047); }
         .progress-segment.nao-iniciada { background: linear-gradient(135deg, #455a64, #607d8b); }
         .progress-segment.cancelado { background: linear-gradient(135deg, #d32f2f, #e53935); }
+        .progress-segment.em-andamento { background: linear-gradient(135deg, #1565c0, #1e88e5); }
 
         /* Filters */
         .filters-section { max-width: 1600px; margin: 0 auto; padding: 1.5rem 2rem; }
@@ -267,9 +268,11 @@
         .status-concluido { background: rgba(46,125,50,0.12); color: #2e7d32; }
         .status-nao-iniciada { background: rgba(69,90,100,0.12); color: #455a64; }
         .status-cancelado { background: rgba(211,47,47,0.12); color: #d32f2f; }
+        .status-em-andamento { background: rgba(21,101,192,0.12); color: #1565c0; }
         [data-theme="dark"] .status-concluido { background: rgba(46,125,50,0.25); color: #66bb6a; }
         [data-theme="dark"] .status-nao-iniciada { background: rgba(69,90,100,0.25); color: #90a4ae; }
         [data-theme="dark"] .status-cancelado { background: rgba(211,47,47,0.25); color: #ef5350; }
+        [data-theme="dark"] .status-em-andamento { background: rgba(21,101,192,0.25); color: #42a5f5; }
 
         .cell-stars { white-space: nowrap; font-size: 0.85rem; letter-spacing: 1px; }
         .star-filled { color: var(--star-filled); }
@@ -476,6 +479,7 @@
                     <option value="Concluido">Concluido</option>
                     <option value="Nao iniciada">Nao Iniciada</option>
                     <option value="Cancelado">Cancelado</option>
+                    <option value="Em andamento">Em Andamento</option>
                 </select>
             </div>
             <div class="filter-group">
@@ -572,7 +576,8 @@
             { nome: "ARC Rider", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "" },
             { nome: "Days Gone Remastered", adquirido: true, avaliacao: 3, dataFinal: "05/02/2026", dataInicio: "01/02/2026", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Concluido", trofeus: "" },
             { nome: "Battlefield 6", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "" },
-            { nome: "Super Mario World", adquirido: true, avaliacao: 5, dataFinal: "31/01/2026", dataInicio: "19/01/2026", dificuldade: "Normal", plataforma: "Switch 2", release: 1991, status: "Concluido", trofeus: "" }
+            { nome: "Super Mario World", adquirido: true, avaliacao: 5, dataFinal: "31/01/2026", dataInicio: "19/01/2026", dificuldade: "Normal", plataforma: "Switch 2", release: 1991, status: "Concluido", trofeus: "" },
+            { nome: "Resident Evil 2 Remake", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "09/02/2026", dificuldade: "", plataforma: "PS5", release: 2019, status: "Em andamento", trofeus: "" }
         ];
 
         const platformColors = { 'PS4': '#003087', 'PS5': '#00439C', 'Switch 2': '#E60012' };
@@ -606,11 +611,13 @@
         function updateProgressBar() {
             const t = games.length;
             const c = games.filter(g => g.status === 'Concluido').length;
+            const a = games.filter(g => g.status === 'Em andamento').length;
             const n = games.filter(g => g.status === 'Nao iniciada').length;
             const x = games.filter(g => g.status === 'Cancelado').length;
             const bar = document.getElementById('progressBar');
             bar.innerHTML = `
                 <div class="progress-segment concluido" style="width:${(c/t*100).toFixed(1)}%">${c/t*100>8?c+' Concluidos':''}</div>
+                <div class="progress-segment em-andamento" style="width:${(a/t*100).toFixed(1)}%">${a/t*100>5?a+' Jogando':''}</div>
                 <div class="progress-segment nao-iniciada" style="width:${(n/t*100).toFixed(1)}%">${n/t*100>8?n+' Backlog':''}</div>
                 <div class="progress-segment cancelado" style="width:${(x/t*100).toFixed(1)}%">${x/t*100>5?x+' Canc.':''}</div>
             `;
@@ -661,7 +668,7 @@
                 return true;
             });
 
-            const statusOrder = { 'Concluido': 1, 'Cancelado': 2, 'Nao iniciada': 3 };
+            const statusOrder = { 'Concluido': 1, 'Em andamento': 2, 'Cancelado': 3, 'Nao iniciada': 4 };
             const dir = currentSort.dir === 'asc' ? 1 : -1;
 
             filteredGames.sort((a, b) => {
@@ -695,7 +702,10 @@
         }
 
         function getStatusClass(s) {
-            return s === 'Concluido' ? 'status-concluido' : s === 'Cancelado' ? 'status-cancelado' : 'status-nao-iniciada';
+            if (s === 'Concluido') return 'status-concluido';
+            if (s === 'Cancelado') return 'status-cancelado';
+            if (s === 'Em andamento') return 'status-em-andamento';
+            return 'status-nao-iniciada';
         }
 
         function getPlatformColor(p) { return platformColors[p] || '#533483'; }

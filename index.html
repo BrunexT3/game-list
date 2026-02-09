@@ -10,8 +10,6 @@
         :root {
             --bg-primary: #f0f2f5;
             --bg-secondary: #ffffff;
-            --bg-card: #ffffff;
-            --bg-card-hover: #f8f9fa;
             --bg-header: linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #533483 100%);
             --text-primary: #1a1a2e;
             --text-secondary: #4a5568;
@@ -20,8 +18,6 @@
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
             --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
-            --shadow-card: 0 2px 8px rgba(0,0,0,0.06);
-            --shadow-card-hover: 0 8px 25px rgba(0,0,0,0.12);
             --input-bg: #ffffff;
             --input-border: #cbd5e0;
             --filter-bg: #edf2f7;
@@ -35,15 +31,17 @@
             --tag-text: #4a5568;
             --scrollbar-track: #f1f1f1;
             --scrollbar-thumb: #c1c1c1;
-            --list-row-alt: #f7fafc;
+            --row-hover: #f1f5f9;
+            --row-alt: #f8fafc;
             --progress-bg: #e2e8f0;
+            --table-header-bg: #f8fafc;
+            --star-filled: #f59e0b;
+            --star-empty: #d1d5db;
         }
 
         [data-theme="dark"] {
             --bg-primary: #0a0a1a;
             --bg-secondary: #12122a;
-            --bg-card: #1a1a3e;
-            --bg-card-hover: #222255;
             --bg-header: linear-gradient(135deg, #0a0a1a 0%, #12122a 30%, #1a1a3e 60%, #2a1a4e 100%);
             --text-primary: #e2e8f0;
             --text-secondary: #a0aec0;
@@ -52,8 +50,6 @@
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
             --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
-            --shadow-card: 0 2px 8px rgba(0,0,0,0.3);
-            --shadow-card-hover: 0 8px 25px rgba(0,0,0,0.5);
             --input-bg: #1a1a3e;
             --input-border: #2d3748;
             --filter-bg: #1a1a3e;
@@ -67,8 +63,12 @@
             --tag-text: #a0aec0;
             --scrollbar-track: #1a1a2e;
             --scrollbar-thumb: #4a5568;
-            --list-row-alt: #15153a;
+            --row-hover: #1e1e4a;
+            --row-alt: #13132e;
             --progress-bg: #2d3748;
+            --table-header-bg: #151535;
+            --star-filled: #f59e0b;
+            --star-empty: #4a5568;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -81,7 +81,7 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
         ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
 
@@ -94,7 +94,7 @@
         /* Header */
         .header {
             background: var(--bg-header);
-            padding: 2rem 2rem 1rem;
+            padding: 2rem 2rem 1.5rem;
             position: relative; overflow: hidden;
         }
         .header::before {
@@ -105,7 +105,7 @@
         }
         @keyframes headerFloat { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-2%,2%); } }
 
-        .header-content { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; }
+        .header-content { position: relative; z-index: 2; max-width: 1600px; margin: 0 auto; }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
 
         .title-section h1 {
@@ -136,7 +136,7 @@
         .btn-action:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
 
         /* Stats */
-        .stats-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .stats-row { display: flex; gap: 1rem; flex-wrap: wrap; }
         .stat-card {
             background: var(--stat-bg); border: 1px solid rgba(255,255,255,0.1);
             border-radius: 10px; padding: 0.7rem 1.2rem; backdrop-filter: blur(5px);
@@ -146,7 +146,7 @@
         .stat-info .stat-number { font-family: 'Press Start 2P', cursive; font-size: 1rem; color: #ffffff; }
         .stat-info .stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
 
-        /* Progress bar in header */
+        /* Progress bar */
         .progress-container { margin-top: 1.5rem; }
         .progress-label {
             font-family: 'Press Start 2P', cursive; font-size: 0.55rem;
@@ -155,7 +155,7 @@
         .progress-bar-wrapper {
             height: 28px; border-radius: 10px; overflow: hidden;
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
-            display: flex; position: relative;
+            display: flex;
         }
         .progress-segment {
             height: 100%; display: flex; align-items: center; justify-content: center;
@@ -168,7 +168,7 @@
         .progress-segment.cancelado { background: linear-gradient(135deg, #d32f2f, #e53935); }
 
         /* Filters */
-        .filters-section { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; }
+        .filters-section { max-width: 1600px; margin: 0 auto; padding: 1.5rem 2rem; }
         .search-bar { position: relative; margin-bottom: 1rem; }
         .search-bar input {
             width: 100%; padding: 0.8rem 1rem 0.8rem 2.8rem;
@@ -210,88 +210,86 @@
         }
         .filter-select:focus { outline: none; border-color: #533483; box-shadow: 0 0 0 3px rgba(83,52,131,0.15); }
 
-        .sort-view-row { display: flex; justify-content: space-between; align-items: center; }
-        .view-toggles { display: flex; gap: 0.3rem; background: var(--filter-bg); border-radius: 8px; padding: 3px; }
-        .view-btn {
-            padding: 0.4rem 0.7rem; border: none; background: transparent;
-            color: var(--text-muted); border-radius: 6px; cursor: pointer;
-            font-size: 0.9rem; transition: all 0.2s ease;
+        /* Table */
+        .table-container {
+            max-width: 1600px; margin: 0 auto; padding: 0 2rem 2rem;
+            overflow-x: auto;
         }
-        .view-btn.active { background: var(--bg-card); color: var(--text-primary); box-shadow: var(--shadow-sm); }
-
-        /* Game Grid */
-        .games-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem 2rem; }
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.2rem; }
-        .games-grid.list-view { grid-template-columns: 1fr; gap: 0.5rem; }
-
-        /* Card */
-        .game-card {
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 1.2rem; cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4,0,0.2,1); box-shadow: var(--shadow-card);
-            position: relative; overflow: hidden;
-            opacity: 0; transform: translateY(20px); animation: fadeInUp 0.4s ease forwards;
+        .game-table {
+            width: 100%; border-collapse: separate; border-spacing: 0;
+            background: var(--bg-secondary); border-radius: 12px;
+            box-shadow: var(--shadow-md); overflow: hidden;
+            border: 1px solid var(--border-color);
         }
-        .game-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); border-color: transparent; }
-        .game-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: var(--platform-color, #533483); border-radius: 12px 12px 0 0;
-            opacity: 0; transition: opacity 0.3s ease;
+        .game-table thead { background: var(--table-header-bg); }
+        .game-table th {
+            padding: 0.75rem 1rem; text-align: left; font-size: 0.7rem;
+            font-weight: 700; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 1px; border-bottom: 2px solid var(--border-color);
+            cursor: pointer; user-select: none; white-space: nowrap;
+            transition: color 0.2s ease; position: relative;
         }
-        .game-card:hover::before { opacity: 1; }
+        .game-table th:hover { color: var(--text-primary); }
+        .game-table th.sorted { color: #533483; }
+        [data-theme="dark"] .game-table th.sorted { color: #ab47bc; }
+        .game-table th .sort-arrow {
+            display: inline-block; margin-left: 4px; font-size: 0.6rem;
+            opacity: 0; transition: opacity 0.2s;
+        }
+        .game-table th.sorted .sort-arrow { opacity: 1; }
 
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .game-table td {
+            padding: 0.65rem 1rem; border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem; color: var(--text-primary); vertical-align: middle;
+            transition: background 0.15s ease;
+        }
+        .game-table tbody tr { cursor: pointer; transition: background 0.15s ease; }
+        .game-table tbody tr:hover { background: var(--row-hover); }
+        .game-table tbody tr:nth-child(even) { background: var(--row-alt); }
+        .game-table tbody tr:nth-child(even):hover { background: var(--row-hover); }
+        .game-table tbody tr:last-child td { border-bottom: none; }
 
-        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; gap: 0.5rem; }
-        .game-name { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-primary); line-height: 1.3; flex: 1; }
+        /* Table cell styles */
+        .cell-name { font-weight: 600; white-space: nowrap; }
+        .cell-platform {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 0.78rem; font-weight: 600; white-space: nowrap;
+        }
+        .platform-dot {
+            width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0;
+        }
 
         .status-badge {
-            padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.65rem;
+            padding: 0.2rem 0.55rem; border-radius: 12px; font-size: 0.65rem;
             font-weight: 600; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.5px;
+            display: inline-block;
         }
         .status-concluido { background: rgba(46,125,50,0.12); color: #2e7d32; }
         .status-nao-iniciada { background: rgba(69,90,100,0.12); color: #455a64; }
         .status-cancelado { background: rgba(211,47,47,0.12); color: #d32f2f; }
-
         [data-theme="dark"] .status-concluido { background: rgba(46,125,50,0.25); color: #66bb6a; }
         [data-theme="dark"] .status-nao-iniciada { background: rgba(69,90,100,0.25); color: #90a4ae; }
         [data-theme="dark"] .status-cancelado { background: rgba(211,47,47,0.25); color: #ef5350; }
 
-        .platform-badge {
-            display: inline-flex; align-items: center; padding: 0.2rem 0.6rem;
-            border-radius: 6px; font-size: 0.7rem; font-weight: 600; color: #fff; margin-bottom: 0.6rem;
-        }
+        .cell-stars { white-space: nowrap; font-size: 0.85rem; letter-spacing: 1px; }
+        .star-filled { color: var(--star-filled); }
+        .star-empty { color: var(--star-empty); }
+        .cell-no-rating { color: var(--text-muted); font-size: 0.75rem; }
 
-        .card-details { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
-        .detail-tag {
-            background: var(--tag-bg); color: var(--tag-text); padding: 0.2rem 0.5rem;
-            border-radius: 6px; font-size: 0.7rem; display: flex; align-items: center; gap: 0.3rem;
-        }
+        .cell-date { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap; }
+        .cell-difficulty { font-size: 0.78rem; color: var(--text-secondary); }
+        .cell-release { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
 
-        .card-rating { font-size: 0.85rem; margin-bottom: 0.4rem; letter-spacing: 1px; }
-
-        .card-trophies {
-            font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem;
-            padding-top: 0.5rem; border-top: 1px solid var(--border-color);
-            display: flex; align-items: center; gap: 0.5rem;
+        .cell-trophies { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .trophy-mini-bar {
+            width: 50px; height: 5px; background: var(--progress-bg);
+            border-radius: 3px; overflow: hidden; flex-shrink: 0;
         }
-        .trophy-bar {
-            flex: 1; height: 5px; background: var(--progress-bg); border-radius: 3px; overflow: hidden;
-        }
-        .trophy-fill {
+        .trophy-mini-fill {
             height: 100%; border-radius: 3px;
             background: linear-gradient(90deg, #f57c00, #ffc107);
-            transition: width 0.5s ease;
         }
-
-        /* List View */
-        .games-grid.list-view .game-card { border-radius: 8px; padding: 0.8rem 1.2rem; }
-        .games-grid.list-view .game-card:nth-child(even) { background: var(--list-row-alt); }
-        .games-grid.list-view .card-content { display: flex; align-items: center; gap: 1rem; }
-        .games-grid.list-view .card-header { margin-bottom: 0; flex: 1; min-width: 200px; }
-        .games-grid.list-view .card-details { margin-bottom: 0; flex: 1; }
-        .games-grid.list-view .card-trophies { display: none; }
-        .games-grid.list-view .platform-badge { margin-bottom: 0; }
+        .trophy-text { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); }
 
         /* No Results */
         .no-results { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
@@ -307,7 +305,7 @@
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal {
-            background: var(--modal-bg); border-radius: 16px; max-width: 650px; width: 100%;
+            background: var(--modal-bg); border-radius: 16px; max-width: 600px; width: 100%;
             max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-lg);
             transform: scale(0.9) translateY(20px); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
             border: 1px solid var(--border-color);
@@ -324,37 +322,37 @@
         }
         .modal-close:hover { background: var(--border-color); color: var(--text-primary); }
         .modal-title {
-            font-family: 'Inter', sans-serif; font-size: 1.4rem; font-weight: 700;
+            font-family: 'Inter', sans-serif; font-size: 1.3rem; font-weight: 700;
             color: var(--text-primary); padding-right: 2rem; margin-top: 0.5rem;
         }
 
         .modal-body { padding: 1.5rem; }
-        .modal-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.2rem; }
-        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-        .modal-field { display: flex; flex-direction: column; gap: 0.2rem; }
-        .modal-field-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .modal-field-value { font-size: 0.95rem; color: var(--text-primary); font-weight: 500; }
-
-        .modal-section { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border-color); }
-        .modal-section-title { font-family: 'Press Start 2P', cursive; font-size: 0.6rem; color: var(--text-muted); margin-bottom: 0.7rem; letter-spacing: 1px; }
-
-        .modal-trophy-bar {
-            display: flex; align-items: center; gap: 0.8rem; margin-top: 1.2rem;
-            padding: 1rem; background: var(--filter-bg); border-radius: 10px;
+        .modal-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+        .modal-platform-badge {
+            display: inline-flex; align-items: center; padding: 0.25rem 0.7rem;
+            border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #fff;
         }
-        .modal-trophy-value { font-family: 'Press Start 2P', cursive; font-size: 0.9rem; color: #f57c00; }
-        [data-theme="dark"] .modal-trophy-value { color: #ffc107; }
-        .modal-trophy-label { font-size: 0.75rem; color: var(--text-muted); }
-        .modal-trophy-bar-inner { flex: 1; height: 8px; background: var(--progress-bg); border-radius: 4px; overflow: hidden; }
-        .modal-trophy-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #f57c00, #ffc107); transition: width 0.5s ease; }
+        .modal-rating { font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 1rem; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+        .modal-field { padding: 0.6rem; background: var(--filter-bg); border-radius: 8px; }
+        .modal-field-label { font-size: 0.65rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .modal-field-value { font-size: 0.9rem; color: var(--text-primary); font-weight: 500; margin-top: 2px; }
 
-        .modal-rating { font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 0.5rem; }
+        .modal-trophy-section {
+            margin-top: 1rem; padding: 0.8rem; background: var(--filter-bg);
+            border-radius: 8px; display: flex; align-items: center; gap: 0.8rem;
+        }
+        .modal-trophy-value { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; color: #f57c00; }
+        [data-theme="dark"] .modal-trophy-value { color: #ffc107; }
+        .modal-trophy-label { font-size: 0.72rem; color: var(--text-muted); }
+        .modal-trophy-bar { flex: 1; height: 8px; background: var(--progress-bg); border-radius: 4px; overflow: hidden; }
+        .modal-trophy-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #f57c00, #ffc107); }
 
         /* Footer */
         .footer {
             text-align: center; padding: 2rem; color: var(--text-muted);
             font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
-            border-top: 1px solid var(--border-color); max-width: 1400px; margin: 2rem auto 0;
+            border-top: 1px solid var(--border-color); max-width: 1600px; margin: 2rem auto 0;
         }
         .footer-text { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .footer-pixel {
@@ -380,13 +378,12 @@
             .stats-row { flex-wrap: wrap; }
             .stat-card { min-width: 120px; flex: 1; }
             .filters-section { padding: 1rem; }
-            .games-container { padding: 0 1rem 2rem; }
-            .games-grid { grid-template-columns: 1fr; }
+            .table-container { padding: 0 1rem 2rem; }
             .filters-row { flex-direction: column; align-items: stretch; }
             .modal { max-height: 95vh; border-radius: 12px; }
             .modal-overlay { padding: 1rem; }
             .modal-grid { grid-template-columns: 1fr; }
-            .sort-view-row { flex-direction: column; gap: 0.5rem; align-items: stretch; }
+            .game-table th, .game-table td { padding: 0.5rem 0.6rem; font-size: 0.75rem; }
         }
         @media (max-width: 480px) {
             .title-section h1 { font-size: 0.8rem; }
@@ -424,7 +421,7 @@
                     <div class="stat-icon">&#127918;</div>
                     <div class="stat-info">
                         <div class="stat-number" id="totalGames">0</div>
-                        <div class="stat-label">Total de Jogos</div>
+                        <div class="stat-label">Total</div>
                     </div>
                 </div>
                 <div class="stat-card">
@@ -490,31 +487,26 @@
                     <option value="3">3 Estrelas</option>
                 </select>
             </div>
-            <div class="filter-group">
-                <span class="filter-label">Ordenar</span>
-                <select class="filter-select" id="sortFilter" onchange="applyFilters()">
-                    <option value="nome-az" selected>Nome A-Z</option>
-                    <option value="nome-za">Nome Z-A</option>
-                    <option value="status">Status</option>
-                    <option value="rating-desc">Avaliacao (maior)</option>
-                    <option value="rating-asc">Avaliacao (menor)</option>
-                    <option value="release">Ano Lancamento</option>
-                    <option value="plataforma">Plataforma</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="sort-view-row">
-            <div></div>
-            <div class="view-toggles">
-                <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Grade">&#9638;</button>
-                <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="Lista">&#9776;</button>
-            </div>
         </div>
     </section>
 
-    <main class="games-container">
-        <div class="games-grid" id="gamesGrid"></div>
+    <main class="table-container">
+        <table class="game-table" id="gameTable">
+            <thead>
+                <tr>
+                    <th data-sort="nome" onclick="sortBy('nome')">Nome <span class="sort-arrow"></span></th>
+                    <th data-sort="plataforma" onclick="sortBy('plataforma')">Plataforma <span class="sort-arrow"></span></th>
+                    <th data-sort="status" onclick="sortBy('status')">Status <span class="sort-arrow"></span></th>
+                    <th data-sort="avaliacao" onclick="sortBy('avaliacao')">Avaliacao <span class="sort-arrow"></span></th>
+                    <th data-sort="release" onclick="sortBy('release')">Release <span class="sort-arrow"></span></th>
+                    <th data-sort="dificuldade" onclick="sortBy('dificuldade')">Dificuldade <span class="sort-arrow"></span></th>
+                    <th data-sort="dataInicio" onclick="sortBy('dataInicio')">Inicio <span class="sort-arrow"></span></th>
+                    <th data-sort="dataFinal" onclick="sortBy('dataFinal')">Final <span class="sort-arrow"></span></th>
+                    <th>Trofeus</th>
+                </tr>
+            </thead>
+            <tbody id="gameTableBody"></tbody>
+        </table>
         <div class="no-results" id="noResults" style="display: none;">
             <div class="no-results-icon">&#127918;</div>
             <h3>Nenhum jogo encontrado</h3>
@@ -583,15 +575,11 @@
             { nome: "Super Mario World", adquirido: true, avaliacao: 5, dataFinal: "31/01/2026", dataInicio: "19/01/2026", dificuldade: "Normal", plataforma: "Switch 2", release: 1991, status: "Concluido", trofeus: "" }
         ];
 
-        const platformColors = {
-            'PS4': '#003087',
-            'PS5': '#00439C',
-            'Switch 2': '#E60012'
-        };
+        const platformColors = { 'PS4': '#003087', 'PS5': '#00439C', 'Switch 2': '#E60012' };
 
         let currentPlatform = 'Todos';
-        let currentView = 'grid';
         let filteredGames = [...games];
+        let currentSort = { field: 'nome', dir: 'asc' };
 
         function init() {
             buildPlatformFilters();
@@ -602,53 +590,36 @@
 
         function buildPlatformFilters() {
             const container = document.getElementById('platformFilters');
-            const usedPlatforms = [...new Set(games.map(g => g.plataforma))].sort();
-            const allPlatforms = ['Todos', ...usedPlatforms];
-            container.innerHTML = allPlatforms.map(p => {
-                const isActive = p === 'Todos' ? 'active' : '';
-                return `<button class="platform-btn ${isActive}" data-platform="${p}" onclick="setPlatform(this, '${p}')">${p}</button>`;
-            }).join('');
+            const used = [...new Set(games.map(g => g.plataforma))].sort();
+            container.innerHTML = ['Todos', ...used].map(p =>
+                `<button class="platform-btn ${p === 'Todos' ? 'active' : ''}" onclick="setPlatform(this, '${p}')">${p}</button>`
+            ).join('');
         }
 
         function updateStats() {
-            const total = games.length;
-            const concluidos = games.filter(g => g.status === 'Concluido').length;
-            const pendentes = games.filter(g => g.status === 'Nao iniciada').length;
-            const platforms = new Set(games.map(g => g.plataforma)).size;
-
-            animateNumber('totalGames', total);
-            animateNumber('concluidos', concluidos);
-            animateNumber('pendentes', pendentes);
-            animateNumber('totalPlatforms', platforms);
+            animateNumber('totalGames', games.length);
+            animateNumber('concluidos', games.filter(g => g.status === 'Concluido').length);
+            animateNumber('pendentes', games.filter(g => g.status === 'Nao iniciada').length);
+            animateNumber('totalPlatforms', new Set(games.map(g => g.plataforma)).size);
         }
 
         function updateProgressBar() {
-            const total = games.length;
-            const concluidos = games.filter(g => g.status === 'Concluido').length;
-            const cancelados = games.filter(g => g.status === 'Cancelado').length;
-            const naoIniciados = games.filter(g => g.status === 'Nao iniciada').length;
-
-            const pctConcluido = ((concluidos / total) * 100).toFixed(1);
-            const pctNaoIniciado = ((naoIniciados / total) * 100).toFixed(1);
-            const pctCancelado = ((cancelados / total) * 100).toFixed(1);
-
+            const t = games.length;
+            const c = games.filter(g => g.status === 'Concluido').length;
+            const n = games.filter(g => g.status === 'Nao iniciada').length;
+            const x = games.filter(g => g.status === 'Cancelado').length;
             const bar = document.getElementById('progressBar');
             bar.innerHTML = `
-                <div class="progress-segment concluido" style="width: ${pctConcluido}%">${pctConcluido > 8 ? concluidos + ' Concluidos' : ''}</div>
-                <div class="progress-segment nao-iniciada" style="width: ${pctNaoIniciado}%">${pctNaoIniciado > 8 ? naoIniciados + ' Backlog' : ''}</div>
-                <div class="progress-segment cancelado" style="width: ${pctCancelado}%">${pctCancelado > 5 ? cancelados + ' Canc.' : ''}</div>
+                <div class="progress-segment concluido" style="width:${(c/t*100).toFixed(1)}%">${c/t*100>8?c+' Concluidos':''}</div>
+                <div class="progress-segment nao-iniciada" style="width:${(n/t*100).toFixed(1)}%">${n/t*100>8?n+' Backlog':''}</div>
+                <div class="progress-segment cancelado" style="width:${(x/t*100).toFixed(1)}%">${x/t*100>5?x+' Canc.':''}</div>
             `;
         }
 
         function animateNumber(id, target) {
             const el = document.getElementById(id);
-            let current = 0;
-            const step = Math.ceil(target / 30);
-            const interval = setInterval(() => {
-                current += step;
-                if (current >= target) { current = target; clearInterval(interval); }
-                el.textContent = current;
-            }, 30);
+            let cur = 0; const step = Math.ceil(target / 30);
+            const iv = setInterval(() => { cur += step; if (cur >= target) { cur = target; clearInterval(iv); } el.textContent = cur; }, 30);
         }
 
         function setPlatform(btn, platform) {
@@ -658,126 +629,120 @@
             applyFilters();
         }
 
+        function parseDate(d) {
+            if (!d) return 0;
+            const [dd, mm, yyyy] = d.split('/');
+            return new Date(yyyy, mm - 1, dd).getTime();
+        }
+
+        function sortBy(field) {
+            if (currentSort.field === field) {
+                currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.field = field;
+                currentSort.dir = 'asc';
+            }
+            applyFilters();
+        }
+
         function applyFilters() {
             const search = document.getElementById('searchInput').value.toLowerCase().trim();
             const status = document.getElementById('statusFilter').value;
             const rating = document.getElementById('ratingFilter').value;
-            const sort = document.getElementById('sortFilter').value;
 
             filteredGames = games.filter(game => {
                 if (currentPlatform !== 'Todos' && game.plataforma !== currentPlatform) return false;
                 if (status && game.status !== status) return false;
                 if (rating && game.avaliacao !== parseInt(rating)) return false;
                 if (search) {
-                    const searchStr = `${game.nome} ${game.plataforma} ${game.dificuldade} ${game.status}`.toLowerCase();
-                    if (!searchStr.includes(search)) return false;
+                    const s = `${game.nome} ${game.plataforma} ${game.dificuldade} ${game.status}`.toLowerCase();
+                    if (!s.includes(search)) return false;
                 }
                 return true;
             });
 
             const statusOrder = { 'Concluido': 1, 'Cancelado': 2, 'Nao iniciada': 3 };
+            const dir = currentSort.dir === 'asc' ? 1 : -1;
 
-            switch (sort) {
-                case 'nome-az': filteredGames.sort((a, b) => a.nome.localeCompare(b.nome)); break;
-                case 'nome-za': filteredGames.sort((a, b) => b.nome.localeCompare(a.nome)); break;
-                case 'status': filteredGames.sort((a, b) => (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99)); break;
-                case 'rating-desc': filteredGames.sort((a, b) => b.avaliacao - a.avaliacao); break;
-                case 'rating-asc': filteredGames.sort((a, b) => a.avaliacao - b.avaliacao); break;
-                case 'release': filteredGames.sort((a, b) => (a.release || 9999) - (b.release || 9999)); break;
-                case 'plataforma': filteredGames.sort((a, b) => a.plataforma.localeCompare(b.plataforma)); break;
+            filteredGames.sort((a, b) => {
+                let va, vb;
+                switch (currentSort.field) {
+                    case 'nome': return dir * a.nome.localeCompare(b.nome);
+                    case 'plataforma': return dir * a.plataforma.localeCompare(b.plataforma);
+                    case 'status': return dir * ((statusOrder[a.status]||99) - (statusOrder[b.status]||99));
+                    case 'avaliacao': return dir * (a.avaliacao - b.avaliacao);
+                    case 'release': return dir * ((a.release||9999) - (b.release||9999));
+                    case 'dificuldade': return dir * (a.dificuldade||'').localeCompare(b.dificuldade||'');
+                    case 'dataInicio': return dir * (parseDate(a.dataInicio) - parseDate(b.dataInicio));
+                    case 'dataFinal': return dir * (parseDate(a.dataFinal) - parseDate(b.dataFinal));
+                    default: return 0;
+                }
+            });
+
+            // Update sort arrows
+            document.querySelectorAll('.game-table th').forEach(th => {
+                th.classList.remove('sorted');
+                th.querySelector('.sort-arrow') && (th.querySelector('.sort-arrow').textContent = '');
+            });
+            const sortedTh = document.querySelector(`th[data-sort="${currentSort.field}"]`);
+            if (sortedTh) {
+                sortedTh.classList.add('sorted');
+                sortedTh.querySelector('.sort-arrow').textContent = currentSort.dir === 'asc' ? ' ▲' : ' ▼';
             }
 
-            renderGames();
+            renderTable();
             document.getElementById('searchCount').textContent = `${filteredGames.length} de ${games.length}`;
         }
 
-        function getStatusClass(status) {
-            switch (status) {
-                case 'Concluido': return 'status-concluido';
-                case 'Nao iniciada': return 'status-nao-iniciada';
-                case 'Cancelado': return 'status-cancelado';
-                default: return 'status-nao-iniciada';
-            }
+        function getStatusClass(s) {
+            return s === 'Concluido' ? 'status-concluido' : s === 'Cancelado' ? 'status-cancelado' : 'status-nao-iniciada';
         }
 
-        function getPlatformColor(platform) {
-            return platformColors[platform] || '#533483';
-        }
+        function getPlatformColor(p) { return platformColors[p] || '#533483'; }
 
         function renderStars(count) {
-            if (!count) return '<span style="color: var(--text-muted); font-size: 0.75rem;">Sem avaliacao</span>';
-            let stars = '';
-            for (let i = 0; i < 5; i++) {
-                stars += i < count ? '&#9733;' : '&#9734;';
-            }
-            return stars;
+            if (!count) return '<span class="cell-no-rating">--</span>';
+            let s = '';
+            for (let i = 0; i < 5; i++) s += `<span class="${i < count ? 'star-filled' : 'star-empty'}">&#9733;</span>`;
+            return s;
         }
 
-        function parseTrophyPercent(trofeus) {
-            if (!trofeus) return 0;
-            const match = trofeus.match(/(\d+)%/);
-            return match ? parseInt(match[1]) : 0;
+        function parseTrophyPercent(t) {
+            if (!t) return 0;
+            const m = t.match(/(\d+)%/);
+            return m ? parseInt(m[1]) : 0;
         }
 
-        function renderGames() {
-            const grid = document.getElementById('gamesGrid');
+        function renderTable() {
+            const tbody = document.getElementById('gameTableBody');
             const noResults = document.getElementById('noResults');
 
             if (filteredGames.length === 0) {
-                grid.innerHTML = '';
+                tbody.innerHTML = '';
                 noResults.style.display = 'block';
                 return;
             }
             noResults.style.display = 'none';
 
-            grid.innerHTML = filteredGames.map((game, index) => {
+            tbody.innerHTML = filteredGames.map(game => {
                 const color = getPlatformColor(game.plataforma);
-                const statusClass = getStatusClass(game.status);
-                const delay = Math.min(index * 40, 800);
-                const trophyPct = parseTrophyPercent(game.trofeus);
+                const tPct = parseTrophyPercent(game.trofeus);
+                const trophyHtml = game.trofeus
+                    ? `<div class="cell-trophies"><div class="trophy-mini-bar"><div class="trophy-mini-fill" style="width:${tPct}%"></div></div><span class="trophy-text">${game.trofeus}</span></div>`
+                    : '<span style="color:var(--text-muted)">--</span>';
 
-                let detailTags = '';
-                if (game.release) detailTags += `<span class="detail-tag">&#128197; ${game.release}</span>`;
-                if (game.dificuldade) detailTags += `<span class="detail-tag">&#9876; ${game.dificuldade}</span>`;
-                if (game.dataInicio) detailTags += `<span class="detail-tag">&#9654; ${game.dataInicio}</span>`;
-                if (game.dataFinal) detailTags += `<span class="detail-tag">&#9632; ${game.dataFinal}</span>`;
-
-                let trophyHtml = '';
-                if (game.trofeus) {
-                    trophyHtml = `
-                        <div class="card-trophies">
-                            <span>&#127942; ${game.trofeus}</span>
-                            <div class="trophy-bar"><div class="trophy-fill" style="width: ${trophyPct}%"></div></div>
-                        </div>`;
-                }
-
-                return `
-                    <div class="game-card" style="--platform-color: ${color}; animation-delay: ${delay}ms;" onclick="openModal(${games.indexOf(game)})">
-                        <div class="card-header">
-                            <div class="game-name">${game.nome}</div>
-                            <span class="status-badge ${statusClass}">${game.status}</span>
-                        </div>
-                        <span class="platform-badge" style="background: ${color};">${game.plataforma}</span>
-                        <div class="card-rating">${renderStars(game.avaliacao)}</div>
-                        <div class="card-details">${detailTags}</div>
-                        ${trophyHtml}
-                    </div>
-                `;
+                return `<tr onclick="openModal(${games.indexOf(game)})">
+                    <td class="cell-name">${game.nome}</td>
+                    <td><span class="cell-platform"><span class="platform-dot" style="background:${color}"></span>${game.plataforma}</span></td>
+                    <td><span class="status-badge ${getStatusClass(game.status)}">${game.status}</span></td>
+                    <td class="cell-stars">${renderStars(game.avaliacao)}</td>
+                    <td class="cell-release">${game.release || '--'}</td>
+                    <td class="cell-difficulty">${game.dificuldade || '--'}</td>
+                    <td class="cell-date">${game.dataInicio || '--'}</td>
+                    <td class="cell-date">${game.dataFinal || '--'}</td>
+                    <td>${trophyHtml}</td>
+                </tr>`;
             }).join('');
-        }
-
-        function setView(view) {
-            currentView = view;
-            const grid = document.getElementById('gamesGrid');
-            if (view === 'list') {
-                grid.classList.add('list-view');
-                document.getElementById('listViewBtn').classList.add('active');
-                document.getElementById('gridViewBtn').classList.remove('active');
-            } else {
-                grid.classList.remove('list-view');
-                document.getElementById('gridViewBtn').classList.add('active');
-                document.getElementById('listViewBtn').classList.remove('active');
-            }
         }
 
         function toggleTheme() {
@@ -795,59 +760,30 @@
         function openModal(index) {
             const game = games[index];
             const color = getPlatformColor(game.plataforma);
-            const statusClass = getStatusClass(game.status);
-            const trophyPct = parseTrophyPercent(game.trofeus);
+            const tPct = parseTrophyPercent(game.trofeus);
 
             document.getElementById('modalTitle').textContent = game.nome;
             document.getElementById('modalPlatformBar').style.background = color;
 
-            const body = document.getElementById('modalBody');
-            body.innerHTML = `
+            document.getElementById('modalBody').innerHTML = `
                 <div class="modal-badges">
-                    <span class="platform-badge" style="background: ${color};">${game.plataforma}</span>
-                    <span class="status-badge ${statusClass}">${game.status}</span>
+                    <span class="modal-platform-badge" style="background:${color};">${game.plataforma}</span>
+                    <span class="status-badge ${getStatusClass(game.status)}">${game.status}</span>
                 </div>
-
                 <div class="modal-rating">${renderStars(game.avaliacao)}</div>
-
                 <div class="modal-grid">
-                    <div class="modal-field">
-                        <span class="modal-field-label">Ano Lancamento</span>
-                        <span class="modal-field-value">${game.release || 'N/A'}</span>
-                    </div>
-                    <div class="modal-field">
-                        <span class="modal-field-label">Dificuldade</span>
-                        <span class="modal-field-value">${game.dificuldade || 'N/A'}</span>
-                    </div>
-                    <div class="modal-field">
-                        <span class="modal-field-label">Data Inicio</span>
-                        <span class="modal-field-value">${game.dataInicio || 'N/A'}</span>
-                    </div>
-                    <div class="modal-field">
-                        <span class="modal-field-label">Data Final</span>
-                        <span class="modal-field-value">${game.dataFinal || 'N/A'}</span>
-                    </div>
-                    <div class="modal-field">
-                        <span class="modal-field-label">Adquirido</span>
-                        <span class="modal-field-value">${game.adquirido ? 'Sim' : 'Nao'}</span>
-                    </div>
-                    <div class="modal-field">
-                        <span class="modal-field-label">Plataforma</span>
-                        <span class="modal-field-value">${game.plataforma}</span>
-                    </div>
+                    <div class="modal-field"><span class="modal-field-label">Release</span><span class="modal-field-value">${game.release || 'N/A'}</span></div>
+                    <div class="modal-field"><span class="modal-field-label">Dificuldade</span><span class="modal-field-value">${game.dificuldade || 'N/A'}</span></div>
+                    <div class="modal-field"><span class="modal-field-label">Inicio</span><span class="modal-field-value">${game.dataInicio || 'N/A'}</span></div>
+                    <div class="modal-field"><span class="modal-field-label">Final</span><span class="modal-field-value">${game.dataFinal || 'N/A'}</span></div>
+                    <div class="modal-field"><span class="modal-field-label">Adquirido</span><span class="modal-field-value">${game.adquirido ? 'Sim' : 'Nao'}</span></div>
+                    <div class="modal-field"><span class="modal-field-label">Plataforma</span><span class="modal-field-value">${game.plataforma}</span></div>
                 </div>
-
                 ${game.trofeus ? `
-                <div class="modal-trophy-bar">
-                    <div>
-                        <div class="modal-trophy-value">${trophyPct}%</div>
-                        <div class="modal-trophy-label">Trofeus: ${game.trofeus}</div>
-                    </div>
-                    <div class="modal-trophy-bar-inner">
-                        <div class="modal-trophy-fill" style="width: ${trophyPct}%"></div>
-                    </div>
-                </div>
-                ` : ''}
+                <div class="modal-trophy-section">
+                    <div><div class="modal-trophy-value">${tPct}%</div><div class="modal-trophy-label">${game.trofeus}</div></div>
+                    <div class="modal-trophy-bar"><div class="modal-trophy-fill" style="width:${tPct}%"></div></div>
+                </div>` : ''}
             `;
 
             document.getElementById('modalOverlay').classList.add('active');
@@ -860,43 +796,36 @@
             document.body.style.overflow = '';
         }
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal({ target: document.getElementById('modalOverlay') });
-        });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal({ target: document.getElementById('modalOverlay') }); });
 
         function exportCSV() {
-            const headers = ['Nome', 'Adquirido', 'Avaliacao', 'Data Final', 'Data Inicio', 'Dificuldade', 'Plataforma', 'Release', 'Status', 'Trofeus'];
-            const rows = filteredGames.map(g => [
-                `"${g.nome}"`, g.adquirido ? 'Sim' : 'Nao', g.avaliacao || '',
+            const h = ['Nome','Adquirido','Avaliacao','Data Final','Data Inicio','Dificuldade','Plataforma','Release','Status','Trofeus'];
+            const r = filteredGames.map(g => [
+                `"${g.nome}"`, g.adquirido?'Sim':'Nao', g.avaliacao||'',
                 `"${g.dataFinal}"`, `"${g.dataInicio}"`, `"${g.dificuldade}"`,
-                `"${g.plataforma}"`, g.release || '', `"${g.status}"`, `"${g.trofeus}"`
+                `"${g.plataforma}"`, g.release||'', `"${g.status}"`, `"${g.trofeus}"`
             ]);
-            const csv = [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
-            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const csv = [h.join(';'), ...r.map(x => x.join(';'))].join('\n');
+            const blob = new Blob(['\uFEFF'+csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url; a.download = `game-list-${new Date().toISOString().slice(0,10)}.csv`;
             a.click(); URL.revokeObjectURL(url);
-            showToast('CSV exportado com sucesso!');
+            showToast('CSV exportado!');
         }
 
         function copyLink() {
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                showToast('Link copiado!');
-            }).catch(() => {
-                const input = document.createElement('input');
-                input.value = window.location.href;
-                document.body.appendChild(input); input.select();
-                document.execCommand('copy'); document.body.removeChild(input);
+            navigator.clipboard.writeText(window.location.href).then(() => showToast('Link copiado!')).catch(() => {
+                const i = document.createElement('input'); i.value = window.location.href;
+                document.body.appendChild(i); i.select(); document.execCommand('copy'); document.body.removeChild(i);
                 showToast('Link copiado!');
             });
         }
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
         }
 
         document.addEventListener('DOMContentLoaded', init);

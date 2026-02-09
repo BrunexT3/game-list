@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game List - Minha Colecao</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f0f2f5;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8f9fa;
+            --bg-header: linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #0f3460 60%, #533483 100%);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
+            --shadow-card: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-card-hover: 0 8px 25px rgba(0,0,0,0.12);
+            --input-bg: #ffffff;
+            --input-border: #cbd5e0;
+            --filter-bg: #edf2f7;
+            --filter-active: #1a1a2e;
+            --filter-active-text: #ffffff;
+            --modal-bg: #ffffff;
+            --modal-overlay: rgba(0,0,0,0.5);
+            --scanline-opacity: 0.02;
+            --stat-bg: rgba(255,255,255,0.15);
+            --tag-bg: #edf2f7;
+            --tag-text: #4a5568;
+            --scrollbar-track: #f1f1f1;
+            --scrollbar-thumb: #c1c1c1;
+            --list-row-alt: #f7fafc;
+            --progress-bg: #e2e8f0;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #12122a;
+            --bg-card: #1a1a3e;
+            --bg-card-hover: #222255;
+            --bg-header: linear-gradient(135deg, #0a0a1a 0%, #12122a 30%, #1a1a3e 60%, #2a1a4e 100%);
+            --text-primary: #e2e8f0;
+            --text-secondary: #a0aec0;
+            --text-muted: #718096;
+            --border-color: #2d3748;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.5);
+            --shadow-card: 0 2px 8px rgba(0,0,0,0.3);
+            --shadow-card-hover: 0 8px 25px rgba(0,0,0,0.5);
+            --input-bg: #1a1a3e;
+            --input-border: #2d3748;
+            --filter-bg: #1a1a3e;
+            --filter-active: #533483;
+            --filter-active-text: #ffffff;
+            --modal-bg: #12122a;
+            --modal-overlay: rgba(0,0,0,0.7);
+            --scanline-opacity: 0.04;
+            --stat-bg: rgba(255,255,255,0.08);
+            --tag-bg: #2d3748;
+            --tag-text: #a0aec0;
+            --scrollbar-track: #1a1a2e;
+            --scrollbar-thumb: #4a5568;
+            --list-row-alt: #15153a;
+            --progress-bg: #2d3748;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,var(--scanline-opacity)) 2px, rgba(0,0,0,var(--scanline-opacity)) 4px);
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-header);
+            padding: 2rem 2rem 1rem;
+            position: relative; overflow: hidden;
+        }
+        .header::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(83,52,131,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(15,52,96,0.15) 0%, transparent 50%);
+            animation: headerFloat 15s ease-in-out infinite;
+        }
+        @keyframes headerFloat { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-2%,2%); } }
+
+        .header-content { position: relative; z-index: 2; max-width: 1400px; margin: 0 auto; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+
+        .title-section h1 {
+            font-family: 'Press Start 2P', cursive; font-size: 1.5rem; color: #ffffff;
+            text-shadow: 0 0 20px rgba(83,52,131,0.5), 2px 2px 0 rgba(0,0,0,0.3);
+            margin-bottom: 0.5rem; line-height: 1.6;
+        }
+        .title-section .subtitle {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            color: rgba(255,255,255,0.6); letter-spacing: 2px;
+        }
+
+        .header-actions { display: flex; gap: 0.5rem; align-items: center; }
+        .btn-icon {
+            width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; transition: all 0.2s ease; backdrop-filter: blur(5px);
+        }
+        .btn-icon:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
+        .btn-action {
+            padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1); color: #fff; border-radius: 8px;
+            cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.8rem;
+            font-weight: 500; transition: all 0.2s ease; backdrop-filter: blur(5px);
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .btn-action:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
+
+        /* Stats */
+        .stats-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .stat-card {
+            background: var(--stat-bg); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px; padding: 0.7rem 1.2rem; backdrop-filter: blur(5px);
+            display: flex; align-items: center; gap: 0.7rem; min-width: 140px;
+        }
+        .stat-icon { font-size: 1.4rem; }
+        .stat-info .stat-number { font-family: 'Press Start 2P', cursive; font-size: 1rem; color: #ffffff; }
+        .stat-info .stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+        /* Progress bar in header */
+        .progress-container { margin-top: 1.5rem; }
+        .progress-label {
+            font-family: 'Press Start 2P', cursive; font-size: 0.55rem;
+            color: rgba(255,255,255,0.5); margin-bottom: 0.6rem; letter-spacing: 2px;
+        }
+        .progress-bar-wrapper {
+            height: 28px; border-radius: 10px; overflow: hidden;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
+            display: flex; position: relative;
+        }
+        .progress-segment {
+            height: 100%; display: flex; align-items: center; justify-content: center;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); transition: width 0.5s ease;
+            white-space: nowrap; overflow: hidden; min-width: 0;
+        }
+        .progress-segment.concluido { background: linear-gradient(135deg, #2e7d32, #43a047); }
+        .progress-segment.nao-iniciada { background: linear-gradient(135deg, #455a64, #607d8b); }
+        .progress-segment.cancelado { background: linear-gradient(135deg, #d32f2f, #e53935); }
+
+        /* Filters */
+        .filters-section { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; }
+        .search-bar { position: relative; margin-bottom: 1rem; }
+        .search-bar input {
+            width: 100%; padding: 0.8rem 1rem 0.8rem 2.8rem;
+            border: 1px solid var(--input-border); background: var(--input-bg);
+            color: var(--text-primary); border-radius: 10px; font-family: 'Inter', sans-serif;
+            font-size: 0.95rem; transition: all 0.2s ease; box-shadow: var(--shadow-sm);
+        }
+        .search-bar input:focus { outline: none; border-color: #533483; box-shadow: 0 0 0 3px rgba(83,52,131,0.15); }
+        .search-bar input::placeholder { color: var(--text-muted); }
+        .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1rem; }
+        .search-count {
+            position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-muted);
+            background: var(--tag-bg); padding: 0.2rem 0.6rem; border-radius: 12px;
+        }
+
+        .filters-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+        .filter-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .filter-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .platform-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .platform-btn {
+            padding: 0.4rem 0.8rem; border: 1px solid var(--border-color);
+            background: var(--filter-bg); color: var(--text-secondary); border-radius: 20px;
+            cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.75rem;
+            font-weight: 500; transition: all 0.2s ease; white-space: nowrap;
+        }
+        .platform-btn:hover { border-color: var(--text-muted); transform: translateY(-1px); }
+        .platform-btn.active { background: var(--filter-active); color: var(--filter-active-text); border-color: var(--filter-active); }
+
+        .filter-select {
+            padding: 0.5rem 2rem 0.5rem 0.8rem; border: 1px solid var(--input-border);
+            background: var(--input-bg); color: var(--text-primary); border-radius: 8px;
+            font-family: 'Inter', sans-serif; font-size: 0.8rem; cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23718096'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 0.7rem center;
+            transition: all 0.2s ease;
+        }
+        .filter-select:focus { outline: none; border-color: #533483; box-shadow: 0 0 0 3px rgba(83,52,131,0.15); }
+
+        .sort-view-row { display: flex; justify-content: space-between; align-items: center; }
+        .view-toggles { display: flex; gap: 0.3rem; background: var(--filter-bg); border-radius: 8px; padding: 3px; }
+        .view-btn {
+            padding: 0.4rem 0.7rem; border: none; background: transparent;
+            color: var(--text-muted); border-radius: 6px; cursor: pointer;
+            font-size: 0.9rem; transition: all 0.2s ease;
+        }
+        .view-btn.active { background: var(--bg-card); color: var(--text-primary); box-shadow: var(--shadow-sm); }
+
+        /* Game Grid */
+        .games-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem 2rem; }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.2rem; }
+        .games-grid.list-view { grid-template-columns: 1fr; gap: 0.5rem; }
+
+        /* Card */
+        .game-card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 1.2rem; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1); box-shadow: var(--shadow-card);
+            position: relative; overflow: hidden;
+            opacity: 0; transform: translateY(20px); animation: fadeInUp 0.4s ease forwards;
+        }
+        .game-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); border-color: transparent; }
+        .game-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: var(--platform-color, #533483); border-radius: 12px 12px 0 0;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .game-card:hover::before { opacity: 1; }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem; gap: 0.5rem; }
+        .game-name { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-primary); line-height: 1.3; flex: 1; }
+
+        .status-badge {
+            padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.65rem;
+            font-weight: 600; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .status-concluido { background: rgba(46,125,50,0.12); color: #2e7d32; }
+        .status-nao-iniciada { background: rgba(69,90,100,0.12); color: #455a64; }
+        .status-cancelado { background: rgba(211,47,47,0.12); color: #d32f2f; }
+
+        [data-theme="dark"] .status-concluido { background: rgba(46,125,50,0.25); color: #66bb6a; }
+        [data-theme="dark"] .status-nao-iniciada { background: rgba(69,90,100,0.25); color: #90a4ae; }
+        [data-theme="dark"] .status-cancelado { background: rgba(211,47,47,0.25); color: #ef5350; }
+
+        .platform-badge {
+            display: inline-flex; align-items: center; padding: 0.2rem 0.6rem;
+            border-radius: 6px; font-size: 0.7rem; font-weight: 600; color: #fff; margin-bottom: 0.6rem;
+        }
+
+        .card-details { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
+        .detail-tag {
+            background: var(--tag-bg); color: var(--tag-text); padding: 0.2rem 0.5rem;
+            border-radius: 6px; font-size: 0.7rem; display: flex; align-items: center; gap: 0.3rem;
+        }
+
+        .card-rating { font-size: 0.85rem; margin-bottom: 0.4rem; letter-spacing: 1px; }
+
+        .card-trophies {
+            font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem;
+            padding-top: 0.5rem; border-top: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .trophy-bar {
+            flex: 1; height: 5px; background: var(--progress-bg); border-radius: 3px; overflow: hidden;
+        }
+        .trophy-fill {
+            height: 100%; border-radius: 3px;
+            background: linear-gradient(90deg, #f57c00, #ffc107);
+            transition: width 0.5s ease;
+        }
+
+        /* List View */
+        .games-grid.list-view .game-card { border-radius: 8px; padding: 0.8rem 1.2rem; }
+        .games-grid.list-view .game-card:nth-child(even) { background: var(--list-row-alt); }
+        .games-grid.list-view .card-content { display: flex; align-items: center; gap: 1rem; }
+        .games-grid.list-view .card-header { margin-bottom: 0; flex: 1; min-width: 200px; }
+        .games-grid.list-view .card-details { margin-bottom: 0; flex: 1; }
+        .games-grid.list-view .card-trophies { display: none; }
+        .games-grid.list-view .platform-badge { margin-bottom: 0; }
+
+        /* No Results */
+        .no-results { text-align: center; padding: 4rem 2rem; color: var(--text-muted); }
+        .no-results-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+        .no-results h3 { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; margin-bottom: 0.5rem; color: var(--text-secondary); }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--modal-overlay); z-index: 1000;
+            display: flex; align-items: center; justify-content: center; padding: 2rem;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease; backdrop-filter: blur(4px);
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal {
+            background: var(--modal-bg); border-radius: 16px; max-width: 650px; width: 100%;
+            max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+            transform: scale(0.9) translateY(20px); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+            border: 1px solid var(--border-color);
+        }
+        .modal-overlay.active .modal { transform: scale(1) translateY(0); }
+
+        .modal-header { padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid var(--border-color); position: relative; }
+        .modal-platform-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 16px 16px 0 0; }
+        .modal-close {
+            position: absolute; top: 1rem; right: 1rem; width: 32px; height: 32px;
+            border: none; background: var(--filter-bg); color: var(--text-muted);
+            border-radius: 8px; cursor: pointer; font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+        }
+        .modal-close:hover { background: var(--border-color); color: var(--text-primary); }
+        .modal-title {
+            font-family: 'Inter', sans-serif; font-size: 1.4rem; font-weight: 700;
+            color: var(--text-primary); padding-right: 2rem; margin-top: 0.5rem;
+        }
+
+        .modal-body { padding: 1.5rem; }
+        .modal-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.2rem; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+        .modal-field { display: flex; flex-direction: column; gap: 0.2rem; }
+        .modal-field-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .modal-field-value { font-size: 0.95rem; color: var(--text-primary); font-weight: 500; }
+
+        .modal-section { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border-color); }
+        .modal-section-title { font-family: 'Press Start 2P', cursive; font-size: 0.6rem; color: var(--text-muted); margin-bottom: 0.7rem; letter-spacing: 1px; }
+
+        .modal-trophy-bar {
+            display: flex; align-items: center; gap: 0.8rem; margin-top: 1.2rem;
+            padding: 1rem; background: var(--filter-bg); border-radius: 10px;
+        }
+        .modal-trophy-value { font-family: 'Press Start 2P', cursive; font-size: 0.9rem; color: #f57c00; }
+        [data-theme="dark"] .modal-trophy-value { color: #ffc107; }
+        .modal-trophy-label { font-size: 0.75rem; color: var(--text-muted); }
+        .modal-trophy-bar-inner { flex: 1; height: 8px; background: var(--progress-bg); border-radius: 4px; overflow: hidden; }
+        .modal-trophy-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #f57c00, #ffc107); transition: width 0.5s ease; }
+
+        .modal-rating { font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 0.5rem; }
+
+        /* Footer */
+        .footer {
+            text-align: center; padding: 2rem; color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            border-top: 1px solid var(--border-color); max-width: 1400px; margin: 2rem auto 0;
+        }
+        .footer-text { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .footer-pixel {
+            display: inline-block; width: 8px; height: 8px; background: #533483;
+            border-radius: 2px; animation: pixelBlink 2s infinite;
+        }
+        @keyframes pixelBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #333; color: #fff; padding: 0.8rem 1.5rem; border-radius: 10px;
+            font-size: 0.85rem; z-index: 2000; transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { padding: 1.5rem 1rem 1rem; }
+            .title-section h1 { font-size: 1rem; }
+            .header-top { flex-direction: column; gap: 1rem; align-items: flex-start; }
+            .stats-row { flex-wrap: wrap; }
+            .stat-card { min-width: 120px; flex: 1; }
+            .filters-section { padding: 1rem; }
+            .games-container { padding: 0 1rem 2rem; }
+            .games-grid { grid-template-columns: 1fr; }
+            .filters-row { flex-direction: column; align-items: stretch; }
+            .modal { max-height: 95vh; border-radius: 12px; }
+            .modal-overlay { padding: 1rem; }
+            .modal-grid { grid-template-columns: 1fr; }
+            .sort-view-row { flex-direction: column; gap: 0.5rem; align-items: stretch; }
+        }
+        @media (max-width: 480px) {
+            .title-section h1 { font-size: 0.8rem; }
+            .header-actions { flex-wrap: wrap; }
+            .stat-card { min-width: 100px; padding: 0.5rem 0.8rem; }
+            .stat-info .stat-number { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="scanlines"></div>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="header-top">
+                <div class="title-section">
+                    <h1>Game List</h1>
+                    <div class="subtitle">MINHA COLECAO // BRUNO DEMARCO</div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-action" onclick="exportCSV()" title="Exportar CSV">
+                        <span>&#128190;</span> CSV
+                    </button>
+                    <button class="btn-action" onclick="copyLink()" title="Copiar Link">
+                        <span>&#128279;</span> Link
+                    </button>
+                    <button class="btn-icon" id="themeToggle" onclick="toggleTheme()" title="Alternar Tema">
+                        &#9790;
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon">&#127918;</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalGames">0</div>
+                        <div class="stat-label">Total de Jogos</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">&#127942;</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="concluidos">0</div>
+                        <div class="stat-label">Concluidos</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">&#128203;</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="pendentes">0</div>
+                        <div class="stat-label">Backlog</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">&#128187;</div>
+                    <div class="stat-info">
+                        <div class="stat-number" id="totalPlatforms">0</div>
+                        <div class="stat-label">Plataformas</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-label">PROGRESSO DA COLECAO</div>
+                <div class="progress-bar-wrapper" id="progressBar"></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="filters-section">
+        <div class="search-bar">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" id="searchInput" placeholder="Buscar jogo por nome, plataforma, dificuldade..." oninput="applyFilters()">
+            <span class="search-count" id="searchCount"></span>
+        </div>
+
+        <div class="filters-row">
+            <div class="filter-group">
+                <span class="filter-label">Plataforma</span>
+                <div class="platform-filters" id="platformFilters"></div>
+            </div>
+        </div>
+
+        <div class="filters-row">
+            <div class="filter-group">
+                <span class="filter-label">Status</span>
+                <select class="filter-select" id="statusFilter" onchange="applyFilters()">
+                    <option value="">Todos</option>
+                    <option value="Concluido">Concluido</option>
+                    <option value="Nao iniciada">Nao Iniciada</option>
+                    <option value="Cancelado">Cancelado</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Avaliacao</span>
+                <select class="filter-select" id="ratingFilter" onchange="applyFilters()">
+                    <option value="">Todas</option>
+                    <option value="5">5 Estrelas</option>
+                    <option value="4">4 Estrelas</option>
+                    <option value="3">3 Estrelas</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">Ordenar</span>
+                <select class="filter-select" id="sortFilter" onchange="applyFilters()">
+                    <option value="nome-az" selected>Nome A-Z</option>
+                    <option value="nome-za">Nome Z-A</option>
+                    <option value="status">Status</option>
+                    <option value="rating-desc">Avaliacao (maior)</option>
+                    <option value="rating-asc">Avaliacao (menor)</option>
+                    <option value="release">Ano Lancamento</option>
+                    <option value="plataforma">Plataforma</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sort-view-row">
+            <div></div>
+            <div class="view-toggles">
+                <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Grade">&#9638;</button>
+                <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="Lista">&#9776;</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="games-container">
+        <div class="games-grid" id="gamesGrid"></div>
+        <div class="no-results" id="noResults" style="display: none;">
+            <div class="no-results-icon">&#127918;</div>
+            <h3>Nenhum jogo encontrado</h3>
+            <p>Tente ajustar os filtros ou a busca.</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">
+            <span class="footer-pixel"></span>
+            Game List - Bruno DeMarco
+            <span class="footer-pixel"></span>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-platform-bar" id="modalPlatformBar"></div>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <div class="modal-title" id="modalTitle"></div>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const games = [
+            { nome: "Alan Wake 2", adquirido: true, avaliacao: 3, dataFinal: "03/01/2025", dataInicio: "26/12/2024", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Cancelado", trofeus: "19/67 - 28%" },
+            { nome: "Uncharted - Drake's Fortune", adquirido: true, avaliacao: 5, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS4", release: 2007, status: "Nao iniciada", trofeus: "" },
+            { nome: "Uncharted - Among Thieves", adquirido: true, avaliacao: 4, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS4", release: 2009, status: "Nao iniciada", trofeus: "" },
+            { nome: "Uncharted - Drake's Deception", adquirido: true, avaliacao: 5, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS4", release: 2011, status: "Nao iniciada", trofeus: "" },
+            { nome: "Uncharted - Thief's End", adquirido: true, avaliacao: 5, dataFinal: "31/01/2025", dataInicio: "01/01/2025", dificuldade: "", plataforma: "PS5", release: 2016, status: "Concluido", trofeus: "12/52 - 17%" },
+            { nome: "God of War", adquirido: true, avaliacao: 5, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS4", release: 2018, status: "Nao iniciada", trofeus: "" },
+            { nome: "God of War Ragnarok", adquirido: true, avaliacao: 5, dataFinal: "31/01/2025", dataInicio: "01/01/2025", dificuldade: "", plataforma: "PS5", release: 2022, status: "Concluido", trofeus: "" },
+            { nome: "Spider-Man Remastered", adquirido: true, avaliacao: 5, dataFinal: "31/01/2025", dataInicio: "01/01/2025", dificuldade: "Very Hard", plataforma: "PS5", release: 2018, status: "Concluido", trofeus: "51/51 - 100%" },
+            { nome: "Spider-Man 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "" },
+            { nome: "Indiana Jones e o Grande Circulo", adquirido: true, avaliacao: 3, dataFinal: "20/09/2025", dataInicio: "01/08/2025", dificuldade: "", plataforma: "PS5", release: 2025, status: "Concluido", trofeus: "" },
+            { nome: "The Last of Us Part 1", adquirido: true, avaliacao: 5, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2022, status: "Nao iniciada", trofeus: "" },
+            { nome: "The Last of Us Part 2", adquirido: true, avaliacao: 4, dataFinal: "15/05/2025", dataInicio: "01/05/2025", dificuldade: "", plataforma: "PS5", release: 2024, status: "Concluido", trofeus: "" },
+            { nome: "Cyberpunk 2077", adquirido: true, avaliacao: 4, dataFinal: "28/09/2025", dataInicio: "21/09/2025", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Concluido", trofeus: "" },
+            { nome: "Ghost of Tsushima", adquirido: true, avaliacao: 4, dataFinal: "12/05/2025", dataInicio: "01/04/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "" },
+            { nome: "Uncharted: The Lost Legacy", adquirido: true, avaliacao: 4, dataFinal: "09/06/2025", dataInicio: "06/06/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "13/49 - 21%" },
+            { nome: "Mario Wonder", adquirido: true, avaliacao: 5, dataFinal: "28/09/2025", dataInicio: "07/09/2025", dificuldade: "Normal", plataforma: "Switch 2", release: null, status: "Concluido", trofeus: "" },
+            { nome: "Zelda - Breath of the Wild", adquirido: true, avaliacao: 5, dataFinal: "17/10/2025", dataInicio: "07/09/2025", dificuldade: "", plataforma: "Switch 2", release: null, status: "Concluido", trofeus: "" },
+            { nome: "Ghost of Yotei", adquirido: true, avaliacao: 5, dataFinal: "20/11/2025", dataInicio: "02/11/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Concluido", trofeus: "45/54 - 87%" },
+            { nome: "Star Wars: Outlaws", adquirido: true, avaliacao: 3, dataFinal: "31/01/2026", dataInicio: "19/12/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "" },
+            { nome: "A Ascensao do Ronin", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2022, status: "Nao iniciada", trofeus: "" },
+            { nome: "Farming Simulator 25", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "" },
+            { nome: "Helldivers II", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2022, status: "Nao iniciada", trofeus: "" },
+            { nome: "Astro Bot", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "" },
+            { nome: "Death Stranding 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "" },
+            { nome: "Assassins Creed Shadows", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "" },
+            { nome: "Zelda: Tears of the Kingdom", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "Switch 2", release: 2021, status: "Nao iniciada", trofeus: "" },
+            { nome: "Mario Galaxy", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "Switch 2", release: 2025, status: "Nao iniciada", trofeus: "" },
+            { nome: "Mario Galaxy 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "Switch 2", release: 2025, status: "Nao iniciada", trofeus: "" },
+            { nome: "Zelda: Link's Awakening", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "Switch 2", release: 2020, status: "Nao iniciada", trofeus: "" },
+            { nome: "The Witcher 3", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2020, status: "Nao iniciada", trofeus: "" },
+            { nome: "F1 2025", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2021, status: "Nao iniciada", trofeus: "" },
+            { nome: "Kingdom Come Deliverance II", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "" },
+            { nome: "ARC Rider", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "" },
+            { nome: "Days Gone", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2024, status: "Nao iniciada", trofeus: "" },
+            { nome: "Battlefield 6", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "" }
+        ];
+
+        const platformColors = {
+            'PS4': '#003087',
+            'PS5': '#00439C',
+            'Switch 2': '#E60012'
+        };
+
+        let currentPlatform = 'Todos';
+        let currentView = 'grid';
+        let filteredGames = [...games];
+
+        function init() {
+            buildPlatformFilters();
+            updateStats();
+            updateProgressBar();
+            applyFilters();
+        }
+
+        function buildPlatformFilters() {
+            const container = document.getElementById('platformFilters');
+            const usedPlatforms = [...new Set(games.map(g => g.plataforma))].sort();
+            const allPlatforms = ['Todos', ...usedPlatforms];
+            container.innerHTML = allPlatforms.map(p => {
+                const isActive = p === 'Todos' ? 'active' : '';
+                return `<button class="platform-btn ${isActive}" data-platform="${p}" onclick="setPlatform(this, '${p}')">${p}</button>`;
+            }).join('');
+        }
+
+        function updateStats() {
+            const total = games.length;
+            const concluidos = games.filter(g => g.status === 'Concluido').length;
+            const pendentes = games.filter(g => g.status === 'Nao iniciada').length;
+            const platforms = new Set(games.map(g => g.plataforma)).size;
+
+            animateNumber('totalGames', total);
+            animateNumber('concluidos', concluidos);
+            animateNumber('pendentes', pendentes);
+            animateNumber('totalPlatforms', platforms);
+        }
+
+        function updateProgressBar() {
+            const total = games.length;
+            const concluidos = games.filter(g => g.status === 'Concluido').length;
+            const cancelados = games.filter(g => g.status === 'Cancelado').length;
+            const naoIniciados = games.filter(g => g.status === 'Nao iniciada').length;
+
+            const pctConcluido = ((concluidos / total) * 100).toFixed(1);
+            const pctNaoIniciado = ((naoIniciados / total) * 100).toFixed(1);
+            const pctCancelado = ((cancelados / total) * 100).toFixed(1);
+
+            const bar = document.getElementById('progressBar');
+            bar.innerHTML = `
+                <div class="progress-segment concluido" style="width: ${pctConcluido}%">${pctConcluido > 8 ? concluidos + ' Concluidos' : ''}</div>
+                <div class="progress-segment nao-iniciada" style="width: ${pctNaoIniciado}%">${pctNaoIniciado > 8 ? naoIniciados + ' Backlog' : ''}</div>
+                <div class="progress-segment cancelado" style="width: ${pctCancelado}%">${pctCancelado > 5 ? cancelados + ' Canc.' : ''}</div>
+            `;
+        }
+
+        function animateNumber(id, target) {
+            const el = document.getElementById(id);
+            let current = 0;
+            const step = Math.ceil(target / 30);
+            const interval = setInterval(() => {
+                current += step;
+                if (current >= target) { current = target; clearInterval(interval); }
+                el.textContent = current;
+            }, 30);
+        }
+
+        function setPlatform(btn, platform) {
+            document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentPlatform = platform;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+            const status = document.getElementById('statusFilter').value;
+            const rating = document.getElementById('ratingFilter').value;
+            const sort = document.getElementById('sortFilter').value;
+
+            filteredGames = games.filter(game => {
+                if (currentPlatform !== 'Todos' && game.plataforma !== currentPlatform) return false;
+                if (status && game.status !== status) return false;
+                if (rating && game.avaliacao !== parseInt(rating)) return false;
+                if (search) {
+                    const searchStr = `${game.nome} ${game.plataforma} ${game.dificuldade} ${game.status}`.toLowerCase();
+                    if (!searchStr.includes(search)) return false;
+                }
+                return true;
+            });
+
+            const statusOrder = { 'Concluido': 1, 'Cancelado': 2, 'Nao iniciada': 3 };
+
+            switch (sort) {
+                case 'nome-az': filteredGames.sort((a, b) => a.nome.localeCompare(b.nome)); break;
+                case 'nome-za': filteredGames.sort((a, b) => b.nome.localeCompare(a.nome)); break;
+                case 'status': filteredGames.sort((a, b) => (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99)); break;
+                case 'rating-desc': filteredGames.sort((a, b) => b.avaliacao - a.avaliacao); break;
+                case 'rating-asc': filteredGames.sort((a, b) => a.avaliacao - b.avaliacao); break;
+                case 'release': filteredGames.sort((a, b) => (a.release || 9999) - (b.release || 9999)); break;
+                case 'plataforma': filteredGames.sort((a, b) => a.plataforma.localeCompare(b.plataforma)); break;
+            }
+
+            renderGames();
+            document.getElementById('searchCount').textContent = `${filteredGames.length} de ${games.length}`;
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'Concluido': return 'status-concluido';
+                case 'Nao iniciada': return 'status-nao-iniciada';
+                case 'Cancelado': return 'status-cancelado';
+                default: return 'status-nao-iniciada';
+            }
+        }
+
+        function getPlatformColor(platform) {
+            return platformColors[platform] || '#533483';
+        }
+
+        function renderStars(count) {
+            if (!count) return '<span style="color: var(--text-muted); font-size: 0.75rem;">Sem avaliacao</span>';
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                stars += i < count ? '&#9733;' : '&#9734;';
+            }
+            return stars;
+        }
+
+        function parseTrophyPercent(trofeus) {
+            if (!trofeus) return 0;
+            const match = trofeus.match(/(\d+)%/);
+            return match ? parseInt(match[1]) : 0;
+        }
+
+        function renderGames() {
+            const grid = document.getElementById('gamesGrid');
+            const noResults = document.getElementById('noResults');
+
+            if (filteredGames.length === 0) {
+                grid.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            noResults.style.display = 'none';
+
+            grid.innerHTML = filteredGames.map((game, index) => {
+                const color = getPlatformColor(game.plataforma);
+                const statusClass = getStatusClass(game.status);
+                const delay = Math.min(index * 40, 800);
+                const trophyPct = parseTrophyPercent(game.trofeus);
+
+                let detailTags = '';
+                if (game.release) detailTags += `<span class="detail-tag">&#128197; ${game.release}</span>`;
+                if (game.dificuldade) detailTags += `<span class="detail-tag">&#9876; ${game.dificuldade}</span>`;
+                if (game.dataInicio) detailTags += `<span class="detail-tag">&#9654; ${game.dataInicio}</span>`;
+                if (game.dataFinal) detailTags += `<span class="detail-tag">&#9632; ${game.dataFinal}</span>`;
+
+                let trophyHtml = '';
+                if (game.trofeus) {
+                    trophyHtml = `
+                        <div class="card-trophies">
+                            <span>&#127942; ${game.trofeus}</span>
+                            <div class="trophy-bar"><div class="trophy-fill" style="width: ${trophyPct}%"></div></div>
+                        </div>`;
+                }
+
+                return `
+                    <div class="game-card" style="--platform-color: ${color}; animation-delay: ${delay}ms;" onclick="openModal(${games.indexOf(game)})">
+                        <div class="card-header">
+                            <div class="game-name">${game.nome}</div>
+                            <span class="status-badge ${statusClass}">${game.status}</span>
+                        </div>
+                        <span class="platform-badge" style="background: ${color};">${game.plataforma}</span>
+                        <div class="card-rating">${renderStars(game.avaliacao)}</div>
+                        <div class="card-details">${detailTags}</div>
+                        ${trophyHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function setView(view) {
+            currentView = view;
+            const grid = document.getElementById('gamesGrid');
+            if (view === 'list') {
+                grid.classList.add('list-view');
+                document.getElementById('listViewBtn').classList.add('active');
+                document.getElementById('gridViewBtn').classList.remove('active');
+            } else {
+                grid.classList.remove('list-view');
+                document.getElementById('gridViewBtn').classList.add('active');
+                document.getElementById('listViewBtn').classList.remove('active');
+            }
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeToggle');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                btn.innerHTML = '&#9788;';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                btn.innerHTML = '&#9790;';
+            }
+        }
+
+        function openModal(index) {
+            const game = games[index];
+            const color = getPlatformColor(game.plataforma);
+            const statusClass = getStatusClass(game.status);
+            const trophyPct = parseTrophyPercent(game.trofeus);
+
+            document.getElementById('modalTitle').textContent = game.nome;
+            document.getElementById('modalPlatformBar').style.background = color;
+
+            const body = document.getElementById('modalBody');
+            body.innerHTML = `
+                <div class="modal-badges">
+                    <span class="platform-badge" style="background: ${color};">${game.plataforma}</span>
+                    <span class="status-badge ${statusClass}">${game.status}</span>
+                </div>
+
+                <div class="modal-rating">${renderStars(game.avaliacao)}</div>
+
+                <div class="modal-grid">
+                    <div class="modal-field">
+                        <span class="modal-field-label">Ano Lancamento</span>
+                        <span class="modal-field-value">${game.release || 'N/A'}</span>
+                    </div>
+                    <div class="modal-field">
+                        <span class="modal-field-label">Dificuldade</span>
+                        <span class="modal-field-value">${game.dificuldade || 'N/A'}</span>
+                    </div>
+                    <div class="modal-field">
+                        <span class="modal-field-label">Data Inicio</span>
+                        <span class="modal-field-value">${game.dataInicio || 'N/A'}</span>
+                    </div>
+                    <div class="modal-field">
+                        <span class="modal-field-label">Data Final</span>
+                        <span class="modal-field-value">${game.dataFinal || 'N/A'}</span>
+                    </div>
+                    <div class="modal-field">
+                        <span class="modal-field-label">Adquirido</span>
+                        <span class="modal-field-value">${game.adquirido ? 'Sim' : 'Nao'}</span>
+                    </div>
+                    <div class="modal-field">
+                        <span class="modal-field-label">Plataforma</span>
+                        <span class="modal-field-value">${game.plataforma}</span>
+                    </div>
+                </div>
+
+                ${game.trofeus ? `
+                <div class="modal-trophy-bar">
+                    <div>
+                        <div class="modal-trophy-value">${trophyPct}%</div>
+                        <div class="modal-trophy-label">Trofeus: ${game.trofeus}</div>
+                    </div>
+                    <div class="modal-trophy-bar-inner">
+                        <div class="modal-trophy-fill" style="width: ${trophyPct}%"></div>
+                    </div>
+                </div>
+                ` : ''}
+            `;
+
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            if (event && event.target !== document.getElementById('modalOverlay') && event.target.className !== 'modal-close') return;
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal({ target: document.getElementById('modalOverlay') });
+        });
+
+        function exportCSV() {
+            const headers = ['Nome', 'Adquirido', 'Avaliacao', 'Data Final', 'Data Inicio', 'Dificuldade', 'Plataforma', 'Release', 'Status', 'Trofeus'];
+            const rows = filteredGames.map(g => [
+                `"${g.nome}"`, g.adquirido ? 'Sim' : 'Nao', g.avaliacao || '',
+                `"${g.dataFinal}"`, `"${g.dataInicio}"`, `"${g.dificuldade}"`,
+                `"${g.plataforma}"`, g.release || '', `"${g.status}"`, `"${g.trofeus}"`
+            ]);
+            const csv = [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `game-list-${new Date().toISOString().slice(0,10)}.csv`;
+            a.click(); URL.revokeObjectURL(url);
+            showToast('CSV exportado com sucesso!');
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showToast('Link copiado!');
+            }).catch(() => {
+                const input = document.createElement('input');
+                input.value = window.location.href;
+                document.body.appendChild(input); input.select();
+                document.execCommand('copy'); document.body.removeChild(input);
+                showToast('Link copiado!');
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

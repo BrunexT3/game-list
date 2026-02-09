@@ -210,6 +210,13 @@
             transition: all 0.2s ease;
         }
         .filter-select:focus { outline: none; border-color: #533483; box-shadow: 0 0 0 3px rgba(83,52,131,0.15); }
+        .sort-dir-btn {
+            width: 34px; height: 34px; border: 1px solid var(--input-border);
+            background: var(--input-bg); color: var(--text-secondary); border-radius: 8px;
+            cursor: pointer; font-size: 0.7rem; display: flex; align-items: center;
+            justify-content: center; transition: all 0.2s ease; flex-shrink: 0;
+        }
+        .sort-dir-btn:hover { border-color: #533483; color: #533483; }
 
         /* Table */
         .table-container {
@@ -491,6 +498,19 @@
                     <option value="3">3 Estrelas</option>
                 </select>
             </div>
+            <div class="filter-group">
+                <span class="filter-label">Ordenar por</span>
+                <div style="display:flex;gap:0.4rem;align-items:center;">
+                    <select class="filter-select" id="sortField" onchange="applySortFromDropdown()">
+                        <option value="nome">Nome</option>
+                        <option value="trofeus">Trofeus (%)</option>
+                        <option value="avaliacao">Avaliacao</option>
+                        <option value="status" selected>Status</option>
+                        <option value="plataforma">Plataforma</option>
+                    </select>
+                    <button class="sort-dir-btn" id="sortDirBtn" onclick="toggleSortDir()" title="Alternar ordem">&#9650;</button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -506,7 +526,7 @@
                     <th data-sort="dificuldade" onclick="sortBy('dificuldade')">Dificuldade <span class="sort-arrow"></span></th>
                     <th data-sort="dataInicio" onclick="sortBy('dataInicio')">Inicio <span class="sort-arrow"></span></th>
                     <th data-sort="dataFinal" onclick="sortBy('dataFinal')">Final <span class="sort-arrow"></span></th>
-                    <th>Trofeus</th>
+                    <th data-sort="trofeus" onclick="sortBy('trofeus')">Trofeus <span class="sort-arrow"></span></th>
                 </tr>
             </thead>
             <tbody id="gameTableBody"></tbody>
@@ -884,7 +904,33 @@
                 currentSort.field = field;
                 currentSort.dir = 'asc';
             }
+            syncSortDropdown();
             applyFilters();
+        }
+
+        function applySortFromDropdown() {
+            currentSort.field = document.getElementById('sortField').value;
+            currentSort.dir = 'asc';
+            syncSortDirBtn();
+            applyFilters();
+        }
+
+        function toggleSortDir() {
+            currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+            syncSortDirBtn();
+            applyFilters();
+        }
+
+        function syncSortDropdown() {
+            const sel = document.getElementById('sortField');
+            if (sel.querySelector(`option[value="${currentSort.field}"]`)) {
+                sel.value = currentSort.field;
+            }
+            syncSortDirBtn();
+        }
+
+        function syncSortDirBtn() {
+            document.getElementById('sortDirBtn').innerHTML = currentSort.dir === 'asc' ? '&#9650;' : '&#9660;';
         }
 
         function applyFilters() {
@@ -917,6 +963,7 @@
                     case 'dificuldade': return dir * (a.dificuldade||'').localeCompare(b.dificuldade||'');
                     case 'dataInicio': return dir * (parseDate(a.dataInicio) - parseDate(b.dataInicio));
                     case 'dataFinal': return dir * (parseDate(a.dataFinal) - parseDate(b.dataFinal));
+                    case 'trofeus': return dir * (parseTrophyPercent(a.trofeus) - parseTrophyPercent(b.trofeus));
                     default: return 0;
                 }
             });

@@ -473,7 +473,7 @@
         .trof-hero-total { display: flex; align-items: baseline; gap: 0.5rem; }
         .trof-hero-num { font-family: 'JetBrains Mono', monospace; font-size: 3rem; font-weight: 700; color: var(--text-primary); line-height: 1; }
         .trof-hero-lbl { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .trof-types { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; flex: 1; min-width: 280px; }
+        .trof-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(88px, 1fr)); gap: 0.8rem; flex: 1; min-width: 280px; }
         .trof-type { text-align: center; padding: 0.8rem 0.4rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-primary); }
         .trof-type-ico { font-size: 1.4rem; }
         .trof-type-num { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
@@ -482,6 +482,7 @@
         .trof-type.ouro { border-top: 3px solid #f5c518; }
         .trof-type.prata { border-top: 3px solid #b8c0c8; }
         .trof-type.bronze { border-top: 3px solid #cd7f32; }
+        .trof-type.steam { border-top: 3px solid #66c0f4; }
         .trof-substats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
         .trof-substat { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 0.9rem 1.1rem; box-shadow: var(--shadow-sm); }
         .trof-substat-num { font-family: 'JetBrains Mono', monospace; font-size: 1.3rem; font-weight: 600; color: var(--text-primary); }
@@ -547,6 +548,30 @@
         .rdr-types { display: flex; gap: 0.8rem; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-secondary); }
         .rdr-note { background: var(--stat-bg); border: 1px dashed var(--border-color); border-radius: 10px; padding: 0.9rem 1.1rem; font-size: 0.85rem; color: var(--text-secondary); }
         .rdr-note strong { color: var(--text-primary); }
+
+        .rdr-cmp-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin: 1.6rem 0 0.8rem; }
+        .rdr-cmp-head h3 { font-size: 1rem; color: var(--text-primary); }
+        .rdr-cmp-legend { display: flex; gap: 0.9rem; font-size: 0.75rem; color: var(--text-muted); flex-wrap: wrap; }
+        .rdr-cmp-summary { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+        .rdr-fbtn { font-size: 0.78rem; padding: 0.4rem 0.7rem; border: 1px solid var(--border-color); border-radius: 20px; background: var(--bg-secondary); color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
+        .rdr-fbtn:hover { color: var(--text-primary); }
+        .rdr-fbtn.on { background: var(--filter-active); color: var(--filter-active-text); border-color: var(--filter-active); }
+        .rdr-cmp-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 12px; }
+        .rdr-cmp { width: 100%; border-collapse: collapse; min-width: 520px; }
+        .rdr-cmp th { text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); padding: 0.7rem 0.9rem; background: var(--table-header-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; }
+        .rdr-cmp td { padding: 0.6rem 0.9rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; vertical-align: middle; }
+        .rdr-cmp tbody tr:hover { background: var(--row-hover); }
+        .rdr-t-name { display: flex; align-items: center; gap: 0.6rem; }
+        .rdr-t-ico { font-size: 1.1rem; flex-shrink: 0; }
+        .rdr-t-title { font-weight: 600; color: var(--text-primary); }
+        .rdr-t-desc { font-size: 0.75rem; color: var(--text-muted); }
+        .rdr-t-rar { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; }
+        .rdr-t-cell { text-align: center; width: 80px; }
+        .rdr-yes { color: #2e7d32; font-weight: 700; font-size: 1.05rem; }
+        .rdr-no { color: #c62828; opacity: 0.55; }
+        [data-theme="dark"] .rdr-yes { color: #66bb6a; }
+        [data-theme="dark"] .rdr-no { color: #ef5350; }
+        .rdr-cell-na { color: var(--text-muted); opacity: 0.5; }
 
         @media (max-width: 768px) {
             .rdr-section { padding: 1.2rem; }
@@ -705,7 +730,7 @@
 
     <div id="view-ano" class="tab-view">
         <section class="ano-section">
-            <p class="ano-intro">Tudo que voc&ecirc; finalizou, ano a ano &mdash; horas jogadas e trof&eacute;us conquistados (puxados direto da PSN). Barra dourada = % de trof&eacute;us; &#128142; = platinado (100%).</p>
+            <p class="ano-intro">Jogos por ano &mdash; finalizados (PSN) e jogados (Steam), com horas e troféus/conquistas. Verde = Concluído, azul = Em andamento. Barra dourada = % de troféus; &#128142; = platinado.</p>
             <div class="ano-stats" id="anoStats"></div>
             <div class="ano-note" id="anoNote"></div>
             <div id="anoContent"></div>
@@ -732,48 +757,7 @@
     </div>
 
     <div id="view-rdr2" class="tab-view">
-        <section class="rdr-section">
-            <div class="rdr-hero">
-                <div class="rdr-hero-badge">&#129312; PÁGINA DEDICADA</div>
-                <div class="rdr-hero-title">Red Dead Redemption 2</div>
-                <div class="rdr-hero-sub">Zerado no PS4, no PS5 (versão PS4) e na Steam &mdash; todas as versões somadas</div>
-                <div class="rdr-hero-total"><span class="rdr-big">413h</span><span class="rdr-big-lbl">jogadas no total</span></div>
-            </div>
-
-            <div class="rdr-stats">
-                <div class="rdr-stat"><div class="rdr-stat-num">413h</div><div class="rdr-stat-lbl">Horas totais</div></div>
-                <div class="rdr-stat"><div class="rdr-stat-num">63</div><div class="rdr-stat-lbl">Troféus + Conquistas</div></div>
-                <div class="rdr-stat"><div class="rdr-stat-num">63/103</div><div class="rdr-stat-lbl">Progresso combinado</div></div>
-                <div class="rdr-stat"><div class="rdr-stat-num">2</div><div class="rdr-stat-lbl">Sistemas (PSN + Steam)</div></div>
-            </div>
-
-            <div class="rdr-platforms">
-                <div class="rdr-card">
-                    <div class="rdr-card-head"><span class="rdr-card-ico" style="background:#00439C">&#127918;</span><div><div class="rdr-card-title">PlayStation</div><div class="rdr-card-plat">PS4 &middot; PS5 (versão PS4)</div></div></div>
-                    <div class="rdr-card-hours">311,6<span>h</span></div>
-                    <div class="rdr-card-row"><span>Troféus</span><strong>34 / 52</strong></div>
-                    <div class="rdr-bar"><div class="rdr-bar-fill" style="width:64%;background:linear-gradient(90deg,#f5a623,#f0c040)"></div></div>
-                    <div class="rdr-card-pct">64% concluído</div>
-                    <div class="rdr-types">
-                        <span title="Platina">&#128142; 0</span>
-                        <span title="Ouro">&#129351; 2</span>
-                        <span title="Prata">&#129352; 1</span>
-                        <span title="Bronze">&#129353; 31</span>
-                    </div>
-                </div>
-
-                <div class="rdr-card">
-                    <div class="rdr-card-head"><span class="rdr-card-ico" style="background:#66c0f4">&#128421;&#65039;</span><div><div class="rdr-card-title">Steam (PC)</div><div class="rdr-card-plat">Conquistas</div></div></div>
-                    <div class="rdr-card-hours">101,4<span>h</span></div>
-                    <div class="rdr-card-row"><span>Conquistas</span><strong>29 / 51</strong></div>
-                    <div class="rdr-bar"><div class="rdr-bar-fill" style="width:57%;background:linear-gradient(90deg,#1387b8,#66c0f4)"></div></div>
-                    <div class="rdr-card-pct">57% concluído</div>
-                    <div class="rdr-types"><span>&#127942; 29 conquistas desbloqueadas</span></div>
-                </div>
-            </div>
-
-            <div class="rdr-note">Bônus: <strong>Red Dead Online</strong> (Steam) &mdash; mais <strong>71,2h</strong> no modo online. Somando tudo do universo Red Dead 2: <strong>484h</strong>.</div>
-        </section>
+        <section class="rdr-section" id="rdr2Section"></section>
     </div>
 
     <footer class="footer">
@@ -1084,99 +1068,99 @@
             { nome: "Resident Evil Requiem", adquirido: true, avaliacao: 0, dataFinal: "12/06/2026", dataInicio: "01/03/2026", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Em andamento", trofeus: "5/50 - 7%", horas: 0.3, trofeusTipo: [0,0,0,5] },
             { nome: "Electrician Simulator", adquirido: true, avaliacao: 0, dataFinal: "21/06/2026", dataInicio: "21/06/2026", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Em andamento", trofeus: "1/27 - 1%", horas: 0.2, trofeusTipo: [0,0,0,1] },
             { nome: "EA Sports FC 26", adquirido: true, avaliacao: 0, dataFinal: "07/06/2026", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Em andamento", trofeus: "1/44 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
-            { nome: "SCUM", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "38/69 - 55%", horas: 800.4 },
-            { nome: "Age of Empires IV: Anniversary Edition", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "18/175 - 10%", horas: 151.3 },
-            { nome: "Car Mechanic Simulator 2021", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "41/46 - 89%", horas: 131.7 },
-            { nome: "Red Dead Redemption 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "29/51 - 57%", horas: 101.4 },
-            { nome: "No Man's Sky", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "15/27 - 56%", horas: 97.8 },
-            { nome: "Night of the Dead", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "27/80 - 34%", horas: 74.3 },
-            { nome: "Cities: Skylines", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "24/135 - 18%", horas: 72.9 },
-            { nome: "Red Dead Online", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 71.2 },
-            { nome: "American Truck Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "15/130 - 12%", horas: 71.2 },
-            { nome: "Euro Truck Simulator 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "14/106 - 13%", horas: 65.8 },
-            { nome: "Stranded Deep", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "28/37 - 76%", horas: 64.8 },
-            { nome: "EA SPORTS FIFA 23", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/39 - 5%", horas: 57.9 },
-            { nome: "Grand Theft Auto V Legacy", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "8/77 - 10%", horas: 47.2 },
-            { nome: "Green Hell", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "25/68 - 37%", horas: 41.5 },
-            { nome: "Parcel Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "23/24 - 96%", horas: 40.2 },
-            { nome: "My Summer Car", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "13/77 - 17%", horas: 33 },
-            { nome: "The Forest", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "16/45 - 36%", horas: 29.9 },
-            { nome: "Drive Beyond Horizons", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "23/59 - 39%", horas: 28.6 },
-            { nome: "PC Building Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "15/94 - 16%", horas: 26.7 },
-            { nome: "Farming Simulator 19", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "7/23 - 30%", horas: 24 },
-            { nome: "Retro Rewind - Video Store Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "17/18 - 94%", horas: 22.1 },
-            { nome: "Project CARS", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "11/45 - 24%", horas: 21.5 },
-            { nome: "Farthest Frontier", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/74 - 0%", horas: 18.6 },
-            { nome: "Deconstruction Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "11/20 - 55%", horas: 17.4 },
-            { nome: "Contraband Police", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "27/93 - 29%", horas: 16 },
-            { nome: "Gas Station Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "69/101 - 68%", horas: 15.9 },
-            { nome: "Returns Outlet Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 15.7 },
-            { nome: "Sons Of The Forest", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "5/32 - 16%", horas: 15.1 },
-            { nome: "Ranch Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/39 - 0%", horas: 11.1 },
-            { nome: "My Winter Car", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/67 - 3%", horas: 10.8 },
-            { nome: "House Flipper 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "12/60 - 20%", horas: 10.1 },
-            { nome: "Assetto Corsa Competizione", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 9.9 },
-            { nome: "BeamNG.drive", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/5 - 0%", horas: 9.6 },
-            { nome: "Raft", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "10/104 - 10%", horas: 9.3 },
-            { nome: "Windrose", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 8.6 },
-            { nome: "Escape Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "7/25 - 28%", horas: 8.4 },
-            { nome: "Police Simulator: Patrol Officers", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "13/20 - 65%", horas: 8.2 },
-            { nome: "Estate Agent Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "30/61 - 49%", horas: 8 },
-            { nome: "ELDEN RING", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/42 - 0%", horas: 6.3 },
-            { nome: "Counter-Strike 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/1 - 100%", horas: 5.6 },
-            { nome: "DayZ", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "5/13 - 38%", horas: 5.2 },
-            { nome: "Dead by Daylight", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "8/303 - 3%", horas: 4.8 },
-            { nome: "Sengoku Dynasty", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/40 - 0%", horas: 3.5 },
-            { nome: "The Painscreek Killings", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "4/33 - 12%", horas: 3.3 },
-            { nome: "F1 2014", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/49 - 0%", horas: 2.9 },
-            { nome: "Len's Island", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/31 - 6%", horas: 2.7 },
-            { nome: "7 Days to Die", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/43 - 0%", horas: 2.2 },
-            { nome: "Mist Survival", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 2.2 },
-            { nome: "Car Mechanic Simulator 2018", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/60 - 2%", horas: 1.9 },
-            { nome: "Scene Investigators", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/5 - 20%", horas: 1.9 },
-            { nome: "Satisfactory", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/44 - 0%", horas: 1.7 },
-            { nome: "The Sims 4", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 1.4 },
-            { nome: "Days Gone", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/67 - 4%", horas: 1.2 },
-            { nome: "HITMAN 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/146 - 1%", horas: 1.2 },
-            { nome: "Icarus", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/171 - 1%", horas: 1.2 },
-            { nome: "Aimlabs", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "6/100 - 6%", horas: 1.1 },
-            { nome: "LEGO Worlds", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/71 - 4%", horas: 1 },
-            { nome: "Deadside", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "4/29 - 14%", horas: 1 },
-            { nome: "F1 2020", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/50 - 0%", horas: 1 },
-            { nome: "Project Zomboid", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 0.9 },
-            { nome: "Electrician Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "6/26 - 23%", horas: 0.9 },
-            { nome: "Assetto Corsa", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/709 - 0%", horas: 0.9 },
-            { nome: "Hogwarts Legacy", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/45 - 2%", horas: 0.9 },
-            { nome: "KeepUp Survival", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/32 - 0%", horas: 0.8 },
-            { nome: "Cooking Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "9/302 - 3%", horas: 0.8 },
-            { nome: "Lumberjack's Dynasty", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/33 - 3%", horas: 0.8 },
-            { nome: "Metro Exodus Enhanced Edition", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/68 - 0%", horas: 0.7 },
-            { nome: "Shadow of the Tomb Raider", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/99 - 1%", horas: 0.7 },
-            { nome: "Survival: Fountain of Youth", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/49 - 6%", horas: 0.6 },
-            { nome: "Bus Flipper Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/20 - 10%", horas: 0.6 },
-            { nome: "Storage Hunter", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/72 - 3%", horas: 0.6 },
-            { nome: "Gold Mining Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/42 - 2%", horas: 0.5 },
-            { nome: "Thief Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/33 - 0%", horas: 0.5 },
-            { nome: "Alaskan Road Truckers", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/30 - 7%", horas: 0.5 },
-            { nome: "Circuit Superstars", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/33 - 9%", horas: 0.5 },
-            { nome: "theHunter: Call of the Wild", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/160 - 2%", horas: 0.5 },
-            { nome: "Destiny 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/23 - 4%", horas: 0.5 },
-            { nome: "Survive the Nights", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "24/89 - 27%", horas: 0.4 },
-            { nome: "BarnFinders", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/47 - 2%", horas: 0.3 },
-            { nome: "Big Ambitions", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/99 - 0%", horas: 0.3 },
-            { nome: "eFootball", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 0.3 },
-            { nome: "RaceRoom Racing Experience", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 0.2 },
-            { nome: "SurrounDead", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/21 - 14%", horas: 0.2 },
-            { nome: "My dream setup", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "5/16 - 31%", horas: 0.2 },
-            { nome: "God of War", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/37 - 0%", horas: 0.2 },
-            { nome: "Kingdom Two Crowns", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/46 - 0%", horas: 0.2 },
-            { nome: "Medieval Dynasty", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/44 - 0%", horas: 0.2 },
-            { nome: "Parcel Delivery Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/33 - 9%", horas: 0.1 },
-            { nome: "CHRONO TRIGGER", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/13 - 0%", horas: 0.1 },
-            { nome: "Stardew Valley", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/49 - 0%", horas: 0.1 },
-            { nome: "Wallpaper Engine", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/17 - 0%", horas: 0.1 },
-            { nome: "Indiana Jones and the Fate of Atlantis", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 0 },
-            { nome: "Drug Dealer Simulator", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/36 - 0%", horas: 0 },
+            { nome: "SCUM", adquirido: true, avaliacao: 0, dataFinal: "07/06/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "38/69 - 55%", horas: 800.4 },
+            { nome: "Age of Empires IV: Anniversary Edition", adquirido: true, avaliacao: 0, dataFinal: "19/11/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "18/175 - 10%", horas: 151.3 },
+            { nome: "Car Mechanic Simulator 2021", adquirido: true, avaliacao: 0, dataFinal: "29/05/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "41/46 - 89%", horas: 131.7 },
+            { nome: "Red Dead Redemption 2", adquirido: true, avaliacao: 0, dataFinal: "11/07/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "29/51 - 57%", horas: 101.4 },
+            { nome: "No Man's Sky", adquirido: true, avaliacao: 0, dataFinal: "01/10/2025", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "15/27 - 56%", horas: 97.8 },
+            { nome: "Night of the Dead", adquirido: true, avaliacao: 0, dataFinal: "05/06/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "27/80 - 34%", horas: 74.3 },
+            { nome: "Cities: Skylines", adquirido: true, avaliacao: 0, dataFinal: "18/12/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "24/135 - 18%", horas: 72.9 },
+            { nome: "Red Dead Online", adquirido: true, avaliacao: 0, dataFinal: "27/06/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 71.2 },
+            { nome: "American Truck Simulator", adquirido: true, avaliacao: 0, dataFinal: "17/05/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "15/130 - 12%", horas: 71.2 },
+            { nome: "Euro Truck Simulator 2", adquirido: true, avaliacao: 0, dataFinal: "23/05/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "14/106 - 13%", horas: 65.8 },
+            { nome: "Stranded Deep", adquirido: true, avaliacao: 0, dataFinal: "08/10/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "28/37 - 76%", horas: 64.8 },
+            { nome: "EA SPORTS FIFA 23", adquirido: true, avaliacao: 0, dataFinal: "05/06/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/39 - 5%", horas: 57.9 },
+            { nome: "Grand Theft Auto V Legacy", adquirido: true, avaliacao: 0, dataFinal: "10/07/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "8/77 - 10%", horas: 47.2 },
+            { nome: "Green Hell", adquirido: true, avaliacao: 0, dataFinal: "08/10/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "25/68 - 37%", horas: 41.5 },
+            { nome: "Parcel Simulator", adquirido: true, avaliacao: 0, dataFinal: "21/04/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "23/24 - 96%", horas: 40.2 },
+            { nome: "My Summer Car", adquirido: true, avaliacao: 0, dataFinal: "23/07/2021", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "13/77 - 17%", horas: 33 },
+            { nome: "The Forest", adquirido: true, avaliacao: 0, dataFinal: "05/12/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "16/45 - 36%", horas: 29.9 },
+            { nome: "Drive Beyond Horizons", adquirido: true, avaliacao: 0, dataFinal: "17/05/2025", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "23/59 - 39%", horas: 28.6 },
+            { nome: "PC Building Simulator", adquirido: true, avaliacao: 0, dataFinal: "08/07/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "15/94 - 16%", horas: 26.7 },
+            { nome: "Farming Simulator 19", adquirido: true, avaliacao: 0, dataFinal: "02/07/2021", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "7/23 - 30%", horas: 24 },
+            { nome: "Retro Rewind - Video Store Simulator", adquirido: true, avaliacao: 0, dataFinal: "24/04/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "17/18 - 94%", horas: 22.1 },
+            { nome: "Project CARS", adquirido: true, avaliacao: 0, dataFinal: "30/08/2015", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "11/45 - 24%", horas: 21.5 },
+            { nome: "Farthest Frontier", adquirido: true, avaliacao: 0, dataFinal: "18/01/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/74 - 0%", horas: 18.6 },
+            { nome: "Deconstruction Simulator", adquirido: true, avaliacao: 0, dataFinal: "18/04/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "11/20 - 55%", horas: 17.4 },
+            { nome: "Contraband Police", adquirido: true, avaliacao: 0, dataFinal: "04/11/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "27/93 - 29%", horas: 16 },
+            { nome: "Gas Station Simulator", adquirido: true, avaliacao: 0, dataFinal: "15/11/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "69/101 - 68%", horas: 15.9 },
+            { nome: "Returns Outlet Simulator", adquirido: true, avaliacao: 0, dataFinal: "27/06/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 15.7 },
+            { nome: "Sons Of The Forest", adquirido: true, avaliacao: 0, dataFinal: "23/03/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "5/32 - 16%", horas: 15.1 },
+            { nome: "Ranch Simulator", adquirido: true, avaliacao: 0, dataFinal: "25/11/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/39 - 0%", horas: 11.1 },
+            { nome: "My Winter Car", adquirido: true, avaliacao: 0, dataFinal: "17/05/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/67 - 3%", horas: 10.8 },
+            { nome: "House Flipper 2", adquirido: true, avaliacao: 0, dataFinal: "18/04/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "12/60 - 20%", horas: 10.1 },
+            { nome: "Assetto Corsa Competizione", adquirido: true, avaliacao: 0, dataFinal: "17/05/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 9.9 },
+            { nome: "BeamNG.drive", adquirido: true, avaliacao: 0, dataFinal: "23/05/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/5 - 0%", horas: 9.6 },
+            { nome: "Raft", adquirido: true, avaliacao: 0, dataFinal: "28/10/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "10/104 - 10%", horas: 9.3 },
+            { nome: "Windrose", adquirido: true, avaliacao: 0, dataFinal: "06/06/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 8.6 },
+            { nome: "Escape Simulator", adquirido: true, avaliacao: 0, dataFinal: "09/07/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "7/25 - 28%", horas: 8.4 },
+            { nome: "Police Simulator: Patrol Officers", adquirido: true, avaliacao: 0, dataFinal: "29/07/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "13/20 - 65%", horas: 8.2 },
+            { nome: "Estate Agent Simulator", adquirido: true, avaliacao: 0, dataFinal: "18/11/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "30/61 - 49%", horas: 8 },
+            { nome: "ELDEN RING", adquirido: true, avaliacao: 0, dataFinal: "01/10/2025", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/42 - 0%", horas: 6.3 },
+            { nome: "Counter-Strike 2", adquirido: true, avaliacao: 0, dataFinal: "28/03/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/1 - 100%", horas: 5.6 },
+            { nome: "DayZ", adquirido: true, avaliacao: 0, dataFinal: "15/11/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "5/13 - 38%", horas: 5.2 },
+            { nome: "Dead by Daylight", adquirido: true, avaliacao: 0, dataFinal: "29/03/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "8/303 - 3%", horas: 4.8 },
+            { nome: "Sengoku Dynasty", adquirido: true, avaliacao: 0, dataFinal: "02/09/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/40 - 0%", horas: 3.5 },
+            { nome: "The Painscreek Killings", adquirido: true, avaliacao: 0, dataFinal: "24/12/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "4/33 - 12%", horas: 3.3 },
+            { nome: "F1 2014", adquirido: true, avaliacao: 0, dataFinal: "09/11/2014", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/49 - 0%", horas: 2.9 },
+            { nome: "Len's Island", adquirido: true, avaliacao: 0, dataFinal: "22/06/2025", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/31 - 6%", horas: 2.7 },
+            { nome: "7 Days to Die", adquirido: true, avaliacao: 0, dataFinal: "30/01/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/43 - 0%", horas: 2.2 },
+            { nome: "Mist Survival", adquirido: true, avaliacao: 0, dataFinal: "26/08/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 2.2 },
+            { nome: "Car Mechanic Simulator 2018", adquirido: true, avaliacao: 0, dataFinal: "08/06/2020", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/60 - 2%", horas: 1.9 },
+            { nome: "Scene Investigators", adquirido: true, avaliacao: 0, dataFinal: "28/10/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/5 - 20%", horas: 1.9 },
+            { nome: "Satisfactory", adquirido: true, avaliacao: 0, dataFinal: "18/12/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/44 - 0%", horas: 1.7 },
+            { nome: "The Sims 4", adquirido: true, avaliacao: 0, dataFinal: "18/12/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 1.4 },
+            { nome: "Days Gone", adquirido: true, avaliacao: 0, dataFinal: "05/06/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/67 - 4%", horas: 1.2 },
+            { nome: "HITMAN 2", adquirido: true, avaliacao: 0, dataFinal: "16/02/2020", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/146 - 1%", horas: 1.2 },
+            { nome: "Icarus", adquirido: true, avaliacao: 0, dataFinal: "26/08/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/171 - 1%", horas: 1.2 },
+            { nome: "Aimlabs", adquirido: true, avaliacao: 0, dataFinal: "15/03/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "6/100 - 6%", horas: 1.1 },
+            { nome: "LEGO Worlds", adquirido: true, avaliacao: 0, dataFinal: "15/10/2021", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/71 - 4%", horas: 1 },
+            { nome: "Deadside", adquirido: true, avaliacao: 0, dataFinal: "26/05/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "4/29 - 14%", horas: 1 },
+            { nome: "F1 2020", adquirido: true, avaliacao: 0, dataFinal: "23/06/2021", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/50 - 0%", horas: 1 },
+            { nome: "Project Zomboid", adquirido: true, avaliacao: 0, dataFinal: "03/12/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 0.9 },
+            { nome: "Electrician Simulator", adquirido: true, avaliacao: 0, dataFinal: "03/11/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "6/26 - 23%", horas: 0.9 },
+            { nome: "Assetto Corsa", adquirido: true, avaliacao: 0, dataFinal: "12/04/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/709 - 0%", horas: 0.9 },
+            { nome: "Hogwarts Legacy", adquirido: true, avaliacao: 0, dataFinal: "25/07/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/45 - 2%", horas: 0.9 },
+            { nome: "KeepUp Survival", adquirido: true, avaliacao: 0, dataFinal: "12/06/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/32 - 0%", horas: 0.8 },
+            { nome: "Cooking Simulator", adquirido: true, avaliacao: 0, dataFinal: "01/08/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "9/302 - 3%", horas: 0.8 },
+            { nome: "Lumberjack's Dynasty", adquirido: true, avaliacao: 0, dataFinal: "01/08/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/33 - 3%", horas: 0.8 },
+            { nome: "Metro Exodus Enhanced Edition", adquirido: true, avaliacao: 0, dataFinal: "18/04/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/68 - 0%", horas: 0.7 },
+            { nome: "Shadow of the Tomb Raider", adquirido: true, avaliacao: 0, dataFinal: "18/07/2020", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/99 - 1%", horas: 0.7 },
+            { nome: "Survival: Fountain of Youth", adquirido: true, avaliacao: 0, dataFinal: "25/05/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/49 - 6%", horas: 0.6 },
+            { nome: "Bus Flipper Simulator", adquirido: true, avaliacao: 0, dataFinal: "27/06/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/20 - 10%", horas: 0.6 },
+            { nome: "Storage Hunter", adquirido: true, avaliacao: 0, dataFinal: "16/05/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/72 - 3%", horas: 0.6 },
+            { nome: "Gold Mining Simulator", adquirido: true, avaliacao: 0, dataFinal: "16/05/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/42 - 2%", horas: 0.5 },
+            { nome: "Thief Simulator", adquirido: true, avaliacao: 0, dataFinal: "02/08/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/33 - 0%", horas: 0.5 },
+            { nome: "Alaskan Road Truckers", adquirido: true, avaliacao: 0, dataFinal: "27/10/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "2/30 - 7%", horas: 0.5 },
+            { nome: "Circuit Superstars", adquirido: true, avaliacao: 0, dataFinal: "19/07/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/33 - 9%", horas: 0.5 },
+            { nome: "theHunter: Call of the Wild", adquirido: true, avaliacao: 0, dataFinal: "23/12/2020", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/160 - 2%", horas: 0.5 },
+            { nome: "Destiny 2", adquirido: true, avaliacao: 0, dataFinal: "16/02/2020", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/23 - 4%", horas: 0.5 },
+            { nome: "Survive the Nights", adquirido: true, avaliacao: 0, dataFinal: "05/05/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "24/89 - 27%", horas: 0.4 },
+            { nome: "BarnFinders", adquirido: true, avaliacao: 0, dataFinal: "16/07/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "1/47 - 2%", horas: 0.3 },
+            { nome: "Big Ambitions", adquirido: true, avaliacao: 0, dataFinal: "19/03/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/99 - 0%", horas: 0.3 },
+            { nome: "eFootball", adquirido: true, avaliacao: 0, dataFinal: "19/12/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 0.3 },
+            { nome: "RaceRoom Racing Experience", adquirido: true, avaliacao: 0, dataFinal: "08/11/2014", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 0.2 },
+            { nome: "SurrounDead", adquirido: true, avaliacao: 0, dataFinal: "08/03/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/21 - 14%", horas: 0.2 },
+            { nome: "My dream setup", adquirido: true, avaliacao: 0, dataFinal: "08/03/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "5/16 - 31%", horas: 0.2 },
+            { nome: "God of War", adquirido: true, avaliacao: 0, dataFinal: "10/08/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/37 - 0%", horas: 0.2 },
+            { nome: "Kingdom Two Crowns", adquirido: true, avaliacao: 0, dataFinal: "27/03/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/46 - 0%", horas: 0.2 },
+            { nome: "Medieval Dynasty", adquirido: true, avaliacao: 0, dataFinal: "19/12/2023", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/44 - 0%", horas: 0.2 },
+            { nome: "Parcel Delivery Simulator", adquirido: true, avaliacao: 0, dataFinal: "18/04/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "3/33 - 9%", horas: 0.1 },
+            { nome: "CHRONO TRIGGER", adquirido: true, avaliacao: 0, dataFinal: "25/10/2025", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/13 - 0%", horas: 0.1 },
+            { nome: "Stardew Valley", adquirido: true, avaliacao: 0, dataFinal: "18/03/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/49 - 0%", horas: 0.1 },
+            { nome: "Wallpaper Engine", adquirido: true, avaliacao: 0, dataFinal: "14/06/2024", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/17 - 0%", horas: 0.1 },
+            { nome: "Indiana Jones and the Fate of Atlantis", adquirido: true, avaliacao: 0, dataFinal: "25/01/2026", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "", horas: 0 },
+            { nome: "Drug Dealer Simulator", adquirido: true, avaliacao: 0, dataFinal: "02/08/2022", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Em andamento", trofeus: "0/36 - 0%", horas: 0 },
             { nome: "The Dig", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Nao iniciada", trofeus: "", horas: 0 },
             { nome: "Resident Evil 5", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Nao iniciada", trofeus: "", horas: 0 },
             { nome: "Indiana Jones and the Last Crusade", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Steam", release: null, status: "Nao iniciada", trofeus: "", horas: 0 },
@@ -1214,6 +1198,10 @@
 
         const platformColors = { 'PS3': '#f5a623', 'PS4': '#003087', 'PS5': '#00439C', 'Switch 2': '#E60012', 'Steam': '#66c0f4' };
 
+        /*RDR2_DATA_START*/
+        const RDR2_DATA = {"totalHours":484,"ps":{"hours":311.6,"earned":34,"total":52,"pct":65,"types":[0,2,1,31]},"steam":{"hours":101.4,"earned":29,"total":51,"pct":57},"rdo":{"hours":71.2},"combinedEarned":63,"combinedTotal":103,"cmp":{"both":27,"onlyPsn":7,"onlySteam":2,"neither":16},"compare":[{"name":"Legend of the West","type":"platinum","desc":"Legend of the West","psn":true,"psnEarned":false,"psnRarity":0.1,"steam":false,"steamEarned":null,"steamGlobal":null},{"name":"Back in the Mud","type":"bronze","desc":"Complete Chapter 1.","psn":true,"psnEarned":true,"psnRarity":65.1,"steam":true,"steamEarned":true,"steamGlobal":72.5},{"name":"Just a Scratch","type":"bronze","desc":"Complete 'Enter, Pursued by a Memory'.","psn":true,"psnEarned":true,"psnRarity":76.4,"steam":true,"steamEarned":true,"steamGlobal":85.3},{"name":"To Greener Pastures","type":"bronze","desc":"Complete Chapter 2.","psn":true,"psnEarned":true,"psnRarity":42.6,"steam":true,"steamEarned":true,"steamGlobal":41.2},{"name":"Settling Feuds","type":"bronze","desc":"Complete Chapter 3.","psn":true,"psnEarned":true,"psnRarity":36.1,"steam":true,"steamEarned":true,"steamGlobal":32.4},{"name":"Washed Ashore","type":"bronze","desc":"Complete Chapter 4.","psn":true,"psnEarned":true,"psnRarity":32.2,"steam":true,"steamEarned":true,"steamGlobal":27.4},{"name":"No Traitors","type":"bronze","desc":"Complete Chapter 5.","psn":true,"psnEarned":true,"psnRarity":31.3,"steam":true,"steamEarned":true,"steamGlobal":26.4},{"name":"Third Time Lucky","type":"bronze","desc":"Complete 'Goodbye, Dear Friend'.","psn":true,"psnEarned":true,"psnRarity":29.5,"steam":true,"steamEarned":true,"steamGlobal":24.8},{"name":"Redemption","type":"silver","desc":"Complete 'Red Dead Redemption'.","psn":true,"psnEarned":true,"psnRarity":27.8,"steam":true,"steamEarned":true,"steamGlobal":23.4},{"name":"Cowboy Builder","type":"bronze","desc":"Complete 'A New Jerusalem'.","psn":true,"psnEarned":true,"psnRarity":25.6,"steam":true,"steamEarned":true,"steamGlobal":21},{"name":"Endless Summer","type":"gold","desc":"Complete the Epilogue.","psn":true,"psnEarned":true,"psnRarity":24.6,"steam":true,"steamEarned":true,"steamGlobal":20.2},{"name":"Lending a Hand","type":"silver","desc":"Complete all optional Honor story missions.","psn":true,"psnEarned":false,"psnRarity":7.8,"steam":true,"steamEarned":false,"steamGlobal":9.4},{"name":"Best in the West","type":"gold","desc":"Attain 100% completion.","psn":true,"psnEarned":false,"psnRarity":0.5,"steam":true,"steamEarned":false,"steamGlobal":2.8},{"name":"Gold Rush","type":"silver","desc":"Earn 70 Gold Medals in Story missions.","psn":true,"psnEarned":false,"psnRarity":0.2,"steam":true,"steamEarned":false,"steamGlobal":2},{"name":"Friends With Benefits","type":"bronze","desc":"Complete a Companion Activity in each camp.","psn":true,"psnEarned":false,"psnRarity":15,"steam":true,"steamEarned":false,"steamGlobal":16.2},{"name":"Hobby Horse","type":"bronze","desc":"Play all mini games.","psn":true,"psnEarned":true,"psnRarity":9.6,"steam":true,"steamEarned":false,"steamGlobal":10.1},{"name":"Breaking and Entering","type":"bronze","desc":"Recover the stash from 4 homesteads.","psn":true,"psnEarned":true,"psnRarity":17.8,"steam":true,"steamEarned":false,"steamGlobal":18.4},{"name":"Artificial Intelligence","type":"bronze","desc":"Discover the fate of Marko Dragic.","psn":true,"psnEarned":false,"psnRarity":5.4,"steam":true,"steamEarned":false,"steamGlobal":5.6},{"name":"Take From the Rich","type":"bronze","desc":"Rob or loot $250.","psn":true,"psnEarned":true,"psnRarity":34.9,"steam":true,"steamEarned":true,"steamGlobal":34.4},{"name":"Give to the Poor","type":"bronze","desc":"Donate $250 to the gang tithing box.","psn":true,"psnEarned":true,"psnRarity":37.2,"steam":true,"steamEarned":true,"steamGlobal":42.8},{"name":"Pony Up","type":"bronze","desc":"Spend $5000 across all shops.","psn":true,"psnEarned":true,"psnRarity":13.8,"steam":true,"steamEarned":false,"steamGlobal":14.1},{"name":"Extreme Personality","type":"bronze","desc":"Reach maximum or minimum Honor level.","psn":true,"psnEarned":false,"psnRarity":20.6,"steam":true,"steamEarned":true,"steamGlobal":19.8},{"name":"Western Stranger","type":"bronze","desc":"Complete 10 Stranger mission strands.","psn":true,"psnEarned":false,"psnRarity":10,"steam":true,"steamEarned":true,"steamGlobal":11.2},{"name":"Bountiful","type":"bronze","desc":"Survive 3 days holding a bounty of $250 in all states.","psn":true,"psnEarned":false,"psnRarity":0.9,"steam":true,"steamEarned":false,"steamGlobal":1.8},{"name":"Collector's Item","type":"silver","desc":"Complete one of the Collectable strands.","psn":true,"psnEarned":false,"psnRarity":4.2,"steam":true,"steamEarned":false,"steamGlobal":5.7},{"name":"Paying Respects","type":"bronze","desc":"Find the graves of each of your fallen companions.","psn":true,"psnEarned":false,"psnRarity":1.9,"steam":true,"steamEarned":false,"steamGlobal":2.9},{"name":"Errand Boy","type":"bronze","desc":"Deliver 5 camp companion item requests.","psn":true,"psnEarned":true,"psnRarity":6.1,"steam":true,"steamEarned":false,"steamGlobal":8.2},{"name":"It's Art","type":"bronze","desc":"Find a permanent home for the squirrel statue.","psn":true,"psnEarned":false,"psnRarity":0.5,"steam":true,"steamEarned":false,"steamGlobal":1.6},{"name":"Self Sufficient","type":"bronze","desc":"Craft 30 unique items in Story Mode.","psn":true,"psnEarned":true,"psnRarity":10.7,"steam":true,"steamEarned":true,"steamGlobal":13.2},{"name":"Skin Deep","type":"bronze","desc":"Skin every species of animal in Story Mode.","psn":true,"psnEarned":false,"psnRarity":0.3,"steam":true,"steamEarned":false,"steamGlobal":3.6},{"name":"Zoologist","type":"bronze","desc":"Study every animal across all states in Story Mode.","psn":true,"psnEarned":false,"psnRarity":0.3,"steam":true,"steamEarned":false,"steamGlobal":3.3},{"name":"It was THIS Big!","type":"bronze","desc":"Catch a fish weighing at least 16 lbs (7.3 kg).","psn":true,"psnEarned":true,"psnRarity":22.3,"steam":true,"steamEarned":true,"steamGlobal":18.9},{"name":"Locked and Loaded","type":"bronze","desc":"Upgrade each available component for a single sidearm or longarm weapon.","psn":true,"psnEarned":true,"psnRarity":30.3,"steam":true,"steamEarned":true,"steamGlobal":35.4},{"name":"Grin and Bear it","type":"bronze","desc":"Survive 18 bear attacks and kill the bear each time in Story Mode.","psn":true,"psnEarned":false,"psnRarity":0.3,"steam":true,"steamEarned":false,"steamGlobal":1.6},{"name":"Trusty Steed","type":"bronze","desc":"Reach max bonding level with a horse.","psn":true,"psnEarned":true,"psnRarity":50.5,"steam":true,"steamEarned":true,"steamGlobal":50.5},{"name":"Breakout","type":"bronze","desc":"Red Dead Online: Complete the Intro.","psn":true,"psnEarned":true,"psnRarity":33.4,"steam":true,"steamEarned":true,"steamGlobal":32.6},{"name":"Series Major","type":"bronze","desc":"Red Dead Online: Take part in a Series.","psn":true,"psnEarned":true,"psnRarity":13.5,"steam":true,"steamEarned":true,"steamGlobal":6.7},{"name":"Gun For Hire","type":"bronze","desc":"Red Dead Online: Accept 10 Free Roam missions from characters around the world.","psn":true,"psnEarned":true,"psnRarity":9.5,"steam":true,"steamEarned":false,"steamGlobal":8.2},{"name":"Eventful","type":"bronze","desc":"Red Dead Online: Play 5 Free Roam Events.","psn":true,"psnEarned":false,"psnRarity":2.6,"steam":true,"steamEarned":false,"steamGlobal":2.6},{"name":"Buckle Up","type":"bronze","desc":"Red Dead Online: Achieve 5 gold belt buckles from awards.","psn":true,"psnEarned":true,"psnRarity":10.7,"steam":true,"steamEarned":true,"steamGlobal":10.2},{"name":"The Real Deal","type":"bronze","desc":"Red Dead Online: Achieve MVP 3 times (in a round with at least 4 players).","psn":true,"psnEarned":false,"psnRarity":1.5,"steam":true,"steamEarned":false,"steamGlobal":1.2},{"name":"Horses for Courses","type":"bronze","desc":"Red Dead Online: Concurrently own 5 horses.","psn":true,"psnEarned":true,"psnRarity":1,"steam":true,"steamEarned":false,"steamGlobal":1.9},{"name":"Getting Started","type":"bronze","desc":"Red Dead Online: Reach Rank 10.","psn":true,"psnEarned":true,"psnRarity":16.6,"steam":true,"steamEarned":true,"steamGlobal":14.8},{"name":"Notorious","type":"gold","desc":"Red Dead Online: Reach Rank 50.","psn":true,"psnEarned":true,"psnRarity":3.5,"steam":true,"steamEarned":true,"steamGlobal":4.7},{"name":"All's Fair","type":"bronze","desc":"Red Dead Online: Successfully counter a rival Posse's Free Roam mission.","psn":true,"psnEarned":true,"psnRarity":5.5,"steam":true,"steamEarned":false,"steamGlobal":2.8},{"name":"Home Comforts","type":"bronze","desc":"Red Dead Online: Purchase 5 camp improvements.","psn":true,"psnEarned":true,"psnRarity":2.8,"steam":true,"steamEarned":true,"steamGlobal":4.2},{"name":"Non-Regulation","type":"bronze","desc":"Red Dead Online: Craft 25 pieces of ammunition.","psn":true,"psnEarned":false,"psnRarity":1.5,"steam":true,"steamEarned":false,"steamGlobal":1.8},{"name":"Posse Up","type":"bronze","desc":"Red Dead Online: Form a Persistent Posse.","psn":true,"psnEarned":true,"psnRarity":5.8,"steam":true,"steamEarned":true,"steamGlobal":5.4},{"name":"Master Craftsman","type":"bronze","desc":"Red Dead Online: Craft 20 items (excluding ammo).","psn":true,"psnEarned":true,"psnRarity":7.2,"steam":true,"steamEarned":true,"steamGlobal":6.9},{"name":"Butchered","type":"bronze","desc":"Red Dead Online: Sell 20 items to the Butcher.","psn":true,"psnEarned":true,"psnRarity":11.9,"steam":true,"steamEarned":true,"steamGlobal":9.7},{"name":"Picked to Perfection","type":"bronze","desc":"Red Dead Online: Pick 25 Herbs.","psn":true,"psnEarned":true,"psnRarity":8.6,"steam":true,"steamEarned":true,"steamGlobal":8.2},{"name":"Strength in Numbers","type":"bronze","desc":"Red Dead Online: Complete a Free Roam mission as part of a Posse with at least 2 members.","psn":true,"psnEarned":true,"psnRarity":16.5,"steam":true,"steamEarned":true,"steamGlobal":13}]};
+        /*RDR2_DATA_END*/
+
         let currentPlatform = 'Todos';
         let filteredGames = [...games];
         let currentSort = { field: 'status', dir: 'asc' };
@@ -1225,6 +1213,97 @@
             applyFilters();
             renderPorAno();
             renderTrofeus();
+            renderRdr2();
+        }
+
+        // ===== RED DEAD REDEMPTION 2 (pagina dedicada) =====
+        let rdr2Filter = 'all';
+        function setRdr2Filter(v) { rdr2Filter = v; renderRdr2(); }
+        function renderRdr2() {
+            if (typeof RDR2_DATA === 'undefined') return;
+            const d = RDR2_DATA;
+            const ico = { platinum: '&#128142;', gold: '&#129351;', silver: '&#129352;', bronze: '&#129353;', steam: '&#11088;' };
+            const mark = (on, val) => val == null && !on ? '<span class="rdr-cell-na">&mdash;</span>' : (val ? '<span class="rdr-yes">&#10003;</span>' : '<span class="rdr-no">&#10007;</span>');
+
+            const rows = d.compare.filter(r => {
+                if (rdr2Filter === 'both') return r.psnEarned && r.steamEarned;
+                if (rdr2Filter === 'onlyps') return r.psnEarned && !r.steamEarned;
+                if (rdr2Filter === 'onlysteam') return !r.psnEarned && r.steamEarned;
+                if (rdr2Filter === 'none') return !r.psnEarned && !r.steamEarned;
+                return true;
+            });
+
+            const tableRows = rows.map(r => {
+                const rar = r.psnRarity != null ? r.psnRarity : (r.steamGlobal != null ? r.steamGlobal : null);
+                return `<tr>
+                    <td class="rdr-t-name"><span class="rdr-t-ico" title="${r.type}">${ico[r.type] || ico.steam}</span><div><div class="rdr-t-title">${r.name}</div><div class="rdr-t-desc">${r.desc || ''}</div></div></td>
+                    <td class="rdr-t-rar">${rar != null ? rar + '%' : '&mdash;'}</td>
+                    <td class="rdr-t-cell">${r.psn ? mark(true, r.psnEarned) : '<span class="rdr-cell-na">&mdash;</span>'}</td>
+                    <td class="rdr-t-cell">${r.steam ? mark(true, r.steamEarned) : '<span class="rdr-cell-na">&mdash;</span>'}</td>
+                </tr>`;
+            }).join('');
+
+            document.getElementById('rdr2Section').innerHTML = `
+                <div class="rdr-hero">
+                    <div class="rdr-hero-badge">&#129312; PÁGINA DEDICADA</div>
+                    <div class="rdr-hero-title">Red Dead Redemption 2</div>
+                    <div class="rdr-hero-sub">História + Online, somados como um só &mdash; jogado no PS4, PS5 (versão PS4) e Steam</div>
+                    <div class="rdr-hero-total"><span class="rdr-big">${d.totalHours}h</span><span class="rdr-big-lbl">jogadas no total</span></div>
+                </div>
+
+                <div class="rdr-stats">
+                    <div class="rdr-stat"><div class="rdr-stat-num">${d.totalHours}h</div><div class="rdr-stat-lbl">Horas totais (RDR2 + Online)</div></div>
+                    <div class="rdr-stat"><div class="rdr-stat-num">${d.combinedEarned}</div><div class="rdr-stat-lbl">Troféus + Conquistas</div></div>
+                    <div class="rdr-stat"><div class="rdr-stat-num">${d.combinedEarned}/${d.combinedTotal}</div><div class="rdr-stat-lbl">Progresso combinado</div></div>
+                    <div class="rdr-stat"><div class="rdr-stat-num">${d.cmp.both}</div><div class="rdr-stat-lbl">Ganhos nas 2 plataformas</div></div>
+                </div>
+
+                <div class="rdr-platforms">
+                    <div class="rdr-card">
+                        <div class="rdr-card-head"><span class="rdr-card-ico" style="background:#00439C">&#127918;</span><div><div class="rdr-card-title">PlayStation</div><div class="rdr-card-plat">PS4 &middot; PS5 (versão PS4)</div></div></div>
+                        <div class="rdr-card-hours">${String(d.ps.hours).replace('.', ',')}<span>h</span></div>
+                        <div class="rdr-card-row"><span>Troféus</span><strong>${d.ps.earned} / ${d.ps.total}</strong></div>
+                        <div class="rdr-bar"><div class="rdr-bar-fill" style="width:${d.ps.pct}%;background:linear-gradient(90deg,#f5a623,#f0c040)"></div></div>
+                        <div class="rdr-card-pct">${d.ps.pct}% concluído</div>
+                        <div class="rdr-types"><span title="Platina">&#128142; ${d.ps.types[0]}</span><span title="Ouro">&#129351; ${d.ps.types[1]}</span><span title="Prata">&#129352; ${d.ps.types[2]}</span><span title="Bronze">&#129353; ${d.ps.types[3]}</span></div>
+                    </div>
+                    <div class="rdr-card">
+                        <div class="rdr-card-head"><span class="rdr-card-ico" style="background:#66c0f4">&#128421;&#65039;</span><div><div class="rdr-card-title">Steam &mdash; RDR2</div><div class="rdr-card-plat">Conquistas</div></div></div>
+                        <div class="rdr-card-hours">${String(d.steam.hours).replace('.', ',')}<span>h</span></div>
+                        <div class="rdr-card-row"><span>Conquistas</span><strong>${d.steam.earned} / ${d.steam.total}</strong></div>
+                        <div class="rdr-bar"><div class="rdr-bar-fill" style="width:${d.steam.pct}%;background:linear-gradient(90deg,#1387b8,#66c0f4)"></div></div>
+                        <div class="rdr-card-pct">${d.steam.pct}% concluído</div>
+                        <div class="rdr-types"><span>&#127942; ${d.steam.earned} conquistas</span></div>
+                    </div>
+                    <div class="rdr-card">
+                        <div class="rdr-card-head"><span class="rdr-card-ico" style="background:#2a475e">&#127903;&#65039;</span><div><div class="rdr-card-title">Red Dead Online</div><div class="rdr-card-plat">Steam &middot; modo online</div></div></div>
+                        <div class="rdr-card-hours">${String(d.rdo.hours).replace('.', ',')}<span>h</span></div>
+                        <div class="rdr-card-row"><span>Conquistas</span><strong>sem lista</strong></div>
+                        <div class="rdr-bar"><div class="rdr-bar-fill" style="width:100%;background:linear-gradient(90deg,#3a5a6b,#5a7a8b)"></div></div>
+                        <div class="rdr-card-pct">Somado ao total do RDR2</div>
+                        <div class="rdr-types"><span>&#128176; incluso nas ${d.totalHours}h</span></div>
+                    </div>
+                </div>
+
+                <div class="rdr-cmp-head">
+                    <h3>Troféus (PSN) &times; Conquistas (Steam) &mdash; lado a lado</h3>
+                    <div class="rdr-cmp-legend">
+                        <span>&#10003; ganho</span><span>&#10007; falta</span><span>&mdash; não existe na plataforma</span>
+                    </div>
+                </div>
+                <div class="rdr-cmp-summary">
+                    <button class="rdr-fbtn ${rdr2Filter === 'all' ? 'on' : ''}" onclick="setRdr2Filter('all')">Todas (${d.compare.length})</button>
+                    <button class="rdr-fbtn ${rdr2Filter === 'both' ? 'on' : ''}" onclick="setRdr2Filter('both')">Nas duas (${d.cmp.both})</button>
+                    <button class="rdr-fbtn ${rdr2Filter === 'onlyps' ? 'on' : ''}" onclick="setRdr2Filter('onlyps')">Só PSN (${d.cmp.onlyPsn})</button>
+                    <button class="rdr-fbtn ${rdr2Filter === 'onlysteam' ? 'on' : ''}" onclick="setRdr2Filter('onlysteam')">Só Steam (${d.cmp.onlySteam})</button>
+                    <button class="rdr-fbtn ${rdr2Filter === 'none' ? 'on' : ''}" onclick="setRdr2Filter('none')">Em nenhuma (${d.cmp.neither})</button>
+                </div>
+                <div class="rdr-cmp-wrap">
+                    <table class="rdr-cmp">
+                        <thead><tr><th>Troféu / Conquista</th><th class="rdr-t-rar">Raridade</th><th class="rdr-t-cell">&#127918; PSN</th><th class="rdr-t-cell">&#128421;&#65039; Steam</th></tr></thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>
+                </div>`;
         }
 
         // ===== TABS =====
@@ -1252,23 +1331,22 @@
 
         function renderPorAno() {
             const finished = games.filter(g => g.dataFinal && g.dataFinal.trim());
+            const concluidos = finished.filter(g => g.status === 'Concluido').length;
             const totalHoras = finished.reduce((a, g) => a + (g.horas || 0), 0);
             const totalTrof = finished.reduce((a, g) => a + trophyEarned(g.trofeus), 0);
             const platinas = finished.reduce((a, g) => a + (g.trofeusTipo ? g.trofeusTipo[0] : 0), 0);
-            const semHoras = finished.filter(g => g.horas == null).length;
+            const nSteam = finished.filter(g => g.plataforma === 'Steam').length;
 
             document.getElementById('anoStats').innerHTML = `
-                <div class="ano-stat"><div class="ano-stat-icon">&#127937;</div><div><div class="ano-stat-num">${finished.length}</div><div class="ano-stat-lbl">Jogos Finalizados</div></div></div>
+                <div class="ano-stat"><div class="ano-stat-icon">&#127937;</div><div><div class="ano-stat-num">${concluidos}</div><div class="ano-stat-lbl">Finalizados (Concluído)</div></div></div>
                 <div class="ano-stat"><div class="ano-stat-icon">&#9201;&#65039;</div><div><div class="ano-stat-num">${Math.round(totalHoras)}h</div><div class="ano-stat-lbl">Horas Jogadas</div></div></div>
-                <div class="ano-stat"><div class="ano-stat-icon">&#127942;</div><div><div class="ano-stat-num">${totalTrof}</div><div class="ano-stat-lbl">Troféus</div></div></div>
-                <div class="ano-stat"><div class="ano-stat-icon">&#128142;</div><div><div class="ano-stat-num">${platinas}</div><div class="ano-stat-lbl">Platinas</div></div></div>
+                <div class="ano-stat"><div class="ano-stat-icon">&#127942;</div><div><div class="ano-stat-num">${totalTrof}</div><div class="ano-stat-lbl">Troféus / Conquistas</div></div></div>
+                <div class="ano-stat"><div class="ano-stat-icon">&#128142;</div><div><div class="ano-stat-num">${platinas}</div><div class="ano-stat-lbl">Platinas (PSN)</div></div></div>
             `;
 
             const note = document.getElementById('anoNote');
-            if (semHoras > 0) {
-                note.style.display = 'block';
-                note.innerHTML = `<strong>${semHoras}</strong> jogo(s) sem horas: a PSN n&atilde;o registra tempo em PS3 nem em alguns t&iacute;tulos antigos. Jogos de Switch n&atilde;o t&ecirc;m dados de trof&eacute;u/horas.`;
-            } else note.style.display = 'none';
+            note.style.display = 'block';
+            note.innerHTML = `Inclui <strong>${nSteam}</strong> jogos da <strong>Steam</strong> (agrupados pelo ano da última vez jogada; badge azul = Em andamento). PS3 e alguns títulos antigos não têm horas registradas.`;
 
             const anos = [...new Set(finished.map(g => anoFromData(g.dataFinal)))].filter(Boolean).sort((a, b) => b - a);
             document.getElementById('anoContent').innerHTML = anos.map(ano => {
@@ -1496,34 +1574,39 @@
         function trophyDefined(t) { if (!t) return 0; const m = t.match(/^\d+\/(\d+)/); return m ? parseInt(m[1]) : 0; }
 
         function renderTrofeus() {
-            const comTrofeus = games.filter(g => g.trofeus && g.trofeusTipo);
-            // Totais por tipo [platina, ouro, prata, bronze]
+            const psnTrof = games.filter(g => g.trofeus && g.trofeusTipo);
+            const steamTrof = games.filter(g => g.plataforma === 'Steam' && g.trofeus);
+            const allTrof = games.filter(g => g.trofeus);
+
+            // Totais PSN por tipo [platina, ouro, prata, bronze]
             const tot = [0, 0, 0, 0];
-            comTrofeus.forEach(g => g.trofeusTipo.forEach((n, i) => tot[i] += n));
+            psnTrof.forEach(g => g.trofeusTipo.forEach((n, i) => tot[i] += n));
             const totalTrof = tot.reduce((a, b) => a + b, 0);
-            const earnedSum = comTrofeus.reduce((a, g) => a + trophyEarned(g.trofeus), 0);
-            const definedSum = comTrofeus.reduce((a, g) => a + trophyDefined(g.trofeus), 0);
-            const pctGeral = definedSum ? Math.round(earnedSum / definedSum * 100) : 0;
-            const platinados = comTrofeus.filter(g => parseTrophyPercent(g.trofeus) === 100).length;
+            const platinados = psnTrof.filter(g => parseTrophyPercent(g.trofeus) === 100).length;
+            // Steam
+            const steamEarned = steamTrof.reduce((a, g) => a + trophyEarned(g.trofeus), 0);
+            const steam100 = steamTrof.filter(g => parseTrophyPercent(g.trofeus) === 100).length;
+            const combinado = totalTrof + steamEarned;
 
             document.getElementById('trofHero').innerHTML = `
-                <div class="trof-hero-total"><span class="trof-hero-num">${totalTrof.toLocaleString('pt-BR')}</span><span class="trof-hero-lbl">Troféus<br>conquistados</span></div>
+                <div class="trof-hero-total"><span class="trof-hero-num">${combinado.toLocaleString('pt-BR')}</span><span class="trof-hero-lbl">Troféus +<br>Conquistas</span></div>
                 <div class="trof-types">
                     <div class="trof-type platina"><div class="trof-type-ico">&#128142;</div><div class="trof-type-num">${tot[0]}</div><div class="trof-type-lbl">Platina</div></div>
                     <div class="trof-type ouro"><div class="trof-type-ico">&#129351;</div><div class="trof-type-num">${tot[1]}</div><div class="trof-type-lbl">Ouro</div></div>
                     <div class="trof-type prata"><div class="trof-type-ico">&#129352;</div><div class="trof-type-num">${tot[2]}</div><div class="trof-type-lbl">Prata</div></div>
                     <div class="trof-type bronze"><div class="trof-type-ico">&#129353;</div><div class="trof-type-num">${tot[3]}</div><div class="trof-type-lbl">Bronze</div></div>
+                    <div class="trof-type steam"><div class="trof-type-ico">&#11088;</div><div class="trof-type-num">${steamEarned}</div><div class="trof-type-lbl">Steam</div></div>
                 </div>`;
 
             document.getElementById('trofSubstats').innerHTML = `
-                <div class="trof-substat"><div class="trof-substat-num">${comTrofeus.length}</div><div class="trof-substat-lbl">Jogos com troféus</div></div>
-                <div class="trof-substat"><div class="trof-substat-num">${platinados}</div><div class="trof-substat-lbl">Jogos 100%</div></div>
-                <div class="trof-substat"><div class="trof-substat-num">${pctGeral}%</div><div class="trof-substat-lbl">Conclusão geral</div></div>
-                <div class="trof-substat"><div class="trof-substat-num">${earnedSum}/${definedSum}</div><div class="trof-substat-lbl">Ganhos / Disponíveis</div></div>`;
+                <div class="trof-substat"><div class="trof-substat-num">${totalTrof}</div><div class="trof-substat-lbl">Troféus PSN (${psnTrof.length} jogos)</div></div>
+                <div class="trof-substat"><div class="trof-substat-num">${steamEarned}</div><div class="trof-substat-lbl">Conquistas Steam (${steamTrof.length} jogos)</div></div>
+                <div class="trof-substat"><div class="trof-substat-num">${tot[0]}</div><div class="trof-substat-lbl">Platinas (PSN)</div></div>
+                <div class="trof-substat"><div class="trof-substat-num">${platinados + steam100}</div><div class="trof-substat-lbl">Jogos 100%</div></div>`;
 
             // Ordenacao
             const sort = document.getElementById('trofSort').value;
-            const lista = [...comTrofeus];
+            const lista = [...allTrof];
             lista.sort((a, b) => {
                 switch (sort) {
                     case 'data-asc': return parseDate(a.dataFinal) - parseDate(b.dataFinal);
@@ -1538,13 +1621,14 @@
             document.getElementById('trofList').innerHTML = lista.map(g => {
                 const color = getPlatformColor(g.plataforma);
                 const pct = parseTrophyPercent(g.trofeus);
-                const plat = pct === 100 ? '<img class="trof-plat-img" src="https://i.redd.it/ys23cmt5l0u61.png" alt="Platina">' : '';
-                const [p, o, s, b] = g.trofeusTipo;
-                const tt = `
-                    <span class="${p ? '' : 'z'}" title="Platina">&#128142;${p}</span>
-                    <span class="${o ? '' : 'z'}" title="Ouro">&#129351;${o}</span>
-                    <span class="${s ? '' : 'z'}" title="Prata">&#129352;${s}</span>
-                    <span class="${b ? '' : 'z'}" title="Bronze">&#129353;${b}</span>`;
+                const plat = pct === 100 ? '<img class="trof-plat-img" src="https://i.redd.it/ys23cmt5l0u61.png" alt="100%">' : '';
+                let tt;
+                if (g.trofeusTipo) {
+                    const [p, o, s, b] = g.trofeusTipo;
+                    tt = `<span class="${p ? '' : 'z'}" title="Platina">&#128142;${p}</span><span class="${o ? '' : 'z'}" title="Ouro">&#129351;${o}</span><span class="${s ? '' : 'z'}" title="Prata">&#129352;${s}</span><span class="${b ? '' : 'z'}" title="Bronze">&#129353;${b}</span>`;
+                } else {
+                    tt = `<span title="Conquistas Steam">&#11088; ${trophyEarned(g.trofeus)} conq.</span>`;
+                }
                 return `<div class="trof-row" onclick="openModal(${games.indexOf(g)})">
                     <div>
                         <div class="trof-row-name"><span class="trof-plat-dot" style="background:${color}"></span>${g.nome}</div>

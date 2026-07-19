@@ -437,6 +437,15 @@
         .ano-list { display: flex; flex-direction: column; gap: 0.4rem; }
         .ano-row { display: grid; grid-template-columns: minmax(0, 1fr) 70px 170px; gap: 0.9rem; align-items: center; padding: 0.7rem 0.9rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: background 0.15s ease; }
         .ano-row:hover { background: var(--row-hover); }
+        .ano-row.ar-concluido { border-left: 4px solid #2e7d32; }
+        .ano-row.ar-andamento { border-left: 4px solid #1565c0; }
+        .ano-row.ar-cancelado { border-left: 4px solid #d32f2f; }
+        .ano-row.ar-naoiniciada { border-left: 4px solid #90a4ae; }
+        .ano-row.ar-concluido { background: linear-gradient(90deg, rgba(46,125,50,0.07), transparent 55%); }
+        [data-theme="dark"] .ano-row.ar-concluido { background: linear-gradient(90deg, rgba(46,125,50,0.16), transparent 55%); }
+        .ano-check { color: #2e7d32; font-weight: 700; flex-shrink: 0; }
+        [data-theme="dark"] .ano-check { color: #66bb6a; }
+        .ano-row-meta .status-badge { margin-right: 0.3rem; vertical-align: middle; }
         .ano-row-main { min-width: 0; }
         .ano-row-name { font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
         .ano-plat-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
@@ -1056,12 +1065,15 @@
                     .sort((a, b) => parseDate(b.dataFinal) - parseDate(a.dataFinal));
                 const h = jogos.reduce((s, g) => s + (g.horas || 0), 0);
                 const tr = jogos.reduce((s, g) => s + trophyEarned(g.trofeus), 0);
+                const stMap = { 'Concluido': 'ar-concluido', 'Em andamento': 'ar-andamento', 'Cancelado': 'ar-cancelado', 'Nao iniciada': 'ar-naoiniciada' };
                 const rows = jogos.map(g => {
                     const color = getPlatformColor(g.plataforma);
-                    return `<div class="ano-row" onclick="openModal(${games.indexOf(g)})">
+                    const stCls = stMap[g.status] || '';
+                    const check = g.status === 'Concluido' ? '<span class="ano-check" title="Concluído">&#10003;</span> ' : '';
+                    return `<div class="ano-row ${stCls}" onclick="openModal(${games.indexOf(g)})">
                         <div class="ano-row-main">
-                            <div class="ano-row-name"><span class="ano-plat-dot" style="background:${color}"></span>${g.nome}</div>
-                            <div class="ano-row-meta">${g.plataforma} &middot; ${g.status} &middot; ${g.dataFinal}</div>
+                            <div class="ano-row-name">${check}<span class="ano-plat-dot" style="background:${color}"></span>${g.nome}</div>
+                            <div class="ano-row-meta"><span class="status-badge ${getStatusClass(g.status)}">${g.status}</span>${g.plataforma} &middot; ${g.dataFinal}</div>
                         </div>
                         <div class="ano-hours">${fmtHoras(g.horas)}</div>
                         <div class="ano-trophies">${trophyCell(g)}</div>

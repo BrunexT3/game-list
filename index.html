@@ -678,8 +678,92 @@
             .rdr-detail-grid { grid-template-columns: 1fr; }
         }
     </style>
+
+    <!-- ===== Clerk — acesso privado (privado-leve, checagem no cliente) ===== -->
+    <style id="clerk-gate-style">
+        /* esconde TODO o conteudo real ate o Clerk confirmar login + email autorizado */
+        body > *:not(#clerk-gate) { display: none !important; }
+        #clerk-gate {
+            position: fixed; inset: 0; z-index: 2147483647;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 18px; padding: 24px; text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+            color: #e2e8f0; font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        #clerk-gate .gate-emoji { font-size: 40px; }
+        #clerk-gate .gate-title { font-size: 22px; font-weight: 700; }
+        #clerk-gate .gate-sub { font-size: 14px; color: #a0aec0; max-width: 360px; line-height: 1.5; }
+        #clerk-gate button {
+            background: #533483; color: #fff; border: none; border-radius: 8px;
+            padding: 11px 22px; font-size: 14px; font-weight: 600; cursor: pointer;
+        }
+        #clerk-gate button:hover { background: #6b44a8; }
+    </style>
+    <script
+        defer
+        crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_bG9naWNhbC1rb2ktNDYuY2xlcmsuYWNjb3VudHMuZGV2JA"
+        src="https://logical-koi-46.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
+    <script>
+        // E-mails autorizados a ver esta pagina. Para liberar alguem, adicione o e-mail aqui.
+        const CLERK_ALLOWED_EMAILS = [
+            'bruno.dm28@gmail.com',
+        ];
+
+        window.addEventListener('load', async function () {
+            const gate = document.getElementById('clerk-gate');
+            try {
+                await Clerk.load();
+            } catch (err) {
+                gate.innerHTML =
+                    '<div class="gate-emoji">&#9888;&#65039;</div>' +
+                    '<div class="gate-title">Erro ao carregar o login</div>' +
+                    '<div class="gate-sub">Recarregue a página. Se persistir, verifique a conexão.</div>';
+                return;
+            }
+
+            function evaluate() {
+                if (!Clerk.isSignedIn) {
+                    // nao logado -> tela de login hospedada do Clerk
+                    Clerk.redirectToSignIn();
+                    return;
+                }
+                const email = ((Clerk.user &&
+                    Clerk.user.primaryEmailAddress &&
+                    Clerk.user.primaryEmailAddress.emailAddress) || '').toLowerCase();
+                const allowed = CLERK_ALLOWED_EMAILS.map(function (e) { return e.toLowerCase(); });
+
+                if (allowed.indexOf(email) !== -1) {
+                    // autorizado -> revela o conteudo
+                    var s = document.getElementById('clerk-gate-style');
+                    if (s) s.remove();
+                    if (gate) gate.remove();
+                } else {
+                    // logado, mas fora da lista de permitidos
+                    gate.innerHTML =
+                        '<div class="gate-emoji">&#128274;</div>' +
+                        '<div class="gate-title">Acesso restrito</div>' +
+                        '<div class="gate-sub">A conta <b>' + email + '</b> não está liberada para ver esta página.</div>' +
+                        '<button id="clerk-signout-btn">Sair e trocar de conta</button>';
+                    var btn = document.getElementById('clerk-signout-btn');
+                    if (btn) btn.onclick = function () { Clerk.signOut(); };
+                }
+            }
+
+            Clerk.addListener(evaluate);
+            evaluate();
+        });
+    </script>
+    <!-- ===== fim Clerk ===== -->
 </head>
 <body data-theme="light">
+    <div id="clerk-gate">
+        <div class="gate-emoji">&#127918;</div>
+        <div class="gate-title">Verificando acesso&hellip;</div>
+        <div class="gate-sub">Só um instante.</div>
+    </div>
     <div class="scanlines"></div>
 
     <div id="topbar" class="topbar">

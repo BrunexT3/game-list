@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Dead — Bruno DeMarco</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Rye&family=Special+Elite&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #150f0a;
+            min-height: 100vh;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: #f2e6ce;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== Nav topo ===== */
+        .rd-nav {
+            max-width: 1120px; margin: 0 auto; padding: 1.4rem 2rem 0.4rem;
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+        }
+        .rd-nav a.back {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            color: #c7b189; text-decoration: none; font-size: 0.9rem;
+            border: 1px solid #4a3621; border-radius: 999px; padding: 0.45rem 1rem;
+            transition: all 0.15s;
+        }
+        .rd-nav a.back:hover { color: #f2e6ce; border-color: #e0a94a; }
+        .rd-nav .brand { font-family: 'Special Elite', monospace; font-size: 0.78rem; letter-spacing: 2px; color: #7a5f3a; text-transform: uppercase; }
+
+        /* ===== Tema Velho Oeste (portado da aba RDR2, aprovado) ===== */
+        .rdr2-scope, .rdr-modal-overlay {
+            --rdr-ink: #f2e6ce; --rdr-ink-dim: #c7b189; --rdr-bg: #150f0a; --rdr-panel: #221812;
+            --rdr-panel2: #2c2016; --rdr-gold: #e0a94a; --rdr-orange: #c9763a; --rdr-red: #8f3320;
+            --rdr-border: #4a3621; --rdr-paper: #ecdcbc; --rdr-paper-ink: #3a2a18;
+        }
+        .rdr2-scope {
+            max-width: 1120px; margin: 0 auto; padding: 0 2rem 4rem;
+            color: var(--rdr-ink); font-family: 'Inter', sans-serif;
+        }
+        .rdr-modal { color: var(--rdr-ink); font-family: 'Inter', sans-serif; }
+        .rdr2-scope h2, .rdr2-scope h3 { color: var(--rdr-ink); }
+        .rdr-sec-title { font-family: 'Rye', serif; font-size: 1.4rem; color: var(--rdr-gold); margin: 2.4rem 0 1rem; display: flex; align-items: center; gap: 0.6rem; text-shadow: 1px 1px 0 rgba(0,0,0,0.4); }
+        .rdr-sec-title::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, var(--rdr-border), transparent); }
+
+        /* Hero por-do-sol */
+        .rdr-hero { position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 1.4rem; padding: 3rem 2rem 2.4rem; text-align: center;
+            background:
+              radial-gradient(circle at 50% 128%, rgba(255,206,110,0.85) 0%, rgba(224,140,64,0.5) 22%, transparent 46%),
+              linear-gradient(180deg, #1a1410 0%, #3d2113 32%, #7a3719 58%, #b85f26 78%, #e0983f 100%);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.45); border: 1px solid var(--rdr-border);
+        }
+        .rdr-hero::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%); }
+        .rdr-hero > * { position: relative; z-index: 1; }
+        .rdr-hero-eyebrow { font-family: 'Special Elite', monospace; letter-spacing: 3px; font-size: 0.72rem; color: #ffe9c2; text-transform: uppercase; margin-bottom: 0.6rem; }
+        .rdr-hero-title { font-family: 'Rye', serif; font-size: 2.8rem; line-height: 1.1; color: #fff6e6; margin-bottom: 0.6rem; text-shadow: 0 3px 12px rgba(0,0,0,0.55), 0 0 30px rgba(255,180,90,0.3); }
+        .rdr-hero-tag { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; color: #f3ddb8; opacity: 0.95; margin-bottom: 1.4rem; }
+        .rdr-hero-facts { display: flex; justify-content: center; gap: 0.5rem 1.4rem; flex-wrap: wrap; font-size: 0.8rem; color: #f0dcb6; margin-bottom: 1.6rem; }
+        .rdr-hero-facts span { display: inline-flex; align-items: center; gap: 0.35rem; }
+        .rdr-hero-hours { display: inline-flex; align-items: baseline; gap: 0.5rem; padding: 0.6rem 1.4rem; border: 1px solid rgba(255,230,180,0.35); border-radius: 12px; background: rgba(30,18,10,0.35); backdrop-filter: blur(3px); }
+        .rdr-hero-hours b { font-family: 'Rye', serif; font-size: 2.4rem; color: #fff2da; line-height: 1; }
+        .rdr-hero-hours span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #e9cfa0; }
+
+        .rdr-band { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-bottom: 1.4rem; }
+        .rdr-bitem { background: var(--rdr-panel); border: 1px solid var(--rdr-border); border-radius: 12px; padding: 1rem; text-align: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+        .rdr-bitem-num { font-family: 'Rye', serif; font-size: 1.6rem; color: var(--rdr-gold); line-height: 1.1; }
+        .rdr-bitem-lbl { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--rdr-ink-dim); margin-top: 0.3rem; }
+
+        .rdr-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 0.6rem; }
+        .rdr-card { background: linear-gradient(180deg, var(--rdr-panel2), var(--rdr-panel)); border: 1px solid var(--rdr-border); border-radius: 14px; padding: 1.3rem; box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
+        .rdr-card-head { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
+        .rdr-card-ico { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+        .rdr-card-title { font-weight: 700; font-size: 1.05rem; color: var(--rdr-ink); }
+        .rdr-card-plat { font-size: 0.78rem; color: var(--rdr-ink-dim); }
+        .rdr-card-hours { font-family: 'Rye', serif; font-size: 2rem; color: var(--rdr-gold); line-height: 1; margin-bottom: 0.8rem; }
+        .rdr-card-hours span { font-size: 1rem; color: var(--rdr-ink-dim); }
+        .rdr-card-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--rdr-ink-dim); margin-bottom: 0.5rem; }
+        .rdr-card-row strong { color: var(--rdr-ink); font-family: 'JetBrains Mono', monospace; }
+        .rdr-bar { height: 8px; background: rgba(0,0,0,0.35); border-radius: 4px; overflow: hidden; margin-bottom: 0.4rem; border: 1px solid var(--rdr-border); }
+        .rdr-bar-fill { height: 100%; border-radius: 4px; }
+        .rdr-card-pct { font-size: 0.75rem; color: var(--rdr-ink-dim); margin-bottom: 0.9rem; }
+        .rdr-types { display: flex; gap: 0.8rem; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--rdr-ink-dim); }
+
+        .rdr-trophybar { margin: 1rem 0 0; width: 100%; text-align: left; cursor: pointer; border: 1px solid var(--rdr-gold); border-radius: 14px;
+            background: linear-gradient(180deg, #2c2016, #221812); padding: 1rem 1.3rem; display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; transition: transform 0.15s, box-shadow 0.15s; }
+        .rdr-trophybar:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.45), 0 0 0 1px var(--rdr-gold); }
+        .rdr-tb-badge { font-size: 2rem; }
+        .rdr-tb-main { flex: 1; min-width: 180px; }
+        .rdr-tb-title { font-family: 'Rye', serif; color: var(--rdr-gold); font-size: 1.1rem; }
+        .rdr-tb-sub { font-size: 0.82rem; color: var(--rdr-ink-dim); margin-top: 0.15rem; }
+        .rdr-tb-nums { display: flex; gap: 1.2rem; text-align: center; }
+        .rdr-tb-num { font-family: 'JetBrains Mono', monospace; font-size: 1.3rem; font-weight: 700; color: var(--rdr-ink); }
+        .rdr-tb-num small { display: block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--rdr-ink-dim); font-weight: 400; }
+        .rdr-tb-cta { font-family: 'Special Elite', monospace; color: var(--rdr-orange); font-size: 0.85rem; white-space: nowrap; }
+
+        .rdr-chapters { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .rdr-chapter { background: linear-gradient(180deg, #efe0c1, var(--rdr-paper)); color: var(--rdr-paper-ink); border-radius: 10px; padding: 1.2rem 1.3rem; border: 1px solid #c6ac82; box-shadow: 0 6px 16px rgba(0,0,0,0.35); position: relative; }
+        .rdr-ch-num { font-family: 'Rye', serif; font-size: 0.75rem; color: var(--rdr-red); letter-spacing: 1px; }
+        .rdr-ch-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.15rem; margin: 0.1rem 0 0.5rem; }
+        .rdr-ch-loc { font-family: 'Special Elite', monospace; font-size: 0.72rem; color: #7a5f3a; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .rdr-ch-desc { font-family: 'Special Elite', monospace; font-size: 0.86rem; line-height: 1.5; color: #4a3925; }
+
+        .rdr-two { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .rdr-panel { background: var(--rdr-panel); border: 1px solid var(--rdr-border); border-radius: 14px; padding: 1.4rem; }
+        .rdr-facts-list { list-style: none; }
+        .rdr-facts-list li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0; border-bottom: 1px dashed var(--rdr-border); font-size: 0.9rem; }
+        .rdr-facts-list li:last-child { border-bottom: none; }
+        .rdr-facts-list .k { color: var(--rdr-ink-dim); }
+        .rdr-facts-list .v { color: var(--rdr-ink); font-weight: 600; text-align: right; }
+        .rdr-trivia { list-style: none; }
+        .rdr-trivia li { position: relative; padding: 0.5rem 0 0.5rem 1.5rem; font-size: 0.9rem; line-height: 1.5; color: var(--rdr-ink); border-bottom: 1px dashed var(--rdr-border); }
+        .rdr-trivia li:last-child { border-bottom: none; }
+        .rdr-trivia li::before { content: '\2605'; position: absolute; left: 0; top: 0.55rem; color: var(--rdr-gold); font-size: 0.8rem; }
+
+        /* Modal trofeus */
+        .rdr-modal-overlay { position: fixed; inset: 0; background: rgba(10,6,3,0.85); z-index: 1500; display: none; align-items: center; justify-content: center; padding: 2rem 1rem; backdrop-filter: blur(3px); }
+        .rdr-modal-overlay.active { display: flex; }
+        .rdr-modal { width: 100%; max-width: 920px; max-height: 88vh; display: flex; flex-direction: column; background: linear-gradient(180deg, #241a12, #1a120c); border: 1px solid var(--rdr-gold); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); overflow: hidden; }
+        .rdr-modal-head { padding: 1.3rem 1.5rem; border-bottom: 1px solid var(--rdr-border); background: linear-gradient(180deg, #3a2415, #241812); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .rdr-modal-title { font-family: 'Rye', serif; color: var(--rdr-gold); font-size: 1.25rem; }
+        .rdr-modal-title small { display: block; font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--rdr-ink-dim); margin-top: 0.2rem; letter-spacing: normal; }
+        .rdr-modal-close { background: none; border: 1px solid var(--rdr-border); color: var(--rdr-ink); width: 38px; height: 38px; border-radius: 8px; font-size: 1.4rem; cursor: pointer; flex-shrink: 0; transition: all 0.15s; }
+        .rdr-modal-close:hover { background: var(--rdr-red); border-color: var(--rdr-red); }
+        .rdr-mfilters { display: flex; gap: 0.4rem; flex-wrap: wrap; padding: 0.9rem 1.5rem; border-bottom: 1px solid var(--rdr-border); }
+        .rdr-fbtn { font-family: 'Special Elite', monospace; font-size: 0.78rem; padding: 0.35rem 0.75rem; border: 1px solid var(--rdr-border); border-radius: 20px; background: transparent; color: var(--rdr-ink-dim); cursor: pointer; transition: all 0.15s; }
+        .rdr-fbtn:hover { color: var(--rdr-ink); border-color: var(--rdr-gold); }
+        .rdr-fbtn.on { background: var(--rdr-gold); color: #241812; border-color: var(--rdr-gold); font-weight: 700; }
+        .rdr-mlist { overflow-y: auto; padding: 0.6rem; }
+        .rdr-mrow { border: 1px solid var(--rdr-border); border-radius: 10px; margin-bottom: 0.4rem; overflow: hidden; background: rgba(255,255,255,0.015); }
+        .rdr-mrow-head { display: grid; grid-template-columns: auto 1fr auto auto; gap: 0.8rem; align-items: center; padding: 0.7rem 0.9rem; cursor: pointer; transition: background 0.12s; }
+        .rdr-mrow-head:hover { background: rgba(224,169,74,0.08); }
+        .rdr-mrow-ico { font-size: 1.2rem; }
+        .rdr-mrow-name { font-weight: 600; color: var(--rdr-ink); }
+        .rdr-mrow-desc { font-size: 0.75rem; color: var(--rdr-ink-dim); margin-top: 0.1rem; }
+        .rdr-mrow-plats { display: flex; gap: 0.5rem; }
+        .rdr-chip { font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; padding: 0.15rem 0.4rem; border-radius: 5px; white-space: nowrap; border: 1px solid var(--rdr-border); }
+        .rdr-chip.ok { color: #7bc47b; border-color: #3c5c3c; background: rgba(60,120,60,0.12); }
+        .rdr-chip.miss { color: #b07a72; opacity: 0.7; }
+        .rdr-chip.na { color: var(--rdr-ink-dim); opacity: 0.4; }
+        .rdr-mrow-arrow { color: var(--rdr-ink-dim); transition: transform 0.2s; font-size: 0.8rem; }
+        .rdr-mrow.open .rdr-mrow-arrow { transform: rotate(90deg); }
+        .rdr-mrow-detail { display: none; padding: 0 0.9rem 0.9rem; border-top: 1px dashed var(--rdr-border); margin-top: -1px; }
+        .rdr-mrow.open .rdr-mrow-detail { display: block; }
+        .rdr-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; padding-top: 0.8rem; }
+        .rdr-detail-box { background: rgba(0,0,0,0.25); border: 1px solid var(--rdr-border); border-radius: 8px; padding: 0.7rem 0.9rem; }
+        .rdr-detail-box .p { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--rdr-ink-dim); margin-bottom: 0.3rem; }
+        .rdr-detail-box .d { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--rdr-ink); }
+        .rdr-detail-box .d.won { color: var(--rdr-gold); }
+        .rdr-mrow-rar { font-size: 0.68rem; color: var(--rdr-ink-dim); margin-top: 0.6rem; }
+
+        /* ===== NOVO: herói da saga (nível franquia) ===== */
+        .rd-saga {
+            max-width: 1120px; margin: 0.6rem auto 0; padding: 2.6rem 2rem;
+            position: relative; overflow: hidden;
+            border: 1px solid #4a3621; border-radius: 16px;
+            background:
+              linear-gradient(180deg, rgba(21,15,10,0.2), rgba(21,15,10,0.85)),
+              linear-gradient(115deg, #2a1a10 0%, #5c2e16 45%, #8f3320 100%);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+            text-align: center;
+        }
+        .rd-saga-eyebrow { font-family: 'Special Elite', monospace; letter-spacing: 3px; font-size: 0.72rem; color: #e9cfa0; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .rd-saga-title { font-family: 'Rye', serif; font-size: clamp(2.4rem, 7vw, 4rem); color: #fff6e6; line-height: 1; text-shadow: 0 3px 14px rgba(0,0,0,0.6); }
+        .rd-saga-sub { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; color: #f3ddb8; margin-top: 0.8rem; max-width: 640px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+
+        /* ===== NOVO: linha do tempo da saga ===== */
+        .rd-timeline { max-width: 1120px; margin: 0 auto; padding: 0 2rem; display: grid; gap: 0.9rem; }
+        .rd-game {
+            display: grid; grid-template-columns: 92px 1fr; gap: 1.2rem; align-items: stretch;
+            background: linear-gradient(180deg, #2c2016, #221812); border: 1px solid #4a3621;
+            border-radius: 14px; padding: 1.2rem 1.4rem; box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+            transition: border-color 0.15s, transform 0.15s;
+        }
+        .rd-game.flagship { border-color: #e0a94a; box-shadow: 0 6px 22px rgba(0,0,0,0.45), 0 0 0 1px rgba(224,169,74,0.4); }
+        .rd-game.nao { opacity: 0.72; }
+        .rd-year { font-family: 'Rye', serif; font-size: 1.5rem; color: #e0a94a; border-right: 1px solid #4a3621; display: flex; align-items: center; }
+        .rd-body { min-width: 0; }
+        .rd-top { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.25rem; }
+        .rd-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.25rem; color: #f2e6ce; }
+        .rd-badge { font-family: 'Special Elite', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.2rem 0.6rem; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+        .rd-badge.zerado, .rd-badge.flagship { color: #7bc47b; border-color: #3c5c3c; background: rgba(60,120,60,0.14); }
+        .rd-badge.flagship { color: #f0c766; border-color: #a9812f; background: rgba(224,169,74,0.16); }
+        .rd-badge.jogando { color: #66c0f4; border-color: #2a4d63; background: rgba(70,140,190,0.14); }
+        .rd-badge.nao { color: #c7b189; border-color: #4a3621; background: transparent; opacity: 0.9; }
+        .rd-meta { font-size: 0.8rem; color: #c7b189; margin-bottom: 0.5rem; display: flex; gap: 0.4rem 1rem; flex-wrap: wrap; }
+        .rd-meta b { color: #e0a94a; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+        .rd-note { font-size: 0.9rem; line-height: 1.5; color: #ddcba7; }
+        .rd-note a { color: #e0a94a; text-decoration: none; border-bottom: 1px dotted #a9812f; }
+        .rd-note a:hover { color: #fff2da; }
+
+        .rd-spot-divider { text-align: center; margin: 3rem auto 0.4rem; max-width: 1120px; }
+        .rd-spot-divider .lbl { font-family: 'Special Elite', monospace; letter-spacing: 3px; font-size: 0.72rem; color: #c9763a; text-transform: uppercase; }
+
+        /* ===== NOVO: minha voz ===== */
+        .rd-voice { max-width: 860px; margin: 3rem auto 0; padding: 2rem 2.2rem;
+            background: linear-gradient(180deg, #efe0c1, #ecdcbc); color: #3a2a18;
+            border: 1px solid #c6ac82; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); position: relative; }
+        .rd-voice h3 { font-family: 'Rye', serif; font-size: 1.3rem; color: #8f3320; margin-bottom: 0.9rem; }
+        .rd-voice p { font-family: 'Special Elite', monospace; font-size: 0.98rem; line-height: 1.7; margin-bottom: 0.8rem; }
+        .rd-voice p:last-child { margin-bottom: 0; }
+        .rd-voice .sig { text-align: right; font-family: 'Playfair Display', serif; font-style: italic; color: #7a5f3a; }
+
+        footer { max-width: 1120px; margin: 3.5rem auto 0; padding: 0 2rem; text-align: center; color: #7a5f3a; font-size: 0.82rem; font-family: 'Special Elite', monospace; letter-spacing: 1px; }
+
+        @media (max-width: 720px) {
+            .rd-nav, .rdr2-scope, .rd-saga, .rd-timeline, .rd-voice, footer { padding-left: 1rem; padding-right: 1rem; }
+            .rdr2-scope { padding: 0 1rem 3rem; }
+            .rdr-hero { padding: 2rem 1.2rem; }
+            .rdr-hero-title { font-size: 1.8rem; }
+            .rdr-two { grid-template-columns: 1fr; }
+            .rdr-mrow-head { grid-template-columns: auto 1fr auto; }
+            .rdr-mrow-arrow { display: none; }
+            .rdr-detail-grid { grid-template-columns: 1fr; }
+            .rd-game { grid-template-columns: 1fr; gap: 0.6rem; }
+            .rd-year { border-right: none; border-bottom: 1px solid #4a3621; padding-bottom: 0.4rem; }
+        }
+    </style>
+
+    <!-- ===== Clerk — acesso privado (login unico da constelacao) ===== -->
+    <style id="clerk-gate-style">
+        body > *:not(#clerk-gate) { display: none !important; }
+        #clerk-gate {
+            position: fixed; inset: 0; z-index: 2147483647;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 18px; padding: 24px; text-align: center;
+            background: linear-gradient(135deg, #1a1410 0%, #3d2113 45%, #7a3719 100%);
+            color: #f2e6ce; font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        #clerk-gate .gate-emoji { font-size: 40px; }
+        #clerk-gate .gate-title { font-size: 22px; font-weight: 700; }
+        #clerk-gate .gate-sub { font-size: 14px; color: #c7b189; max-width: 360px; line-height: 1.5; }
+        #clerk-gate button {
+            background: #8f3320; color: #fff; border: none; border-radius: 8px;
+            padding: 11px 22px; font-size: 14px; font-weight: 600; cursor: pointer;
+        }
+        #clerk-gate button:hover { background: #a94a2f; }
+    </style>
+    <script
+        defer
+        crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_bG9naWNhbC1rb2ktNDYuY2xlcmsuYWNjb3VudHMuZGV2JA"
+        src="https://logical-koi-46.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
+    <script>
+        // E-mails autorizados. Para liberar alguem, adicione o e-mail aqui.
+        const CLERK_ALLOWED_EMAILS = [
+            'bruno.dm28@gmail.com',
+        ];
+
+        window.addEventListener('load', async function () {
+            const gate = document.getElementById('clerk-gate');
+            try {
+                await Clerk.load();
+            } catch (err) {
+                gate.innerHTML =
+                    '<div class="gate-emoji">&#9888;&#65039;</div>' +
+                    '<div class="gate-title">Erro ao carregar o login</div>' +
+                    '<div class="gate-sub">Recarregue a página. Se persistir, verifique a conexão.</div>';
+                return;
+            }
+
+            function evaluate() {
+                if (!Clerk.isSignedIn) {
+                    Clerk.redirectToSignIn();
+                    return;
+                }
+                const email = ((Clerk.user &&
+                    Clerk.user.primaryEmailAddress &&
+                    Clerk.user.primaryEmailAddress.emailAddress) || '').toLowerCase();
+                const allowed = CLERK_ALLOWED_EMAILS.map(function (e) { return e.toLowerCase(); });
+
+                if (allowed.indexOf(email) !== -1) {
+                    var s = document.getElementById('clerk-gate-style');
+                    if (s) s.remove();
+                    if (gate) gate.remove();
+                } else {
+                    gate.innerHTML =
+                        '<div class="gate-emoji">&#128274;</div>' +
+                        '<div class="gate-title">Acesso restrito</div>' +
+                        '<div class="gate-sub">A conta <b>' + email + '</b> não está liberada para acessar este espaço.</div>' +
+                        '<button id="clerk-signout-btn">Sair e trocar de conta</button>';
+                    var btn = document.getElementById('clerk-signout-btn');
+                    if (btn) btn.onclick = function () { Clerk.signOut(); };
+                }
+            }
+
+            Clerk.addListener(evaluate);
+            evaluate();
+        });
+    </script>
+    <!-- ===== fim Clerk ===== -->
+</head>
+<body>
+    <div id="clerk-gate">
+        <div class="gate-emoji">&#129312;</div>
+        <div class="gate-title">Verificando acesso&hellip;</div>
+        <div class="gate-sub">Só um instante.</div>
+    </div>
+
+    <nav class="rd-nav">
+        <a class="back" href="/">&larr; Games</a>
+        <span class="brand">Especiais · brunodemarco.com.br</span>
+    </nav>
+
+    <!-- Heroi da saga (nivel franquia) -->
+    <header class="rd-saga">
+        <div class="rd-saga-eyebrow">&#9733; A saga · 2004 &rarr; hoje &#9733;</div>
+        <h1 class="rd-saga-title">Red Dead</h1>
+        <p class="rd-saga-sub">O Velho Oeste morrendo, contado por quem foi ficando para trás. Da origem cult de 2004 à obra-prima de 2018 — a saga inteira, e onde eu passei por ela.</p>
+    </header>
+
+    <!-- Linha do tempo: todos os jogos da saga -->
+    <section class="rd-timeline" id="rdTimeline"></section>
+
+    <div class="rd-spot-divider"><span class="lbl">&#9733; O carro-chefe da saga &#9733;</span></div>
+
+    <!-- ===== Carro-chefe: RDR2 (conteudo aprovado, portado da aba) ===== -->
+    <main class="rdr2-scope" id="rdr2">
+        <section id="rdr2Section"></section>
+    </main>
+
+    <!-- Minha voz -->
+    <!-- RASCUNHO da voz do Bruno — edite este bloco a vontade (primeira pessoa, seu tom) -->
+    <section class="rd-voice">
+        <h3>&#127909; Meu lance com Red Dead</h3>
+        <p>Red Dead Redemption 2 é, pra mim, o ponto mais alto do que um videogame pode chegar a ser. Foram mais de 480 horas ao lado do Arthur Morgan — e o final dele é uma das pouquíssimas vezes que um jogo me deixou realmente sem chão.</p>
+        <p>Não é sobre tiroteio no Velho Oeste. É sobre um homem tentando fazer a coisa certa quando já é tarde demais. Foi por isso que essa foi a primeira página dedicada que eu quis construir aqui.</p>
+        <div class="sig">— Bruno</div>
+    </section>
+
+    <footer>&#9733; Van der Linde forever &middot; feito aos poucos &#9733;</footer>
+
+    <!-- Modal grande: Troféus & Conquistas do RDR2 -->
+    <div class="rdr-modal-overlay" id="rdr2Modal" onclick="closeRdr2Modal(event)">
+        <div class="rdr-modal" onclick="event.stopPropagation()">
+            <div class="rdr-modal-head">
+                <div class="rdr-modal-title">Troféus &amp; Conquistas<small>Red Dead Redemption 2 &mdash; PSN &times; Steam · clique numa linha para ver a data</small></div>
+                <button class="rdr-modal-close" onclick="closeRdr2Modal()">&times;</button>
+            </div>
+            <div class="rdr-mfilters" id="rdr2MFilters"></div>
+            <div class="rdr-mlist" id="rdr2MList"></div>
+        </div>
+    </div>
+
+    <script>
+        /* ===== NOVO: linha do tempo da saga ===== */
+        const RD_TIMELINE = [
+            { year: '2004', title: 'Red Dead Revolver', plats: 'PS2 · Xbox', hero: 'Red Harlow', status: 'nao', statusLabel: 'Não joguei',
+              note: 'A origem cult e meio tosca da série — um faroeste spaghetti de arcade, sem ligação com a história de Arthur e John. Ficou de fora da minha jornada.' },
+            { year: '2010', title: 'Red Dead Redemption', plats: 'PS3 · X360 · remaster 2024', hero: 'John Marston', status: 'zerado', statusLabel: 'Zerado',
+              meta: 'História concluída · inclui o DLC Undead Nightmare · remaster no PSN recém-começado (14%)',
+              note: 'A lenda que fundou tudo. Zerei a história na época — mas fora desta conta PSN, então o histórico de troféus ainda está por recuperar. O remaster de 2024 eu só encostei.' },
+            { year: '2018', title: 'Red Dead Redemption 2', plats: 'PS4 · PS5 · PC (Steam)', hero: 'Arthur Morgan', status: 'flagship', statusLabel: 'Carro-chefe',
+              meta: '484h no total · 63/103 troféus + conquistas · 3 versões jogadas',
+              note: 'O ponto alto da saga e da minha coleção inteira. <a href="#rdr2">Ver a página completa &darr;</a>' },
+            { year: '2019', title: 'Red Dead Online', plats: 'Steam · modo online', hero: 'Seu fora-da-lei', status: 'jogando', statusLabel: 'Jogando',
+              meta: '71,2h · incluso nas horas totais do RDR2',
+              note: 'O modo online que virou jogo próprio. Rank 50 alcançado nas duas plataformas.' },
+        ];
+
+        function renderTimeline() {
+            document.getElementById('rdTimeline').innerHTML = RD_TIMELINE.map(g => `
+                <article class="rd-game ${g.status}">
+                    <div class="rd-year">${g.year}</div>
+                    <div class="rd-body">
+                        <div class="rd-top">
+                            <span class="rd-title">${g.title}</span>
+                            <span class="rd-badge ${g.status}">${g.statusLabel}</span>
+                        </div>
+                        <div class="rd-meta"><span>&#127918; ${g.plats}</span><span>&#129312; ${g.hero}</span>${g.meta ? `<span><b>${g.meta}</b></span>` : ''}</div>
+                        <div class="rd-note">${g.note}</div>
+                    </div>
+                </article>`).join('');
+        }
+
+        /* ===== RDR2 DATA (portado da aba, dados reais PSN x Steam) ===== */
+        /*RDR2_DATA_START*/
+        const RDR2_DATA = {"totalHours":484,"ps":{"hours":311.6,"earned":34,"total":52,"pct":65,"types":[0,2,1,31]},"steam":{"hours":101.4,"earned":29,"total":51,"pct":57},"rdo":{"hours":71.2},"combinedEarned":63,"combinedTotal":103,"cmp":{"both":27,"onlyPsn":7,"onlySteam":2,"neither":16},"compare":[{"name":"Legend of the West","type":"platinum","desc":"Legend of the West","psn":true,"psnEarned":false,"psnRarity":0.1,"psnDate":null,"steam":false,"steamEarned":null,"steamGlobal":null,"steamDate":null},{"name":"Back in the Mud","type":"bronze","desc":"Complete Chapter 1.","psn":true,"psnEarned":true,"psnRarity":65.1,"psnDate":"27/10/2018","steam":true,"steamEarned":true,"steamGlobal":72.5,"steamDate":"27/06/2024"},{"name":"Just a Scratch","type":"bronze","desc":"Complete 'Enter, Pursued by a Memory'.","psn":true,"psnEarned":true,"psnRarity":76.4,"psnDate":"26/10/2018","steam":true,"steamEarned":true,"steamGlobal":85.3,"steamDate":"27/06/2024"},{"name":"To Greener Pastures","type":"bronze","desc":"Complete Chapter 2.","psn":true,"psnEarned":true,"psnRarity":42.6,"psnDate":"31/10/2018","steam":true,"steamEarned":true,"steamGlobal":41.2,"steamDate":"27/06/2024"},{"name":"Settling Feuds","type":"bronze","desc":"Complete Chapter 3.","psn":true,"psnEarned":true,"psnRarity":36.1,"psnDate":"06/11/2018","steam":true,"steamEarned":true,"steamGlobal":32.4,"steamDate":"27/06/2024"},{"name":"Washed Ashore","type":"bronze","desc":"Complete Chapter 4.","psn":true,"psnEarned":true,"psnRarity":32.2,"psnDate":"07/11/2018","steam":true,"steamEarned":true,"steamGlobal":27.4,"steamDate":"27/06/2024"},{"name":"No Traitors","type":"bronze","desc":"Complete Chapter 5.","psn":true,"psnEarned":true,"psnRarity":31.3,"psnDate":"08/11/2018","steam":true,"steamEarned":true,"steamGlobal":26.4,"steamDate":"27/06/2024"},{"name":"Third Time Lucky","type":"bronze","desc":"Complete 'Goodbye, Dear Friend'.","psn":true,"psnEarned":true,"psnRarity":29.5,"psnDate":"10/11/2018","steam":true,"steamEarned":true,"steamGlobal":24.8,"steamDate":"27/06/2024"},{"name":"Redemption","type":"silver","desc":"Complete 'Red Dead Redemption'.","psn":true,"psnEarned":true,"psnRarity":27.8,"psnDate":"10/11/2018","steam":true,"steamEarned":true,"steamGlobal":23.4,"steamDate":"27/06/2024"},{"name":"Cowboy Builder","type":"bronze","desc":"Complete 'A New Jerusalem'.","psn":true,"psnEarned":true,"psnRarity":25.6,"psnDate":"11/11/2018","steam":true,"steamEarned":true,"steamGlobal":21,"steamDate":"27/06/2024"},{"name":"Endless Summer","type":"gold","desc":"Complete the Epilogue.","psn":true,"psnEarned":true,"psnRarity":24.6,"psnDate":"11/11/2018","steam":true,"steamEarned":true,"steamGlobal":20.2,"steamDate":"27/06/2024"},{"name":"Lending a Hand","type":"silver","desc":"Complete all optional Honor story missions.","psn":true,"psnEarned":false,"psnRarity":7.8,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":9.4,"steamDate":null},{"name":"Best in the West","type":"gold","desc":"Attain 100% completion.","psn":true,"psnEarned":false,"psnRarity":0.5,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":2.8,"steamDate":null},{"name":"Gold Rush","type":"silver","desc":"Earn 70 Gold Medals in Story missions.","psn":true,"psnEarned":false,"psnRarity":0.2,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":2,"steamDate":null},{"name":"Friends With Benefits","type":"bronze","desc":"Complete a Companion Activity in each camp.","psn":true,"psnEarned":false,"psnRarity":15,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":16.2,"steamDate":null},{"name":"Hobby Horse","type":"bronze","desc":"Play all mini games.","psn":true,"psnEarned":true,"psnRarity":9.6,"psnDate":"14/07/2026","steam":true,"steamEarned":false,"steamGlobal":10.1,"steamDate":null},{"name":"Breaking and Entering","type":"bronze","desc":"Recover the stash from 4 homesteads.","psn":true,"psnEarned":true,"psnRarity":17.8,"psnDate":"14/07/2026","steam":true,"steamEarned":false,"steamGlobal":18.4,"steamDate":null},{"name":"Artificial Intelligence","type":"bronze","desc":"Discover the fate of Marko Dragic.","psn":true,"psnEarned":false,"psnRarity":5.4,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":5.6,"steamDate":null},{"name":"Take From the Rich","type":"bronze","desc":"Rob or loot $250.","psn":true,"psnEarned":true,"psnRarity":34.9,"psnDate":"05/11/2018","steam":true,"steamEarned":true,"steamGlobal":34.4,"steamDate":"27/06/2024"},{"name":"Give to the Poor","type":"bronze","desc":"Donate $250 to the gang tithing box.","psn":true,"psnEarned":true,"psnRarity":37.2,"psnDate":"30/10/2018","steam":true,"steamEarned":true,"steamGlobal":42.8,"steamDate":"27/06/2024"},{"name":"Pony Up","type":"bronze","desc":"Spend $5000 across all shops.","psn":true,"psnEarned":true,"psnRarity":13.8,"psnDate":"11/11/2018","steam":true,"steamEarned":false,"steamGlobal":14.1,"steamDate":null},{"name":"Extreme Personality","type":"bronze","desc":"Reach maximum or minimum Honor level.","psn":true,"psnEarned":false,"psnRarity":20.6,"psnDate":null,"steam":true,"steamEarned":true,"steamGlobal":19.8,"steamDate":"27/06/2024"},{"name":"Western Stranger","type":"bronze","desc":"Complete 10 Stranger mission strands.","psn":true,"psnEarned":false,"psnRarity":10,"psnDate":null,"steam":true,"steamEarned":true,"steamGlobal":11.2,"steamDate":"28/06/2024"},{"name":"Bountiful","type":"bronze","desc":"Survive 3 days holding a bounty of $250 in all states.","psn":true,"psnEarned":false,"psnRarity":0.9,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":1.8,"steamDate":null},{"name":"Collector's Item","type":"silver","desc":"Complete one of the Collectable strands.","psn":true,"psnEarned":false,"psnRarity":4.2,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":5.7,"steamDate":null},{"name":"Paying Respects","type":"bronze","desc":"Find the graves of each of your fallen companions.","psn":true,"psnEarned":false,"psnRarity":1.9,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":2.9,"steamDate":null},{"name":"Errand Boy","type":"bronze","desc":"Deliver 5 camp companion item requests.","psn":true,"psnEarned":true,"psnRarity":6.1,"psnDate":"18/07/2026","steam":true,"steamEarned":false,"steamGlobal":8.2,"steamDate":null},{"name":"It's Art","type":"bronze","desc":"Find a permanent home for the squirrel statue.","psn":true,"psnEarned":false,"psnRarity":0.5,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":1.6,"steamDate":null},{"name":"Self Sufficient","type":"bronze","desc":"Craft 30 unique items in Story Mode.","psn":true,"psnEarned":true,"psnRarity":10.7,"psnDate":"19/11/2018","steam":true,"steamEarned":true,"steamGlobal":13.2,"steamDate":"30/06/2024"},{"name":"Skin Deep","type":"bronze","desc":"Skin every species of animal in Story Mode.","psn":true,"psnEarned":false,"psnRarity":0.3,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":3.6,"steamDate":null},{"name":"Zoologist","type":"bronze","desc":"Study every animal across all states in Story Mode.","psn":true,"psnEarned":false,"psnRarity":0.3,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":3.3,"steamDate":null},{"name":"It was THIS Big!","type":"bronze","desc":"Catch a fish weighing at least 16 lbs (7.3 kg).","psn":true,"psnEarned":true,"psnRarity":22.3,"psnDate":"27/05/2020","steam":true,"steamEarned":true,"steamGlobal":18.9,"steamDate":"28/06/2024"},{"name":"Locked and Loaded","type":"bronze","desc":"Upgrade each available component for a single sidearm or longarm weapon.","psn":true,"psnEarned":true,"psnRarity":30.3,"psnDate":"02/11/2018","steam":true,"steamEarned":true,"steamGlobal":35.4,"steamDate":"30/06/2024"},{"name":"Grin and Bear it","type":"bronze","desc":"Survive 18 bear attacks and kill the bear each time in Story Mode.","psn":true,"psnEarned":false,"psnRarity":0.3,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":1.6,"steamDate":null},{"name":"Trusty Steed","type":"bronze","desc":"Reach max bonding level with a horse.","psn":true,"psnEarned":true,"psnRarity":50.5,"psnDate":"28/10/2018","steam":true,"steamEarned":true,"steamGlobal":50.5,"steamDate":"27/06/2024"},{"name":"Breakout","type":"bronze","desc":"Red Dead Online: Complete the Intro.","psn":true,"psnEarned":true,"psnRarity":33.4,"psnDate":"29/11/2018","steam":true,"steamEarned":true,"steamGlobal":32.6,"steamDate":"27/06/2024"},{"name":"Series Major","type":"bronze","desc":"Red Dead Online: Take part in a Series.","psn":true,"psnEarned":true,"psnRarity":13.5,"psnDate":"24/01/2019","steam":true,"steamEarned":true,"steamGlobal":6.7,"steamDate":"11/07/2024"},{"name":"Gun For Hire","type":"bronze","desc":"Red Dead Online: Accept 10 Free Roam missions from characters around the world.","psn":true,"psnEarned":true,"psnRarity":9.5,"psnDate":"30/05/2020","steam":true,"steamEarned":false,"steamGlobal":8.2,"steamDate":null},{"name":"Eventful","type":"bronze","desc":"Red Dead Online: Play 5 Free Roam Events.","psn":true,"psnEarned":false,"psnRarity":2.6,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":2.6,"steamDate":null},{"name":"Buckle Up","type":"bronze","desc":"Red Dead Online: Achieve 5 gold belt buckles from awards.","psn":true,"psnEarned":true,"psnRarity":10.7,"psnDate":"20/01/2019","steam":true,"steamEarned":true,"steamGlobal":10.2,"steamDate":"13/07/2024"},{"name":"The Real Deal","type":"bronze","desc":"Red Dead Online: Achieve MVP 3 times (in a round with at least 4 players).","psn":true,"psnEarned":false,"psnRarity":1.5,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":1.2,"steamDate":null},{"name":"Horses for Courses","type":"bronze","desc":"Red Dead Online: Concurrently own 5 horses.","psn":true,"psnEarned":true,"psnRarity":1,"psnDate":"19/07/2026","steam":true,"steamEarned":false,"steamGlobal":1.9,"steamDate":null},{"name":"Getting Started","type":"bronze","desc":"Red Dead Online: Reach Rank 10.","psn":true,"psnEarned":true,"psnRarity":16.6,"psnDate":"19/12/2018","steam":true,"steamEarned":true,"steamGlobal":14.8,"steamDate":"11/07/2024"},{"name":"Notorious","type":"gold","desc":"Red Dead Online: Reach Rank 50.","psn":true,"psnEarned":true,"psnRarity":3.5,"psnDate":"23/05/2025","steam":true,"steamEarned":true,"steamGlobal":4.7,"steamDate":"05/08/2024"},{"name":"All's Fair","type":"bronze","desc":"Red Dead Online: Successfully counter a rival Posse's Free Roam mission.","psn":true,"psnEarned":true,"psnRarity":5.5,"psnDate":"22/12/2018","steam":true,"steamEarned":false,"steamGlobal":2.8,"steamDate":null},{"name":"Home Comforts","type":"bronze","desc":"Red Dead Online: Purchase 5 camp improvements.","psn":true,"psnEarned":true,"psnRarity":2.8,"psnDate":"25/05/2025","steam":true,"steamEarned":true,"steamGlobal":4.2,"steamDate":"09/08/2024"},{"name":"Non-Regulation","type":"bronze","desc":"Red Dead Online: Craft 25 pieces of ammunition.","psn":true,"psnEarned":false,"psnRarity":1.5,"psnDate":null,"steam":true,"steamEarned":false,"steamGlobal":1.8,"steamDate":null},{"name":"Posse Up","type":"bronze","desc":"Red Dead Online: Form a Persistent Posse.","psn":true,"psnEarned":true,"psnRarity":5.8,"psnDate":"24/05/2020","steam":true,"steamEarned":true,"steamGlobal":5.4,"steamDate":"28/06/2026"},{"name":"Master Craftsman","type":"bronze","desc":"Red Dead Online: Craft 20 items (excluding ammo).","psn":true,"psnEarned":true,"psnRarity":7.2,"psnDate":"22/12/2018","steam":true,"steamEarned":true,"steamGlobal":6.9,"steamDate":"12/07/2024"},{"name":"Butchered","type":"bronze","desc":"Red Dead Online: Sell 20 items to the Butcher.","psn":true,"psnEarned":true,"psnRarity":11.9,"psnDate":"22/12/2018","steam":true,"steamEarned":true,"steamGlobal":9.7,"steamDate":"09/08/2024"},{"name":"Picked to Perfection","type":"bronze","desc":"Red Dead Online: Pick 25 Herbs.","psn":true,"psnEarned":true,"psnRarity":8.6,"psnDate":"21/12/2018","steam":true,"steamEarned":true,"steamGlobal":8.2,"steamDate":"12/07/2024"},{"name":"Strength in Numbers","type":"bronze","desc":"Red Dead Online: Complete a Free Roam mission as part of a Posse with at least 2 members.","psn":true,"psnEarned":true,"psnRarity":16.5,"psnDate":"01/12/2018","steam":true,"steamEarned":true,"steamGlobal":13,"steamDate":"28/06/2026"}]};
+        /*RDR2_DATA_END*/
+
+        const RDR2_ICO = { platinum: '&#128142;', gold: '&#129351;', silver: '&#129352;', bronze: '&#129353;', steam: '&#11088;' };
+        const RDR2_CHAPTERS = [
+            { n: 'Capítulo 1', name: 'Colter', loc: 'Grizzlies · Neve', desc: 'Após o desastre em Blackwater, a gangue Van der Linde foge para as montanhas geladas. Sobrevivência no frio e o resgate dos que ficaram para trás.' },
+            { n: 'Capítulo 2', name: 'Horseshoe Overlook', loc: 'Valentine · The Heartlands', desc: 'A gangue se reergue perto de Valentine. Primeiros grandes golpes, as dívidas de Strauss e o auge de Arthur como braço-direito de Dutch.' },
+            { n: 'Capítulo 3', name: 'Clemens Point', loc: 'Rhodes · Scarlett Meadows', desc: 'Arthur se enfia na rivalidade entre as famílias Grays e Braithwaite, atrás de ouro e de cavalos raros. As coisas começam a desandar.' },
+            { n: 'Capítulo 4', name: 'Saint Denis', loc: 'A grande cidade', desc: 'O choque com a modernidade. O golpe no banco de Saint Denis e a fuga que dá tudo errado — o ponto de virada da história.' },
+            { n: 'Capítulo 5', name: 'Guarma', loc: 'Ilha tropical', desc: 'Náufragos numa ilha após a fuga. Capítulo mais linear, com a gangue lutando para voltar para casa.' },
+            { n: 'Capítulo 6', name: 'Beaver Hollow', loc: 'Roanoke Ridge', desc: 'O colapso final. A tuberculose de Arthur, a traição de Micah e a ruptura com Dutch. A busca por redenção.' },
+            { n: 'Epílogo 1', name: 'Pronghorn Ranch', loc: 'New Austin / West Elizabeth', desc: 'John Marston recomeça como peão de fazenda sob outro nome, tentando uma vida honesta com Abigail e Jack.' },
+            { n: 'Epílogo 2', name: "Beecher's Hope", loc: 'Ligação com RDR1', desc: 'John constrói sua casa, quita as dívidas e acerta as contas com Micah. Prepara o terreno para Red Dead Redemption (1).' }
+        ];
+        const RDR2_FACTS = [
+            ['Desenvolvedora', 'Rockstar Games'], ['Lançamento', '26/10/2018 (PS4) · 05/11/2019 (PC)'],
+            ['Ambientação', '1899 — fim do Velho Oeste'], ['Protagonista', 'Arthur Morgan (+ John Marston)'],
+            ['Gênero', 'Ação-aventura, mundo aberto'], ['Gangue', 'Van der Linde'], ['Estrutura', '6 capítulos + 2 epílogos']
+        ];
+        const RDR2_TRIVIA = [
+            'É uma prequel de Red Dead Redemption (1), ambientada 12 anos antes.',
+            'Levou cerca de 8 anos de desenvolvimento e é um dos jogos mais caros já feitos.',
+            'O mundo tem mais de 200 espécies de animais, cada uma com comportamento próprio.',
+            'O sistema de Honra muda diálogos, preços, cutscenes e o rumo de Arthur.',
+            'A morte de Arthur Morgan é citada como uma das cenas mais emocionantes dos games.',
+            'Vendeu mais de 60 milhões de cópias no mundo todo.',
+            'Cada NPC de cidade tem rotina própria e reage às suas ações — inclusive à sua higiene.'
+        ];
+
+        let rdr2Filter = 'all';
+
+        function renderRdr2() {
+            if (typeof RDR2_DATA === 'undefined') return;
+            const d = RDR2_DATA;
+            const card = (icoBg, ico, title, plat, hours, rowLbl, rowVal, pct, barGrad, extra) => `
+                <div class="rdr-card">
+                    <div class="rdr-card-head"><span class="rdr-card-ico" style="background:${icoBg}">${ico}</span><div><div class="rdr-card-title">${title}</div><div class="rdr-card-plat">${plat}</div></div></div>
+                    <div class="rdr-card-hours">${String(hours).replace('.', ',')}<span>h</span></div>
+                    <div class="rdr-card-row"><span>${rowLbl}</span><strong>${rowVal}</strong></div>
+                    <div class="rdr-bar"><div class="rdr-bar-fill" style="width:${pct}%;background:${barGrad}"></div></div>
+                    <div class="rdr-card-pct">${pct}% concluído</div>
+                    <div class="rdr-types">${extra}</div>
+                </div>`;
+
+            document.getElementById('rdr2Section').innerHTML = `
+                <div class="rdr-hero">
+                    <div class="rdr-hero-eyebrow">&#9733; Página dedicada · gangue Van der Linde &#9733;</div>
+                    <div class="rdr-hero-title">Red Dead Redemption 2</div>
+                    <div class="rdr-hero-tag">"We're more ghosts than people." &mdash; Arthur Morgan</div>
+                    <div class="rdr-hero-facts"><span>&#128197; 1899</span><span>&#127918; Rockstar Games</span><span>&#129312; Arthur Morgan</span><span>&#127942; ${d.combinedEarned} conquistas</span></div>
+                    <div class="rdr-hero-hours"><b>${d.totalHours}h</b><span>jogadas no total<br>história + online</span></div>
+                </div>
+
+                <div class="rdr-band">
+                    <div class="rdr-bitem"><div class="rdr-bitem-num">${d.totalHours}h</div><div class="rdr-bitem-lbl">Horas totais</div></div>
+                    <div class="rdr-bitem"><div class="rdr-bitem-num">${d.combinedEarned}</div><div class="rdr-bitem-lbl">Troféus + Conquistas</div></div>
+                    <div class="rdr-bitem"><div class="rdr-bitem-num">${d.combinedEarned}/${d.combinedTotal}</div><div class="rdr-bitem-lbl">Progresso combinado</div></div>
+                    <div class="rdr-bitem"><div class="rdr-bitem-num">${d.cmp.both}</div><div class="rdr-bitem-lbl">Ganhos nas 2</div></div>
+                    <div class="rdr-bitem"><div class="rdr-bitem-num">3</div><div class="rdr-bitem-lbl">Versões jogadas</div></div>
+                </div>
+
+                <h2 class="rdr-sec-title">&#127920; Onde eu percorri o Oeste</h2>
+                <div class="rdr-cards">
+                    ${card('#00439C', '&#127918;', 'PlayStation', 'PS4 &middot; PS5 (versão PS4)', d.ps.hours, 'Troféus', d.ps.earned + ' / ' + d.ps.total, d.ps.pct, 'linear-gradient(90deg,#f5a623,#f0c040)', `<span title="Platina">&#128142; ${d.ps.types[0]}</span><span title="Ouro">&#129351; ${d.ps.types[1]}</span><span title="Prata">&#129352; ${d.ps.types[2]}</span><span title="Bronze">&#129353; ${d.ps.types[3]}</span>`)}
+                    ${card('#66c0f4', '&#128421;&#65039;', 'Steam — RDR2', 'PC · Conquistas', d.steam.hours, 'Conquistas', d.steam.earned + ' / ' + d.steam.total, d.steam.pct, 'linear-gradient(90deg,#1387b8,#66c0f4)', `<span>&#127942; ${d.steam.earned} conquistas desbloqueadas</span>`)}
+                    ${card('#2a475e', '&#127903;&#65039;', 'Red Dead Online', 'Steam · modo online', d.rdo.hours, 'Conquistas', 'sem lista', 100, 'linear-gradient(90deg,#3a5a6b,#7a5a3b)', `<span>&#128176; incluso nas ${d.totalHours}h totais</span>`)}
+                </div>
+
+                <button class="rdr-trophybar" onclick="openRdr2Modal()">
+                    <span class="rdr-tb-badge">&#127942;</span>
+                    <div class="rdr-tb-main">
+                        <div class="rdr-tb-title">Troféus &amp; Conquistas</div>
+                        <div class="rdr-tb-sub">52 troféus (PSN) e 51 conquistas (Steam) &mdash; clique para ver todos, com a data de cada um</div>
+                    </div>
+                    <div class="rdr-tb-nums">
+                        <div class="rdr-tb-num">${d.ps.earned}/${d.ps.total}<small>PSN</small></div>
+                        <div class="rdr-tb-num">${d.steam.earned}/${d.steam.total}<small>Steam</small></div>
+                        <div class="rdr-tb-num">${d.cmp.both}<small>nas duas</small></div>
+                    </div>
+                    <span class="rdr-tb-cta">Ver lista completa &rarr;</span>
+                </button>
+
+                <h2 class="rdr-sec-title">&#128220; A história, capítulo a capítulo</h2>
+                <div class="rdr-chapters">
+                    ${RDR2_CHAPTERS.map(c => `<div class="rdr-chapter"><div class="rdr-ch-num">${c.n}</div><div class="rdr-ch-name">${c.name}</div><div class="rdr-ch-loc">&#128205; ${c.loc}</div><div class="rdr-ch-desc">${c.desc}</div></div>`).join('')}
+                </div>
+
+                <div class="rdr-two" style="margin-top:0.6rem">
+                    <div class="rdr-panel">
+                        <h3 class="rdr-sec-title" style="margin-top:0.6rem">&#128203; Ficha do jogo</h3>
+                        <ul class="rdr-facts-list">${RDR2_FACTS.map(([k, v]) => `<li><span class="k">${k}</span><span class="v">${v}</span></li>`).join('')}</ul>
+                    </div>
+                    <div class="rdr-panel">
+                        <h3 class="rdr-sec-title" style="margin-top:0.6rem">&#11088; Curiosidades</h3>
+                        <ul class="rdr-trivia">${RDR2_TRIVIA.map(t => `<li>${t}</li>`).join('')}</ul>
+                    </div>
+                </div>`;
+
+            renderRdr2Modal();
+        }
+
+        function openRdr2Modal() { document.getElementById('rdr2Modal').classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeRdr2Modal(e) {
+            if (e && e.target.id !== 'rdr2Modal' && !e.target.classList.contains('rdr-modal-close')) return;
+            document.getElementById('rdr2Modal').classList.remove('active'); document.body.style.overflow = '';
+        }
+        function setRdr2Filter(v) { rdr2Filter = v; renderRdr2Modal(); }
+
+        function renderRdr2Modal() {
+            if (typeof RDR2_DATA === 'undefined') return;
+            const d = RDR2_DATA;
+            const filters = [['all', 'Todas (' + d.compare.length + ')'], ['both', 'Nas duas (' + d.cmp.both + ')'], ['onlyps', 'Só PSN (' + d.cmp.onlyPsn + ')'], ['onlysteam', 'Só Steam (' + d.cmp.onlySteam + ')'], ['none', 'Em nenhuma (' + d.cmp.neither + ')']];
+            document.getElementById('rdr2MFilters').innerHTML = filters.map(([k, l]) => `<button class="rdr-fbtn ${rdr2Filter === k ? 'on' : ''}" onclick="setRdr2Filter('${k}')">${l}</button>`).join('');
+
+            const rows = d.compare.filter(r => {
+                if (rdr2Filter === 'both') return r.psnEarned && r.steamEarned;
+                if (rdr2Filter === 'onlyps') return r.psnEarned && !r.steamEarned;
+                if (rdr2Filter === 'onlysteam') return !r.psnEarned && r.steamEarned;
+                if (rdr2Filter === 'none') return !r.psnEarned && !r.steamEarned;
+                return true;
+            });
+
+            document.getElementById('rdr2MList').innerHTML = rows.map(r => {
+                const rar = r.psnRarity != null ? r.psnRarity : (r.steamGlobal != null ? r.steamGlobal : null);
+                const chip = (exists, earned, lbl) => !exists ? `<span class="rdr-chip na">&mdash; ${lbl}</span>` : (earned ? `<span class="rdr-chip ok">&#10003; ${lbl}</span>` : `<span class="rdr-chip miss">&#10007; ${lbl}</span>`);
+                const psnDetail = !r.psn ? 'Não existe no PSN' : (r.psnEarned ? 'Conquistado em ' + r.psnDate : 'Ainda não conquistado');
+                const steamDetail = !r.steam ? 'Não existe na Steam (troféu exclusivo do PSN)' : (r.steamEarned ? 'Conquistado em ' + r.steamDate : 'Ainda não conquistado');
+                return `<div class="rdr-mrow">
+                    <div class="rdr-mrow-head" onclick="this.parentNode.classList.toggle('open')">
+                        <span class="rdr-mrow-ico" title="${r.type}">${RDR2_ICO[r.type] || RDR2_ICO.steam}</span>
+                        <div><div class="rdr-mrow-name">${r.name}</div><div class="rdr-mrow-desc">${r.desc || ''}</div></div>
+                        <div class="rdr-mrow-plats">${chip(r.psn, r.psnEarned, 'PSN')}${chip(r.steam, r.steamEarned, 'Steam')}</div>
+                        <span class="rdr-mrow-arrow">&#9654;</span>
+                    </div>
+                    <div class="rdr-mrow-detail">
+                        <div class="rdr-detail-grid">
+                            <div class="rdr-detail-box"><div class="p">&#127918; PlayStation</div><div class="d ${r.psnEarned ? 'won' : ''}">${psnDetail}</div></div>
+                            <div class="rdr-detail-box"><div class="p">&#128421;&#65039; Steam</div><div class="d ${r.steamEarned ? 'won' : ''}">${steamDetail}</div></div>
+                        </div>
+                        ${rar != null ? `<div class="rdr-mrow-rar">Raridade: <strong>${rar}%</strong> dos jogadores têm este troféu/conquista</div>` : ''}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        renderTimeline();
+        renderRdr2();
+    </script>
+</body>
+</html>

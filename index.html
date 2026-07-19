@@ -457,6 +457,55 @@
             .ano-row { grid-template-columns: minmax(0, 1fr) auto; gap: 0.4rem 0.8rem; }
             .ano-trophies { grid-column: 1 / -1; justify-content: flex-start; }
         }
+
+        /* ===== TROFEUS (dashboard) ===== */
+        .trof-section { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+        .trof-hero { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; box-shadow: var(--shadow-md); padding: 1.6rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+        .trof-hero-total { display: flex; align-items: baseline; gap: 0.5rem; }
+        .trof-hero-num { font-family: 'JetBrains Mono', monospace; font-size: 3rem; font-weight: 700; color: var(--text-primary); line-height: 1; }
+        .trof-hero-lbl { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .trof-types { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; flex: 1; min-width: 280px; }
+        .trof-type { text-align: center; padding: 0.8rem 0.4rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-primary); }
+        .trof-type-ico { font-size: 1.4rem; }
+        .trof-type-num { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+        .trof-type-lbl { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+        .trof-type.platina { border-top: 3px solid #a5b8d0; }
+        .trof-type.ouro { border-top: 3px solid #f5c518; }
+        .trof-type.prata { border-top: 3px solid #b8c0c8; }
+        .trof-type.bronze { border-top: 3px solid #cd7f32; }
+        .trof-substats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .trof-substat { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 0.9rem 1.1rem; box-shadow: var(--shadow-sm); }
+        .trof-substat-num { font-family: 'JetBrains Mono', monospace; font-size: 1.3rem; font-weight: 600; color: var(--text-primary); }
+        .trof-substat-lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+
+        .trof-controls { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
+        .trof-count { font-size: 0.78rem; color: var(--text-muted); margin-left: auto; font-family: 'JetBrains Mono', monospace; }
+
+        .trof-list { display: flex; flex-direction: column; gap: 0.4rem; }
+        .trof-row { display: grid; grid-template-columns: minmax(0, 1fr) 92px 150px 170px; gap: 0.9rem; align-items: center; padding: 0.7rem 0.9rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; cursor: pointer; transition: background 0.15s ease; }
+        .trof-row:hover { background: var(--row-hover); }
+        .trof-row-name { font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+        .trof-plat-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+        .trof-row-meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem; }
+        .trof-date { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-secondary); text-align: right; white-space: nowrap; }
+        .trof-tt { display: flex; gap: 0.35rem; justify-content: flex-end; flex-wrap: wrap; }
+        .trof-tt span { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; padding: 0.1rem 0.35rem; border-radius: 5px; background: var(--bg-primary); border: 1px solid var(--border-color); white-space: nowrap; }
+        .trof-tt .z { opacity: 0.32; }
+        .trof-trophies { display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end; }
+        .trof-tbar { width: 60px; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+        .trof-tfill { height: 100%; background: linear-gradient(90deg, #f5a623, #f0c040); }
+        .trof-ttext { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-secondary); white-space: nowrap; }
+        .trof-muted { color: var(--text-muted); }
+        .trof-plat-img { width: 16px; height: 16px; vertical-align: middle; }
+
+        @media (max-width: 768px) {
+            .trof-section { padding: 1.2rem; }
+            .trof-hero { flex-direction: column; align-items: stretch; }
+            .trof-types { grid-template-columns: repeat(2, 1fr); }
+            .trof-row { grid-template-columns: minmax(0, 1fr) auto; }
+            .trof-date, .trof-tt { grid-column: 1 / -1; justify-content: flex-start; text-align: left; }
+            .trof-trophies { grid-column: 1 / -1; justify-content: flex-start; }
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -523,6 +572,7 @@
     <nav class="tabs">
         <button class="tab-btn active" id="tabColecao" onclick="switchTab('colecao')">&#128203; Coleção</button>
         <button class="tab-btn" id="tabAno" onclick="switchTab('ano')">&#127942; Por Ano</button>
+        <button class="tab-btn" id="tabTrofeus" onclick="switchTab('trofeus')">&#128142; Troféus</button>
     </nav>
 
     <div id="view-colecao" class="tab-view active">
@@ -613,6 +663,25 @@
         </section>
     </div>
 
+    <div id="view-trofeus" class="tab-view">
+        <section class="trof-section">
+            <div class="trof-hero" id="trofHero"></div>
+            <div class="trof-substats" id="trofSubstats"></div>
+            <div class="trof-controls">
+                <span class="filter-label">Ordenar por</span>
+                <select class="filter-select" id="trofSort" onchange="renderTrofeus()">
+                    <option value="data-desc">Data (mais recente)</option>
+                    <option value="data-asc">Data (mais antiga)</option>
+                    <option value="trofeus-desc">Troféus conquistados</option>
+                    <option value="pct-desc">% de conclusão</option>
+                    <option value="nome-asc">Nome (A-Z)</option>
+                </select>
+                <span class="trof-count" id="trofCount"></span>
+            </div>
+            <div class="trof-list" id="trofList"></div>
+        </section>
+    </div>
+
     <footer class="footer">
         <div class="footer-text">
             <span class="footer-pixel"></span>
@@ -636,280 +705,280 @@
 
     <script>
         const games = [
-            { nome: "Alan Wake 2", adquirido: true, avaliacao: 3, dataFinal: "03/01/2025", dataInicio: "24/11/2024", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Cancelado", trofeus: "22/89 - 24%", horas: null },
-            { nome: "Uncharted - Drake's Fortune", adquirido: true, avaliacao: 5, dataFinal: "04/03/2025", dataInicio: "04/03/2025", dificuldade: "Normal", plataforma: "PS4", release: 2007, status: "Nao iniciada", trofeus: "19/48 - 44%", horas: null },
+            { nome: "Alan Wake 2", adquirido: true, avaliacao: 3, dataFinal: "03/01/2025", dataInicio: "24/11/2024", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Cancelado", trofeus: "22/89 - 24%", horas: null, trofeusTipo: [0,0,0,22] },
+            { nome: "Uncharted - Drake's Fortune", adquirido: true, avaliacao: 5, dataFinal: "04/03/2025", dataInicio: "04/03/2025", dificuldade: "Normal", plataforma: "PS4", release: 2007, status: "Nao iniciada", trofeus: "19/48 - 44%", horas: null, trofeusTipo: [0,2,2,15] },
             { nome: "Uncharted - Among Thieves", adquirido: true, avaliacao: 4, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: 2009, status: "Nao iniciada", trofeus: "", horas: null },
             { nome: "Uncharted - Drake's Deception", adquirido: true, avaliacao: 5, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: 2011, status: "Nao iniciada", trofeus: "", horas: null },
-            { nome: "Uncharted - Thief's End", adquirido: true, avaliacao: 5, dataFinal: "31/01/2025", dataInicio: "20/07/2024", dificuldade: "Normal", plataforma: "PS5", release: 2016, status: "Concluido", trofeus: "12/68 - 14%", horas: null },
-            { nome: "God of War", adquirido: true, avaliacao: 5, dataFinal: "24/08/2018", dataInicio: "24/08/2018", dificuldade: "Normal", plataforma: "PS4", release: 2018, status: "Nao iniciada", trofeus: "24/37 - 55%", horas: 50.5 },
-            { nome: "God of War Ragnarok", adquirido: true, avaliacao: 5, dataFinal: "31/01/2025", dataInicio: "01/01/2025", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Concluido", trofeus: "0/48 - 0%", horas: 0.3 },
-            { nome: "Spider-Man Remastered", adquirido: true, avaliacao: 5, dataFinal: "02/02/2025", dataInicio: "09/01/2025", dificuldade: "Very Hard", plataforma: "PS5", release: 2018, status: "Concluido", trofeus: "53/79 - 60%", horas: null },
-            { nome: "Spider-Man 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "1/43 - 1%", horas: 0.8 },
-            { nome: "Indiana Jones e o Grande Circulo", adquirido: true, avaliacao: 3, dataFinal: "20/09/2025", dataInicio: "19/07/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Concluido", trofeus: "24/56 - 46%", horas: 21.7 },
-            { nome: "The Last of Us Part 1", adquirido: true, avaliacao: 5, dataFinal: "", dataInicio: "07/06/2025", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Nao iniciada", trofeus: "1/29 - 1%", horas: 3.5 },
-            { nome: "The Last of Us Part 2", adquirido: true, avaliacao: 4, dataFinal: "15/05/2025", dataInicio: "01/05/2025", dificuldade: "Normal", plataforma: "PS5", release: 2024, status: "Concluido", trofeus: "0/45 - 0%", horas: null },
-            { nome: "Cyberpunk 2077", adquirido: true, avaliacao: 4, dataFinal: "28/09/2025", dataInicio: "23/11/2024", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Concluido", trofeus: "10/58 - 20%", horas: 23.8 },
-            { nome: "Ghost of Tsushima", adquirido: true, avaliacao: 4, dataFinal: "12/05/2025", dataInicio: "06/04/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "20/77 - 22%", horas: 17.5 },
-            { nome: "Uncharted: The Lost Legacy", adquirido: true, avaliacao: 4, dataFinal: "09/06/2025", dataInicio: "08/06/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "5/50 - 7%", horas: null },
+            { nome: "Uncharted - Thief's End", adquirido: true, avaliacao: 5, dataFinal: "31/01/2025", dataInicio: "20/07/2024", dificuldade: "Normal", plataforma: "PS5", release: 2016, status: "Concluido", trofeus: "12/68 - 14%", horas: null, trofeusTipo: [0,0,0,12] },
+            { nome: "God of War", adquirido: true, avaliacao: 5, dataFinal: "24/08/2018", dataInicio: "24/08/2018", dificuldade: "Normal", plataforma: "PS4", release: 2018, status: "Nao iniciada", trofeus: "24/37 - 55%", horas: 50.5, trofeusTipo: [0,2,5,17] },
+            { nome: "God of War Ragnarok", adquirido: true, avaliacao: 5, dataFinal: "31/01/2025", dataInicio: "01/01/2025", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Concluido", trofeus: "0/48 - 0%", horas: 0.3, trofeusTipo: [0,0,0,0] },
+            { nome: "Spider-Man Remastered", adquirido: true, avaliacao: 5, dataFinal: "02/02/2025", dataInicio: "09/01/2025", dificuldade: "Very Hard", plataforma: "PS5", release: 2018, status: "Concluido", trofeus: "53/79 - 60%", horas: null, trofeusTipo: [1,2,12,38] },
+            { nome: "Spider-Man 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "1/43 - 1%", horas: 0.8, trofeusTipo: [0,0,0,1] },
+            { nome: "Indiana Jones e o Grande Circulo", adquirido: true, avaliacao: 3, dataFinal: "20/09/2025", dataInicio: "19/07/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Concluido", trofeus: "24/56 - 46%", horas: 21.7, trofeusTipo: [0,1,10,13] },
+            { nome: "The Last of Us Part 1", adquirido: true, avaliacao: 5, dataFinal: "", dataInicio: "07/06/2025", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Nao iniciada", trofeus: "1/29 - 1%", horas: 3.5, trofeusTipo: [0,0,0,1] },
+            { nome: "The Last of Us Part 2", adquirido: true, avaliacao: 4, dataFinal: "15/05/2025", dataInicio: "01/05/2025", dificuldade: "Normal", plataforma: "PS5", release: 2024, status: "Concluido", trofeus: "0/45 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Cyberpunk 2077", adquirido: true, avaliacao: 4, dataFinal: "28/09/2025", dataInicio: "23/11/2024", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Concluido", trofeus: "10/58 - 20%", horas: 23.8, trofeusTipo: [0,1,1,8] },
+            { nome: "Ghost of Tsushima", adquirido: true, avaliacao: 4, dataFinal: "12/05/2025", dataInicio: "06/04/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "20/77 - 22%", horas: 17.5, trofeusTipo: [0,1,0,19] },
+            { nome: "Uncharted: The Lost Legacy", adquirido: true, avaliacao: 4, dataFinal: "09/06/2025", dataInicio: "08/06/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "5/50 - 7%", horas: null, trofeusTipo: [0,0,0,5] },
             { nome: "Mario Wonder", adquirido: true, avaliacao: 5, dataFinal: "28/09/2025", dataInicio: "07/09/2025", dificuldade: "Normal", plataforma: "Switch 2", release: null, status: "Concluido", trofeus: "", horas: null },
             { nome: "Zelda - Breath of the Wild", adquirido: true, avaliacao: 5, dataFinal: "17/10/2025", dataInicio: "07/09/2025", dificuldade: "Normal", plataforma: "Switch 2", release: null, status: "Concluido", trofeus: "", horas: null },
-            { nome: "Ghost of Yotei", adquirido: true, avaliacao: 5, dataFinal: "23/11/2025", dataInicio: "01/11/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Concluido", trofeus: "45/62 - 70%", horas: 58.6 },
-            { nome: "Star Wars: Outlaws", adquirido: true, avaliacao: 3, dataFinal: "03/01/2026", dataInicio: "14/12/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "19/60 - 30%", horas: 16.3 },
+            { nome: "Ghost of Yotei", adquirido: true, avaliacao: 5, dataFinal: "23/11/2025", dataInicio: "01/11/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Concluido", trofeus: "45/62 - 70%", horas: 58.6, trofeusTipo: [0,2,6,37] },
+            { nome: "Star Wars: Outlaws", adquirido: true, avaliacao: 3, dataFinal: "03/01/2026", dataInicio: "14/12/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "19/60 - 30%", horas: 16.3, trofeusTipo: [0,1,4,14] },
             { nome: "A Ascensao do Ronin", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Nao iniciada", trofeus: "", horas: null },
-            { nome: "Farming Simulator 25", adquirido: true, avaliacao: 0, dataFinal: "21/06/2025", dataInicio: "01/04/2025", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "10/46 - 21%", horas: 38.1 },
-            { nome: "Helldivers II", adquirido: true, avaliacao: 0, dataFinal: "31/03/2025", dataInicio: "30/03/2025", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Nao iniciada", trofeus: "4/39 - 6%", horas: 0.9 },
+            { nome: "Farming Simulator 25", adquirido: true, avaliacao: 0, dataFinal: "21/06/2025", dataInicio: "01/04/2025", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "10/46 - 21%", horas: 38.1, trofeusTipo: [0,1,0,9] },
+            { nome: "Helldivers II", adquirido: true, avaliacao: 0, dataFinal: "31/03/2025", dataInicio: "30/03/2025", dificuldade: "Normal", plataforma: "PS5", release: 2022, status: "Nao iniciada", trofeus: "4/39 - 6%", horas: 0.9, trofeusTipo: [0,0,0,4] },
             { nome: "Astro Bot", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "", horas: null },
-            { nome: "Death Stranding 2", adquirido: true, avaliacao: 0, dataFinal: "30/11/2025", dataInicio: "28/11/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "5/55 - 7%", horas: 3.2 },
-            { nome: "Assassins Creed Shadows", adquirido: true, avaliacao: 0, dataFinal: "17/01/2026", dataInicio: "28/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "9/76 - 10%", horas: 4.3 },
+            { nome: "Death Stranding 2", adquirido: true, avaliacao: 0, dataFinal: "30/11/2025", dataInicio: "28/11/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "5/55 - 7%", horas: 3.2, trofeusTipo: [0,0,0,5] },
+            { nome: "Assassins Creed Shadows", adquirido: true, avaliacao: 0, dataFinal: "17/01/2026", dataInicio: "28/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "9/76 - 10%", horas: 4.3, trofeusTipo: [0,0,1,8] },
             { nome: "Zelda: Tears of the Kingdom", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Switch 2", release: 2021, status: "Nao iniciada", trofeus: "", horas: null },
             { nome: "Mario Galaxy", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Switch 2", release: 2025, status: "Nao iniciada", trofeus: "", horas: null },
             { nome: "Mario Galaxy 2", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Switch 2", release: 2025, status: "Nao iniciada", trofeus: "", horas: null },
             { nome: "Zelda: Link's Awakening", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "Switch 2", release: 2020, status: "Nao iniciada", trofeus: "", horas: null },
-            { nome: "The Witcher 3", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: 2020, status: "Nao iniciada", trofeus: "20/79 - 23%", horas: 111.8 },
-            { nome: "F1 2025", adquirido: true, avaliacao: 0, dataFinal: "28/12/2025", dataInicio: "28/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2021, status: "Nao iniciada", trofeus: "4/47 - 5%", horas: 19.1 },
-            { nome: "Kingdom Come Deliverance II", adquirido: true, avaliacao: 0, dataFinal: "15/12/2025", dataInicio: "15/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "2/84 - 1%", horas: 4.7 },
-            { nome: "ARC Rider", adquirido: true, avaliacao: 0, dataFinal: "13/12/2025", dataInicio: "13/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "7/51 - 11%", horas: 3.1 },
-            { nome: "Days Gone Remastered", adquirido: true, avaliacao: 3, dataFinal: "07/02/2026", dataInicio: "11/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Concluido", trofeus: "19/67 - 18%", horas: null },
-            { nome: "Battlefield 6", adquirido: true, avaliacao: 0, dataFinal: "01/11/2025", dataInicio: "18/10/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "5/54 - 6%", horas: 19.1 },
+            { nome: "The Witcher 3", adquirido: true, avaliacao: 0, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: 2020, status: "Nao iniciada", trofeus: "20/79 - 23%", horas: 111.8, trofeusTipo: [0,0,3,17] },
+            { nome: "F1 2025", adquirido: true, avaliacao: 0, dataFinal: "28/12/2025", dataInicio: "28/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2021, status: "Nao iniciada", trofeus: "4/47 - 5%", horas: 19.1, trofeusTipo: [0,0,0,4] },
+            { nome: "Kingdom Come Deliverance II", adquirido: true, avaliacao: 0, dataFinal: "15/12/2025", dataInicio: "15/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2023, status: "Nao iniciada", trofeus: "2/84 - 1%", horas: 4.7, trofeusTipo: [0,0,0,2] },
+            { nome: "ARC Rider", adquirido: true, avaliacao: 0, dataFinal: "13/12/2025", dataInicio: "13/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "7/51 - 11%", horas: 3.1, trofeusTipo: [0,0,1,6] },
+            { nome: "Days Gone Remastered", adquirido: true, avaliacao: 3, dataFinal: "07/02/2026", dataInicio: "11/12/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Concluido", trofeus: "19/67 - 18%", horas: null, trofeusTipo: [0,0,2,17] },
+            { nome: "Battlefield 6", adquirido: true, avaliacao: 0, dataFinal: "01/11/2025", dataInicio: "18/10/2025", dificuldade: "Normal", plataforma: "PS5", release: 2025, status: "Nao iniciada", trofeus: "5/54 - 6%", horas: 19.1, trofeusTipo: [0,0,0,5] },
             { nome: "Super Mario World", adquirido: true, avaliacao: 5, dataFinal: "31/01/2026", dataInicio: "19/01/2026", dificuldade: "Normal", plataforma: "Switch 2", release: 1991, status: "Concluido", trofeus: "", horas: null },
-            { nome: "Resident Evil 2 Remake", adquirido: true, avaliacao: 4, dataFinal: "15/02/2026", dataInicio: "12/11/2024", dificuldade: "Normal", plataforma: "PS5", release: 2019, status: "Concluido", trofeus: "19/45 - 27%", horas: 0 },
-            { nome: "Resident Evil Village", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/57 - 0%", horas: 0.1 },
-            { nome: "Raft", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/43 - 0%", horas: 0.1 },
-            { nome: "Return to Moria", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/28 - 0%", horas: null },
-            { nome: "Skyrim", adquirido: true, avaliacao: 3, dataFinal: "21/12/2025", dataInicio: "21/12/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/76 - 1%", horas: null },
-            { nome: "Subnautica: Below Zero", adquirido: true, avaliacao: 3, dataFinal: "13/12/2025", dataInicio: "13/12/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/14 - 2%", horas: 0.2 },
-            { nome: "Red Dead Redemption", adquirido: true, avaliacao: 3, dataFinal: "11/12/2025", dataInicio: "11/12/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "15/91 - 14%", horas: 1.2 },
-            { nome: "Black Myth: Wukong", adquirido: true, avaliacao: 3, dataFinal: "29/11/2025", dataInicio: "29/11/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/36 - 3%", horas: 0.9 },
-            { nome: "Hitman 3", adquirido: true, avaliacao: 3, dataFinal: "28/11/2025", dataInicio: "28/11/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/84 - 2%", horas: null },
-            { nome: "Pacific Drive", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/50 - 0%", horas: 0.3 },
-            { nome: "The Long Dark", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/88 - 0%", horas: 2.8 },
-            { nome: "Silent Hill 2", adquirido: true, avaliacao: 3, dataFinal: "15/11/2025", dataInicio: "15/11/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/44 - 2%", horas: 2.3 },
-            { nome: "Prince of Persia: The Lost Crown", adquirido: true, avaliacao: 3, dataFinal: "04/10/2025", dataInicio: "04/10/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/42 - 3%", horas: 4.6 },
-            { nome: "The Invincible", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/30 - 0%", horas: 0.2 },
-            { nome: "Marvel Rivals", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/41 - 0%", horas: 0.2 },
-            { nome: "Final Fantasy VII Remake", adquirido: true, avaliacao: 3, dataFinal: "20/09/2025", dataInicio: "20/09/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/63 - 3%", horas: 0.8 },
-            { nome: "Stumble Guys", adquirido: true, avaliacao: 3, dataFinal: "13/09/2025", dataInicio: "13/09/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "8/50 - 16%", horas: 0.5 },
-            { nome: "Dead by Daylight", adquirido: true, avaliacao: 3, dataFinal: "13/09/2025", dataInicio: "13/09/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "59/297 - 19%", horas: 448.4 },
-            { nome: "Sackboy: A Big Adventure", adquirido: true, avaliacao: 3, dataFinal: "31/08/2025", dataInicio: "31/08/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/46 - 5%", horas: null },
-            { nome: "Overcooked! All You Can Eat", adquirido: true, avaliacao: 3, dataFinal: "31/08/2025", dataInicio: "31/08/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/43 - 5%", horas: 1.2 },
-            { nome: "Sword of the Sea", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/48 - 0%", horas: 0.1 },
-            { nome: "Coral Island", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/50 - 0%", horas: 0.7 },
-            { nome: "Mortal Kombat 1", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/51 - 0%", horas: null },
-            { nome: "Forza Horizon 5", adquirido: true, avaliacao: 3, dataFinal: "09/08/2025", dataInicio: "09/08/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "36/165 - 25%", horas: 63.2 },
-            { nome: "Lies of P", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/54 - 0%", horas: 0.2 },
-            { nome: "Hot Wheels Unleashed", adquirido: true, avaliacao: 3, dataFinal: "26/07/2025", dataInicio: "26/07/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/54 - 2%", horas: 0.1 },
-            { nome: "It Takes Two", adquirido: true, avaliacao: 3, dataFinal: "13/07/2025", dataInicio: "13/07/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/21 - 2%", horas: null },
-            { nome: "Medieval Dynasty", adquirido: true, avaliacao: 3, dataFinal: "04/07/2025", dataInicio: "04/07/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "10/45 - 14%", horas: 17.8 },
-            { nome: "Grounded", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/46 - 0%", horas: null },
-            { nome: "EA Sports FC 25", adquirido: true, avaliacao: 3, dataFinal: "14/06/2025", dataInicio: "14/06/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/40 - 1%", horas: null },
-            { nome: "Death Stranding Director's Cut", adquirido: true, avaliacao: 3, dataFinal: "07/06/2025", dataInicio: "07/06/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "8/63 - 11%", horas: null },
-            { nome: "Hot Wheels Unleashed 2: Turbocharged", adquirido: true, avaliacao: 3, dataFinal: "31/05/2025", dataInicio: "31/05/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "38/56 - 67%", horas: 18.4 },
-            { nome: "The Precinct", adquirido: true, avaliacao: 3, dataFinal: "18/05/2025", dataInicio: "18/05/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "9/40 - 14%", horas: 6.2 },
-            { nome: "Salt and Sacrifice", adquirido: true, avaliacao: 3, dataFinal: "18/05/2025", dataInicio: "18/05/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "16/54 - 23%", horas: 12 },
-            { nome: "The Elder Scrolls Online", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/182 - 0%", horas: null },
-            { nome: "Car Mechanic Simulator 2021", adquirido: true, avaliacao: 3, dataFinal: "03/05/2025", dataInicio: "03/05/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "19/47 - 31%", horas: 18 },
-            { nome: "House Flipper 2", adquirido: true, avaliacao: 3, dataFinal: "24/04/2025", dataInicio: "24/04/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "22/60 - 50%", horas: 24.4 },
-            { nome: "Green Hell", adquirido: true, avaliacao: 3, dataFinal: "21/04/2025", dataInicio: "21/04/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "10/41 - 14%", horas: null },
-            { nome: "Green Hell VR", adquirido: true, avaliacao: 3, dataFinal: "19/04/2025", dataInicio: "19/04/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/34 - 3%", horas: 0.5 },
-            { nome: "The Texas Chain Saw Massacre", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/52 - 4%", horas: 0.1 },
-            { nome: "Construction Simulator", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/33 - 0%", horas: 0.4 },
-            { nome: "Agatha Christie: Murder on the Orient Express", adquirido: true, avaliacao: 3, dataFinal: "22/03/2025", dataInicio: "22/03/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/28 - 1%", horas: 0.5 },
-            { nome: "Deadside", adquirido: true, avaliacao: 3, dataFinal: "16/03/2025", dataInicio: "16/03/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "7/30 - 10%", horas: 19.6 },
-            { nome: "Asterix & Obelix: Slap Them All!", adquirido: true, avaliacao: 3, dataFinal: "01/03/2025", dataInicio: "01/03/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "4/31 - 6%", horas: 0.4 },
-            { nome: "Call of Duty: Modern Warfare II", adquirido: true, avaliacao: 3, dataFinal: "28/02/2025", dataInicio: "28/02/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "6/158 - 5%", horas: null },
-            { nome: "EA Sports UFC 5", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/32 - 0%", horas: null },
-            { nome: "World War Z: Aftermath", adquirido: true, avaliacao: 3, dataFinal: "02/02/2025", dataInicio: "02/02/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/36 - 3%", horas: 17.1 },
-            { nome: "Return to Monkey Island", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/40 - 0%", horas: 0.1 },
-            { nome: "Battlefield 2042", adquirido: true, avaliacao: 3, dataFinal: "24/01/2025", dataInicio: "24/01/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "11/35 - 29%", horas: null },
-            { nome: "UFL", adquirido: true, avaliacao: 3, dataFinal: "05/01/2025", dataInicio: "05/01/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/26 - 3%", horas: 0.4 },
-            { nome: "War Thunder", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/13 - 0%", horas: 0.1 },
-            { nome: "Assassin's Creed Mirage", adquirido: true, avaliacao: 3, dataFinal: "26/12/2024", dataInicio: "26/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/62 - 1%", horas: 1.2 },
-            { nome: "Gran Turismo 7", adquirido: true, avaliacao: 3, dataFinal: "23/12/2024", dataInicio: "23/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "15/54 - 22%", horas: 12.3 },
-            { nome: "Robocop: Rogue City", adquirido: true, avaliacao: 3, dataFinal: "21/12/2024", dataInicio: "21/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "14/28 - 44%", horas: 4.7 },
-            { nome: "No Man's Sky", adquirido: true, avaliacao: 3, dataFinal: "15/12/2024", dataInicio: "15/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "11/28 - 25%", horas: null },
-            { nome: "Temtem", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/48 - 0%", horas: 0 },
-            { nome: "Fall Guys", adquirido: true, avaliacao: 3, dataFinal: "07/12/2024", dataInicio: "07/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "11/35 - 17%", horas: 0.4 },
-            { nome: "Assetto Corsa Competizione", adquirido: true, avaliacao: 3, dataFinal: "06/12/2024", dataInicio: "06/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/41 - 1%", horas: 20.6 },
-            { nome: "Aliens: Dark Descent", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/46 - 0%", horas: 0.2 },
-            { nome: "EA Sports FC 24", adquirido: true, avaliacao: 3, dataFinal: "30/11/2024", dataInicio: "30/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/41 - 10%", horas: null },
-            { nome: "Dying Light 2: Stay Human", adquirido: true, avaliacao: 3, dataFinal: "23/11/2024", dataInicio: "23/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "5/66 - 6%", horas: null },
-            { nome: "Grid Legends", adquirido: true, avaliacao: 3, dataFinal: "15/11/2024", dataInicio: "15/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/91 - 1%", horas: 0.1 },
-            { nome: "Anno 1800", adquirido: true, avaliacao: 3, dataFinal: "13/11/2024", dataInicio: "13/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/31 - 1%", horas: null },
-            { nome: "Dirt 5", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/41 - 0%", horas: null },
-            { nome: "Hogwarts Legacy", adquirido: true, avaliacao: 3, dataFinal: "12/11/2024", dataInicio: "12/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/46 - 4%", horas: 2.7 },
-            { nome: "Demon's Souls", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/37 - 0%", horas: 0.8 },
-            { nome: "Alan Wake Remastered", adquirido: true, avaliacao: 3, dataFinal: "27/10/2024", dataInicio: "27/10/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/68 - 3%", horas: 0.8 },
-            { nome: "Assassin's Creed Valhalla", adquirido: true, avaliacao: 3, dataFinal: "20/10/2024", dataInicio: "20/10/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/93 - 1%", horas: 1.9 },
-            { nome: "Firefighting Simulator: The Squad", adquirido: true, avaliacao: 3, dataFinal: "18/10/2024", dataInicio: "18/10/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/31 - 1%", horas: null },
-            { nome: "Dead Island 2", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/60 - 0%", horas: 0.4 },
-            { nome: "Deliver Us the Moon", adquirido: true, avaliacao: 3, dataFinal: "12/10/2024", dataInicio: "12/10/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/33 - 1%", horas: 0.2 },
-            { nome: "Little Nightmares II", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/35 - 0%", horas: 0.1 },
-            { nome: "Moving Out 2", adquirido: true, avaliacao: 3, dataFinal: "08/08/2024", dataInicio: "08/08/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "6/29 - 8%", horas: 0.5 },
-            { nome: "Star Wars Jedi: Survivor", adquirido: true, avaliacao: 3, dataFinal: "31/07/2024", dataInicio: "31/07/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/54 - 1%", horas: 1.9 },
-            { nome: "Grand Theft Auto V", adquirido: true, avaliacao: 3, dataFinal: "26/07/2024", dataInicio: "26/07/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "24/78 - 31%", horas: null },
-            { nome: "Bus Simulator 21", adquirido: true, avaliacao: 3, dataFinal: "25/07/2024", dataInicio: "25/07/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/38 - 4%", horas: null },
-            { nome: "Ratchet & Clank: Rift Apart", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/47 - 0%", horas: 0.5 },
-            { nome: "Marvel's Spider-Man: Miles Morales", adquirido: true, avaliacao: 3, dataFinal: "20/07/2024", dataInicio: "20/07/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "5/50 - 7%", horas: 2.4 },
-            { nome: "Far Cry Primal", adquirido: true, avaliacao: 3, dataFinal: "30/09/2025", dataInicio: "30/09/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/51 - 2%", horas: 0.7 },
-            { nome: "Stardew Valley", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/50 - 0%", horas: 0.3 },
-            { nome: "Hollow Knight", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/35 - 0%", horas: 0.3 },
-            { nome: "theHunter: Call of the Wild", adquirido: true, avaliacao: 3, dataFinal: "20/06/2025", dataInicio: "20/06/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/115 - 2%", horas: 0.7 },
-            { nome: "Red Dead Redemption 2", adquirido: true, avaliacao: 3, dataFinal: "25/05/2025", dataInicio: "25/05/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "34/52 - 64%", horas: 311.6 },
-            { nome: "The Forest", adquirido: true, avaliacao: 3, dataFinal: "15/03/2025", dataInicio: "15/03/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "12/38 - 25%", horas: 56.4 },
-            { nome: "Fade to Silence", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/43 - 0%", horas: 0.1 },
-            { nome: "DayZ", adquirido: true, avaliacao: 3, dataFinal: "01/01/2025", dataInicio: "01/01/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/13 - 19%", horas: 9.9 },
-            { nome: "The Texas Chain Saw Massacre", adquirido: true, avaliacao: 3, dataFinal: "02/04/2025", dataInicio: "02/04/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/52 - 4%", horas: 0.1 },
-            { nome: "Alien: Isolation", adquirido: true, avaliacao: 3, dataFinal: "21/12/2024", dataInicio: "21/12/2024", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/51 - 5%", horas: 3.4 },
-            { nome: "Shadow of the Tomb Raider", adquirido: true, avaliacao: 3, dataFinal: "24/11/2024", dataInicio: "24/11/2024", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "20/100 - 14%", horas: 9.6 },
-            { nome: "Tomb Raider: Definitive Edition", adquirido: true, avaliacao: 3, dataFinal: "21/02/2026", dataInicio: "17/02/2026", dificuldade: "Normal", plataforma: "PS4", release: 2014, status: "Concluido", trofeus: "13/51 - 20%", horas: 8.2 },
-            { nome: "Rise of the Tomb Raider", adquirido: true, avaliacao: 3, dataFinal: "28/02/2026", dataInicio: "22/02/2026", dificuldade: "Normal", plataforma: "PS4", release: 2015, status: "Concluido", trofeus: "20/125 - 14%", horas: 7.9 },
-            { nome: "Street Fighter 30th Anniversary Collection", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/17 - 0%", horas: 0.2 },
-            { nome: "Tom Clancy's Ghost Recon Breakpoint", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/51 - 0%", horas: 0.1 },
-            { nome: "Plants vs. Zombies: Battle for Neighborville", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/51 - 0%", horas: 0.1 },
-            { nome: "Mad Max", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/50 - 0%", horas: 0.2 },
-            { nome: "Roblox", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/8 - 0%", horas: 0 },
-            { nome: "Minecraft", adquirido: true, avaliacao: 3, dataFinal: "23/02/2022", dataInicio: "23/02/2022", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/127 - 4%", horas: null },
-            { nome: "Monster Energy Supercross", adquirido: true, avaliacao: 3, dataFinal: "22/02/2022", dataInicio: "22/02/2022", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/51 - 2%", horas: 1.6 },
-            { nome: "Sonic Forces", adquirido: true, avaliacao: 3, dataFinal: "10/02/2022", dataInicio: "10/02/2022", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/49 - 9%", horas: 21.2 },
-            { nome: "Lego DC Super-Villains", adquirido: true, avaliacao: 3, dataFinal: "07/02/2022", dataInicio: "07/02/2022", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/76 - 8%", horas: 9.6 },
-            { nome: "Tennis World Tour 2", adquirido: true, avaliacao: 3, dataFinal: "08/08/2021", dataInicio: "08/08/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/31 - 1%", horas: 0.1 },
-            { nome: "Steep", adquirido: true, avaliacao: 3, dataFinal: "06/05/2021", dataInicio: "06/05/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/48 - 8%", horas: 7.2 },
-            { nome: "Stranded Deep", adquirido: true, avaliacao: 3, dataFinal: "05/05/2021", dataInicio: "05/05/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/36 - 1%", horas: 1.8 },
-            { nome: "Zombie Army 4: Dead War", adquirido: true, avaliacao: 3, dataFinal: "24/04/2021", dataInicio: "24/04/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/71 - 5%", horas: 1.4 },
-            { nome: "LittleBigPlanet 3", adquirido: true, avaliacao: 3, dataFinal: "24/01/2021", dataInicio: "24/01/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/38 - 3%", horas: 12.2 },
-            { nome: "Street Fighter V", adquirido: true, avaliacao: 3, dataFinal: "03/01/2021", dataInicio: "03/01/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/45 - 1%", horas: 0.7 },
-            { nome: "Tiny Troopers Joint Ops", adquirido: true, avaliacao: 3, dataFinal: "03/01/2021", dataInicio: "03/01/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/15 - 3%", horas: 0.5 },
-            { nome: "Rayman Legends", adquirido: true, avaliacao: 3, dataFinal: "01/01/2021", dataInicio: "01/01/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "32/51 - 58%", horas: 153.8 },
-            { nome: "Just Cause 4", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/61 - 0%", horas: null },
-            { nome: "PUBG: Battlegrounds", adquirido: true, avaliacao: 3, dataFinal: "12/12/2020", dataInicio: "12/12/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "6/38 - 11%", horas: 5.1 },
-            { nome: "Kung Fu Panda: Showdown of Legendary Legends", adquirido: true, avaliacao: 3, dataFinal: "07/12/2020", dataInicio: "07/12/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/25 - 4%", horas: 4.7 },
-            { nome: "Q*bert: Rebooted", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/9 - 0%", horas: 0 },
-            { nome: "Color Guardians", adquirido: true, avaliacao: 3, dataFinal: "07/12/2020", dataInicio: "07/12/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/46 - 1%", horas: 0.3 },
-            { nome: "Sonic Mania", adquirido: true, avaliacao: 3, dataFinal: "29/11/2020", dataInicio: "29/11/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/18 - 4%", horas: 1.6 },
-            { nome: "Farming Simulator 19", adquirido: true, avaliacao: 3, dataFinal: "09/07/2020", dataInicio: "06/05/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "24/24 - 100%", horas: 640.4 },
-            { nome: "Star Wars Battlefront II", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/44 - 0%", horas: null },
-            { nome: "Call of Duty: WWII", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/91 - 0%", horas: null },
-            { nome: "eFootball PES 2020", adquirido: true, avaliacao: 3, dataFinal: "02/05/2020", dataInicio: "02/05/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "24/50 - 44%", horas: 165 },
-            { nome: "DiRT Rally 2.0", adquirido: true, avaliacao: 3, dataFinal: "12/04/2020", dataInicio: "12/04/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/72 - 5%", horas: 9.6 },
-            { nome: "Hitman 2", adquirido: true, avaliacao: 3, dataFinal: "22/03/2020", dataInicio: "22/03/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "16/125 - 8%", horas: 27.2 },
-            { nome: "The Sims 4", adquirido: true, avaliacao: 3, dataFinal: "06/02/2020", dataInicio: "06/02/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/51 - 1%", horas: 18.3 },
-            { nome: "F1 2019", adquirido: true, avaliacao: 3, dataFinal: "27/09/2019", dataInicio: "27/09/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/51 - 11%", horas: null },
-            { nome: "Pro Evolution Soccer 2019", adquirido: true, avaliacao: 3, dataFinal: "07/09/2019", dataInicio: "07/09/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "21/50 - 38%", horas: null },
-            { nome: "Crash Team Racing: Nitro-Fueled", adquirido: true, avaliacao: 3, dataFinal: "08/07/2019", dataInicio: "08/07/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "16/48 - 25%", horas: 7 },
-            { nome: "Tom Clancy's The Division 2", adquirido: true, avaliacao: 3, dataFinal: "14/04/2019", dataInicio: "14/04/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "16/68 - 15%", horas: null },
-            { nome: "For Honor", adquirido: true, avaliacao: 3, dataFinal: "04/03/2019", dataInicio: "04/03/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/61 - 6%", horas: 4 },
-            { nome: "Battlefield V", adquirido: true, avaliacao: 3, dataFinal: "30/12/2018", dataInicio: "30/12/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "9/22 - 34%", horas: 108.9 },
-            { nome: "Friday the 13th: The Game", adquirido: true, avaliacao: 3, dataFinal: "20/09/2018", dataInicio: "20/09/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/51 - 4%", horas: null },
-            { nome: "F1 2018", adquirido: true, avaliacao: 3, dataFinal: "28/08/2018", dataInicio: "28/08/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "6/50 - 8%", horas: 6.7 },
-            { nome: "Middle-earth: Shadow of War", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/73 - 0%", horas: 0.4 },
-            { nome: "A Way Out", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/15 - 0%", horas: 0.9 },
-            { nome: "F1 2017", adquirido: true, avaliacao: 3, dataFinal: "07/08/2018", dataInicio: "07/08/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/51 - 12%", horas: 44.5 },
-            { nome: "Gran Turismo Sport", adquirido: true, avaliacao: 3, dataFinal: "24/06/2018", dataInicio: "24/06/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "14/41 - 21%", horas: null },
-            { nome: "Pro Evolution Soccer 2018", adquirido: true, avaliacao: 3, dataFinal: "28/01/2018", dataInicio: "28/01/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/52 - 5%", horas: null },
-            { nome: "Assassin's Creed Origins", adquirido: true, avaliacao: 3, dataFinal: "24/12/2017", dataInicio: "24/12/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/68 - 5%", horas: 6.8 },
-            { nome: "Project Cars 2", adquirido: true, avaliacao: 3, dataFinal: "15/10/2017", dataInicio: "15/10/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "6/47 - 8%", horas: 21.7 },
-            { nome: "Project Cars", adquirido: true, avaliacao: 3, dataFinal: "23/07/2017", dataInicio: "23/07/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "9/45 - 14%", horas: null },
-            { nome: "Tom Clancy's Ghost Recon Wildlands", adquirido: true, avaliacao: 3, dataFinal: "10/07/2017", dataInicio: "10/07/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "44/58 - 71%", horas: 2.9 },
-            { nome: "How to Survive 2", adquirido: true, avaliacao: 3, dataFinal: "19/02/2017", dataInicio: "19/02/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/50 - 11%", horas: 1.9 },
-            { nome: "Resident Evil 7: Biohazard", adquirido: true, avaliacao: 3, dataFinal: "29/01/2017", dataInicio: "29/01/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "22/59 - 24%", horas: 0.3 },
-            { nome: "Battlefield 1", adquirido: true, avaliacao: 3, dataFinal: "11/12/2016", dataInicio: "11/12/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/51 - 9%", horas: 67.6 },
-            { nome: "Driveclub", adquirido: true, avaliacao: 3, dataFinal: "03/08/2016", dataInicio: "03/08/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "24/128 - 14%", horas: null },
-            { nome: "Battlefield 4", adquirido: true, avaliacao: 3, dataFinal: "18/06/2016", dataInicio: "18/06/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "6/68 - 11%", horas: null },
-            { nome: "Tom Clancy's The Division", adquirido: true, avaliacao: 3, dataFinal: "22/05/2016", dataInicio: "22/05/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "41/66 - 59%", horas: 2.4 },
-            { nome: "Tropico 5", adquirido: true, avaliacao: 3, dataFinal: "21/05/2016", dataInicio: "21/05/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "12/71 - 14%", horas: 21.2 },
-            { nome: "Table Top Racing: World Tour", adquirido: true, avaliacao: 3, dataFinal: "15/05/2016", dataInicio: "15/05/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/37 - 14%", horas: 1.9 },
-            { nome: "Pro Evolution Soccer 2016", adquirido: true, avaliacao: 3, dataFinal: "06/02/2016", dataInicio: "06/02/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/41 - 10%", horas: null },
-            { nome: "Until Dawn", adquirido: true, avaliacao: 3, dataFinal: "01/01/2016", dataInicio: "01/01/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/19 - 22%", horas: 12.5 },
-            { nome: "Metal Gear Solid V: The Phantom Pain", adquirido: true, avaliacao: 3, dataFinal: "13/12/2015", dataInicio: "13/12/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/43 - 10%", horas: 5.4 },
-            { nome: "Resident Evil Revelations 2", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/44 - 0%", horas: 0.1 },
-            { nome: "Batman: Arkham Knight", adquirido: true, avaliacao: 3, dataFinal: "15/08/2015", dataInicio: "15/08/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "23/110 - 16%", horas: 25.9 },
-            { nome: "Sherlock Holmes: Crimes and Punishments", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/25 - 0%", horas: null },
-            { nome: "Lego Marvel Super Heroes", adquirido: true, avaliacao: 3, dataFinal: "09/07/2015", dataInicio: "09/07/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/46 - 4%", horas: 0.2 },
-            { nome: "Mortal Kombat X", adquirido: true, avaliacao: 3, dataFinal: "09/07/2015", dataInicio: "09/07/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/74 - 8%", horas: null },
-            { nome: "Surgeon Simulator", adquirido: true, avaliacao: 3, dataFinal: "09/05/2015", dataInicio: "09/05/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/56 - 1%", horas: 0.3 },
-            { nome: "Dying Light", adquirido: true, avaliacao: 3, dataFinal: "09/05/2015", dataInicio: "09/05/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "21/69 - 29%", horas: 28.8 },
-            { nome: "Far Cry 4", adquirido: true, avaliacao: 3, dataFinal: "09/05/2015", dataInicio: "09/05/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "22/58 - 32%", horas: 74.9 },
-            { nome: "Bloodborne", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/40 - 0%", horas: 5.1 },
-            { nome: "Battlefield Hardline", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/63 - 0%", horas: null },
-            { nome: "Middle-earth: Shadow of Mordor", adquirido: true, avaliacao: 3, dataFinal: "24/12/2014", dataInicio: "24/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "38/75 - 53%", horas: 51.5 },
-            { nome: "Pro Evolution Soccer 2015", adquirido: true, avaliacao: 3, dataFinal: "20/12/2014", dataInicio: "20/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/41 - 1%", horas: null },
-            { nome: "EA Sports UFC", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/33 - 7%", horas: 5 },
-            { nome: "Injustice: Gods Among Us Ultimate Edition", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/51 - 11%", horas: 3.3 },
-            { nome: "PvZ Garden Warfare", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/56 - 6%", horas: null },
-            { nome: "The Evil Within", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/72 - 1%", horas: 4.3 },
-            { nome: "Dragon Age: Inquisition", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/70 - 1%", horas: 3.7 },
-            { nome: "FIFA 15", adquirido: true, avaliacao: 3, dataFinal: "26/10/2014", dataInicio: "26/10/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "9/46 - 21%", horas: 41 },
-            { nome: "Diablo III: Reaper of Souls", adquirido: true, avaliacao: 3, dataFinal: "25/10/2014", dataInicio: "25/10/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/54 - 2%", horas: null },
-            { nome: "Destiny", adquirido: true, avaliacao: 3, dataFinal: "11/10/2014", dataInicio: "11/10/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/61 - 2%", horas: 1.3 },
-            { nome: "Assassin's Creed IV: Black Flag", adquirido: true, avaliacao: 3, dataFinal: "30/08/2014", dataInicio: "30/08/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/61 - 1%", horas: 6.6 },
-            { nome: "Watch Dogs", adquirido: true, avaliacao: 3, dataFinal: "30/08/2014", dataInicio: "30/08/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "11/50 - 24%", horas: 22.6 },
-            { nome: "Lego The Hobbit", adquirido: true, avaliacao: 3, dataFinal: "30/08/2014", dataInicio: "30/08/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/40 - 2%", horas: 0 },
-            { nome: "Call of Duty: Ghosts", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/92 - 0%", horas: 0 },
-            { nome: "FIFA 14", adquirido: true, avaliacao: 3, dataFinal: "26/07/2014", dataInicio: "26/07/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "13/42 - 28%", horas: null },
-            { nome: "Dead Nation: Apocalypse Edition", adquirido: true, avaliacao: 3, dataFinal: "04/05/2014", dataInicio: "04/05/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/41 - 11%", horas: 0.2 },
-            { nome: "Pinball Arcade", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/118 - 0%", horas: 0.7 },
-            { nome: "Knack", adquirido: true, avaliacao: 3, dataFinal: "24/12/2013", dataInicio: "24/12/2013", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "9/42 - 12%", horas: 5.6 },
-            { nome: "Contrast", adquirido: true, avaliacao: 3, dataFinal: "01/12/2013", dataInicio: "01/12/2013", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/21 - 9%", horas: 0.1 },
-            { nome: "Gran Turismo 6", adquirido: true, avaliacao: 3, dataFinal: "18/04/2014", dataInicio: "18/04/2014", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "18/53 - 25%", horas: null },
-            { nome: "XCOM: Enemy Unknown", adquirido: true, avaliacao: 3, dataFinal: "26/08/2013", dataInicio: "26/08/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "4/56 - 4%", horas: null },
-            { nome: "Grid 2", adquirido: true, avaliacao: 3, dataFinal: "18/08/2013", dataInicio: "18/08/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "8/61 - 10%", horas: null },
-            { nome: "F1 2012", adquirido: true, avaliacao: 3, dataFinal: "24/07/2013", dataInicio: "24/07/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "12/50 - 18%", horas: null },
-            { nome: "The Last of Us", adquirido: true, avaliacao: 3, dataFinal: "13/07/2013", dataInicio: "13/07/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/50 - 4%", horas: null },
-            { nome: "Os Cavaleiros do Zodiaco: Batalha do Santuario", adquirido: true, avaliacao: 3, dataFinal: "04/07/2013", dataInicio: "03/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "50/50 - 100%", horas: null },
-            { nome: "Silent Hill Downpour", adquirido: true, avaliacao: 3, dataFinal: "04/05/2013", dataInicio: "04/05/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "8/42 - 14%", horas: null },
-            { nome: "Resident Evil 6", adquirido: true, avaliacao: 3, dataFinal: "27/04/2013", dataInicio: "27/04/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "12/71 - 10%", horas: null },
-            { nome: "Tomb Raider", adquirido: true, avaliacao: 3, dataFinal: "13/04/2013", dataInicio: "13/04/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "10/51 - 14%", horas: null },
-            { nome: "Dead Nation", adquirido: true, avaliacao: 3, dataFinal: "13/04/2013", dataInicio: "13/04/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "31/41 - 60%", horas: null },
-            { nome: "God of War: Ascension", adquirido: true, avaliacao: 3, dataFinal: "24/03/2013", dataInicio: "12/03/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "36/36 - 100%", horas: null },
-            { nome: "Far Cry 3", adquirido: true, avaliacao: 3, dataFinal: "06/03/2013", dataInicio: "23/12/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "51/51 - 100%", horas: null },
-            { nome: "Closure", adquirido: true, avaliacao: 3, dataFinal: "18/02/2013", dataInicio: "18/02/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/8 - 4%", horas: null },
-            { nome: "Pro Evolution Soccer 2013", adquirido: true, avaliacao: 3, dataFinal: "16/02/2013", dataInicio: "12/10/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "29/29 - 100%", horas: null },
-            { nome: "CS:GO", adquirido: true, avaliacao: 3, dataFinal: "31/01/2013", dataInicio: "22/08/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "19/19 - 100%", horas: null },
-            { nome: "God of War III", adquirido: true, avaliacao: 3, dataFinal: "28/01/2013", dataInicio: "21/03/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "36/36 - 100%", horas: null },
-            { nome: "The Cave", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "0/20 - 0%", horas: null },
-            { nome: "The Walking Dead", adquirido: true, avaliacao: 3, dataFinal: "25/01/2013", dataInicio: "25/01/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "41/49 - 84%", horas: null },
-            { nome: "Tokyo Jungle", adquirido: true, avaliacao: 3, dataFinal: "22/01/2013", dataInicio: "22/01/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/13 - 14%", horas: null },
-            { nome: "The Amazing Spider-Man", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "0/47 - 0%", horas: null },
-            { nome: "Assassin's Creed III", adquirido: true, avaliacao: 3, dataFinal: "24/12/2012", dataInicio: "24/12/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "2/65 - 2%", horas: null },
-            { nome: "Castle Crashers", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "0/13 - 0%", horas: null },
-            { nome: "Resident Evil 5", adquirido: true, avaliacao: 3, dataFinal: "20/09/2012", dataInicio: "20/09/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "11/71 - 12%", horas: null },
-            { nome: "Gran Turismo 5", adquirido: true, avaliacao: 3, dataFinal: "30/08/2012", dataInicio: "30/08/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "26/59 - 41%", horas: null },
-            { nome: "Battlefield 3", adquirido: true, avaliacao: 3, dataFinal: "28/07/2012", dataInicio: "28/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "19/64 - 28%", horas: null },
-            { nome: "Dark Souls", adquirido: true, avaliacao: 3, dataFinal: "18/07/2012", dataInicio: "18/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/41 - 4%", horas: null },
-            { nome: "Resident Evil: Operation Raccoon City", adquirido: true, avaliacao: 3, dataFinal: "15/07/2012", dataInicio: "15/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "18/71 - 26%", horas: null },
-            { nome: "Batman: Arkham City", adquirido: true, avaliacao: 3, dataFinal: "15/07/2012", dataInicio: "15/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "12/71 - 15%", horas: null },
-            { nome: "AC Brotherhood", adquirido: true, avaliacao: 3, dataFinal: "15/07/2012", dataInicio: "15/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "6/61 - 10%", horas: null },
-            { nome: "Tom Clancy's Ghost Recon: Future Soldier", adquirido: true, avaliacao: 3, dataFinal: "29/06/2012", dataInicio: "29/06/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "5/60 - 6%", horas: null },
-            { nome: "FIFA 12", adquirido: true, avaliacao: 3, dataFinal: "05/05/2012", dataInicio: "05/05/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/56 - 5%", horas: null },
-            { nome: "DiRT 3", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "0/67 - 0%", horas: null },
-            { nome: "F1 2011", adquirido: true, avaliacao: 3, dataFinal: "01/10/2011", dataInicio: "01/10/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "2/39 - 2%", horas: null },
-            { nome: "Back to the Future - Episode 4: Double Visions", adquirido: true, avaliacao: 3, dataFinal: "23/08/2011", dataInicio: "23/08/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "12/13 - 95%", horas: null },
-            { nome: "Back to the Future - Episode 3: Citizen Brown", adquirido: true, avaliacao: 3, dataFinal: "23/08/2011", dataInicio: "23/08/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "9/11 - 90%", horas: null },
-            { nome: "L.A. Noire", adquirido: true, avaliacao: 3, dataFinal: "23/08/2011", dataInicio: "23/08/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "20/61 - 24%", horas: null },
-            { nome: "Dead Rising 2", adquirido: true, avaliacao: 3, dataFinal: "02/07/2011", dataInicio: "02/07/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "8/51 - 13%", horas: null },
-            { nome: "inFamous", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/50 - 1%", horas: null },
-            { nome: "Sonic the Hedgehog 2", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/12 - 5%", horas: null },
-            { nome: "Killzone 3", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/79 - 1%", horas: null },
-            { nome: "Back to the Future - Episode 2: Get Tannen", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "7/11 - 70%", horas: null },
-            { nome: "Shift 2 Unleashed", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "10/49 - 11%", horas: null },
-            { nome: "Dragon Age II", adquirido: true, avaliacao: 3, dataFinal: "30/03/2011", dataInicio: "30/03/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/66 - 1%", horas: null },
-            { nome: "Rock Band 3", adquirido: true, avaliacao: 3, dataFinal: "05/03/2011", dataInicio: "05/03/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "5/50 - 7%", horas: null },
-            { nome: "GTA IV", adquirido: true, avaliacao: 3, dataFinal: "05/03/2011", dataInicio: "05/03/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/66 - 3%", horas: null },
-            { nome: "Back to the Future - Episode 1: It's About Time", adquirido: true, avaliacao: 3, dataFinal: "27/02/2011", dataInicio: "27/02/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "11/12 - 95%", horas: null },
-            { nome: "Call of Duty: Black Ops", adquirido: true, avaliacao: 3, dataFinal: "30/01/2011", dataInicio: "30/01/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "15/71 - 19%", horas: null },
-            { nome: "Sports Champions", adquirido: true, avaliacao: 3, dataFinal: "04/12/2010", dataInicio: "04/12/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "9/43 - 13%", horas: null },
-            { nome: "LittleBigPlanet", adquirido: true, avaliacao: 3, dataFinal: "04/12/2010", dataInicio: "04/12/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "5/70 - 5%", horas: null },
-            { nome: "Guitar Hero Metallica", adquirido: true, avaliacao: 3, dataFinal: "04/12/2010", dataInicio: "04/12/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "6/51 - 8%", horas: null },
-            { nome: "Medal of Honor", adquirido: true, avaliacao: 3, dataFinal: "20/11/2010", dataInicio: "20/11/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "35/51 - 61%", horas: null },
-            { nome: "F1 2010", adquirido: true, avaliacao: 3, dataFinal: "19/11/2010", dataInicio: "19/11/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "14/50 - 20%", horas: null },
-            { nome: "Rock Band 2", adquirido: true, avaliacao: 3, dataFinal: "09/10/2010", dataInicio: "09/10/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "10/51 - 17%", horas: null },
-            { nome: "Battlefield: Bad Company 2", adquirido: true, avaliacao: 3, dataFinal: "11/09/2010", dataInicio: "11/09/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "22/73 - 30%", horas: null },
-            { nome: "Green Day: Rock Band", adquirido: true, avaliacao: 3, dataFinal: "11/09/2010", dataInicio: "11/09/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/49 - 1%", horas: null },
-            { nome: "Heavy Rain", adquirido: true, avaliacao: 3, dataFinal: "16/07/2010", dataInicio: "16/07/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "26/57 - 40%", horas: null },
-            { nome: "SOCOM: U.S. Navy SEALs Confrontation", adquirido: true, avaliacao: 3, dataFinal: "20/05/2010", dataInicio: "20/05/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "6/43 - 11%", horas: null },
-            { nome: "The Secret of Monkey Island: Special Edition", adquirido: true, avaliacao: 3, dataFinal: "25/04/2010", dataInicio: "25/04/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/12 - 4%", horas: null },
-            { nome: "Modern Warfare 2", adquirido: true, avaliacao: 3, dataFinal: "30/12/2009", dataInicio: "30/12/2009", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "8/51 - 11%", horas: null },
-            { nome: "Assassin's Creed II", adquirido: true, avaliacao: 3, dataFinal: "25/12/2009", dataInicio: "25/12/2009", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "23/51 - 50%", horas: null },
+            { nome: "Resident Evil 2 Remake", adquirido: true, avaliacao: 4, dataFinal: "15/02/2026", dataInicio: "12/11/2024", dificuldade: "Normal", plataforma: "PS5", release: 2019, status: "Concluido", trofeus: "19/45 - 27%", horas: 0, trofeusTipo: [0,0,1,18] },
+            { nome: "Resident Evil Village", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/57 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Raft", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/43 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Return to Moria", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/28 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Skyrim", adquirido: true, avaliacao: 3, dataFinal: "21/12/2025", dataInicio: "21/12/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/76 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Subnautica: Below Zero", adquirido: true, avaliacao: 3, dataFinal: "13/12/2025", dataInicio: "13/12/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/14 - 2%", horas: 0.2, trofeusTipo: [0,0,1,0] },
+            { nome: "Red Dead Redemption", adquirido: true, avaliacao: 3, dataFinal: "11/12/2025", dataInicio: "11/12/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "15/91 - 14%", horas: 1.2, trofeusTipo: [0,0,2,13] },
+            { nome: "Black Myth: Wukong", adquirido: true, avaliacao: 3, dataFinal: "29/11/2025", dataInicio: "29/11/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/36 - 3%", horas: 0.9, trofeusTipo: [0,0,0,2] },
+            { nome: "Hitman 3", adquirido: true, avaliacao: 3, dataFinal: "28/11/2025", dataInicio: "28/11/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/84 - 2%", horas: null, trofeusTipo: [0,0,0,3] },
+            { nome: "Pacific Drive", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/50 - 0%", horas: 0.3, trofeusTipo: [0,0,0,0] },
+            { nome: "The Long Dark", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/88 - 0%", horas: 2.8, trofeusTipo: [0,0,0,0] },
+            { nome: "Silent Hill 2", adquirido: true, avaliacao: 3, dataFinal: "15/11/2025", dataInicio: "15/11/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/44 - 2%", horas: 2.3, trofeusTipo: [0,0,0,2] },
+            { nome: "Prince of Persia: The Lost Crown", adquirido: true, avaliacao: 3, dataFinal: "04/10/2025", dataInicio: "04/10/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/42 - 3%", horas: 4.6, trofeusTipo: [0,0,1,1] },
+            { nome: "The Invincible", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/30 - 0%", horas: 0.2, trofeusTipo: [0,0,0,0] },
+            { nome: "Marvel Rivals", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/41 - 0%", horas: 0.2, trofeusTipo: [0,0,0,0] },
+            { nome: "Final Fantasy VII Remake", adquirido: true, avaliacao: 3, dataFinal: "20/09/2025", dataInicio: "20/09/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/63 - 3%", horas: 0.8, trofeusTipo: [0,0,0,3] },
+            { nome: "Stumble Guys", adquirido: true, avaliacao: 3, dataFinal: "13/09/2025", dataInicio: "13/09/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "8/50 - 16%", horas: 0.5, trofeusTipo: [0,1,0,7] },
+            { nome: "Dead by Daylight", adquirido: true, avaliacao: 3, dataFinal: "13/09/2025", dataInicio: "13/09/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "59/297 - 19%", horas: 448.4, trofeusTipo: [0,1,11,47] },
+            { nome: "Sackboy: A Big Adventure", adquirido: true, avaliacao: 3, dataFinal: "31/08/2025", dataInicio: "31/08/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/46 - 5%", horas: null, trofeusTipo: [0,0,1,2] },
+            { nome: "Overcooked! All You Can Eat", adquirido: true, avaliacao: 3, dataFinal: "31/08/2025", dataInicio: "31/08/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/43 - 5%", horas: 1.2, trofeusTipo: [0,0,1,2] },
+            { nome: "Sword of the Sea", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/48 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Coral Island", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/50 - 0%", horas: 0.7, trofeusTipo: [0,0,0,0] },
+            { nome: "Mortal Kombat 1", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/51 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Forza Horizon 5", adquirido: true, avaliacao: 3, dataFinal: "09/08/2025", dataInicio: "09/08/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "36/165 - 25%", horas: 63.2, trofeusTipo: [0,2,1,33] },
+            { nome: "Lies of P", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/54 - 0%", horas: 0.2, trofeusTipo: [0,0,0,0] },
+            { nome: "Hot Wheels Unleashed", adquirido: true, avaliacao: 3, dataFinal: "26/07/2025", dataInicio: "26/07/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/54 - 2%", horas: 0.1, trofeusTipo: [0,0,0,2] },
+            { nome: "It Takes Two", adquirido: true, avaliacao: 3, dataFinal: "13/07/2025", dataInicio: "13/07/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/21 - 2%", horas: null, trofeusTipo: [0,0,0,2] },
+            { nome: "Medieval Dynasty", adquirido: true, avaliacao: 3, dataFinal: "04/07/2025", dataInicio: "04/07/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "10/45 - 14%", horas: 17.8, trofeusTipo: [0,0,0,10] },
+            { nome: "Grounded", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/46 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "EA Sports FC 25", adquirido: true, avaliacao: 3, dataFinal: "14/06/2025", dataInicio: "14/06/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/40 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Death Stranding Director's Cut", adquirido: true, avaliacao: 3, dataFinal: "07/06/2025", dataInicio: "07/06/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "8/63 - 11%", horas: null, trofeusTipo: [0,0,0,8] },
+            { nome: "Hot Wheels Unleashed 2: Turbocharged", adquirido: true, avaliacao: 3, dataFinal: "31/05/2025", dataInicio: "31/05/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "38/56 - 67%", horas: 18.4, trofeusTipo: [0,2,5,31] },
+            { nome: "The Precinct", adquirido: true, avaliacao: 3, dataFinal: "18/05/2025", dataInicio: "18/05/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "9/40 - 14%", horas: 6.2, trofeusTipo: [0,0,1,8] },
+            { nome: "Salt and Sacrifice", adquirido: true, avaliacao: 3, dataFinal: "18/05/2025", dataInicio: "18/05/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "16/54 - 23%", horas: 12, trofeusTipo: [0,0,0,16] },
+            { nome: "The Elder Scrolls Online", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/182 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Car Mechanic Simulator 2021", adquirido: true, avaliacao: 3, dataFinal: "03/05/2025", dataInicio: "03/05/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "19/47 - 31%", horas: 18, trofeusTipo: [0,0,3,16] },
+            { nome: "House Flipper 2", adquirido: true, avaliacao: 3, dataFinal: "24/04/2025", dataInicio: "24/04/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "22/60 - 50%", horas: 24.4, trofeusTipo: [0,4,6,12] },
+            { nome: "Green Hell", adquirido: true, avaliacao: 3, dataFinal: "21/04/2025", dataInicio: "21/04/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "10/41 - 14%", horas: null, trofeusTipo: [0,0,0,10] },
+            { nome: "Green Hell VR", adquirido: true, avaliacao: 3, dataFinal: "19/04/2025", dataInicio: "19/04/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/34 - 3%", horas: 0.5, trofeusTipo: [0,0,0,2] },
+            { nome: "The Texas Chain Saw Massacre", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/52 - 4%", horas: 0.1, trofeusTipo: [0,0,0,3] },
+            { nome: "Construction Simulator", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/33 - 0%", horas: 0.4, trofeusTipo: [0,0,0,0] },
+            { nome: "Agatha Christie: Murder on the Orient Express", adquirido: true, avaliacao: 3, dataFinal: "22/03/2025", dataInicio: "22/03/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/28 - 1%", horas: 0.5, trofeusTipo: [0,0,0,1] },
+            { nome: "Deadside", adquirido: true, avaliacao: 3, dataFinal: "16/03/2025", dataInicio: "16/03/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "7/30 - 10%", horas: 19.6, trofeusTipo: [0,0,0,7] },
+            { nome: "Asterix & Obelix: Slap Them All!", adquirido: true, avaliacao: 3, dataFinal: "01/03/2025", dataInicio: "01/03/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "4/31 - 6%", horas: 0.4, trofeusTipo: [0,0,0,4] },
+            { nome: "Call of Duty: Modern Warfare II", adquirido: true, avaliacao: 3, dataFinal: "28/02/2025", dataInicio: "28/02/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "6/158 - 5%", horas: null, trofeusTipo: [0,1,4,1] },
+            { nome: "EA Sports UFC 5", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/32 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "World War Z: Aftermath", adquirido: true, avaliacao: 3, dataFinal: "02/02/2025", dataInicio: "02/02/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/36 - 3%", horas: 17.1, trofeusTipo: [0,0,1,0] },
+            { nome: "Return to Monkey Island", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/40 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Battlefield 2042", adquirido: true, avaliacao: 3, dataFinal: "24/01/2025", dataInicio: "24/01/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "11/35 - 29%", horas: null, trofeusTipo: [0,1,3,7] },
+            { nome: "UFL", adquirido: true, avaliacao: 3, dataFinal: "05/01/2025", dataInicio: "05/01/2025", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/26 - 3%", horas: 0.4, trofeusTipo: [0,0,1,0] },
+            { nome: "War Thunder", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/13 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Assassin's Creed Mirage", adquirido: true, avaliacao: 3, dataFinal: "26/12/2024", dataInicio: "26/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/62 - 1%", horas: 1.2, trofeusTipo: [0,0,0,1] },
+            { nome: "Gran Turismo 7", adquirido: true, avaliacao: 3, dataFinal: "23/12/2024", dataInicio: "23/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "15/54 - 22%", horas: 12.3, trofeusTipo: [0,0,0,15] },
+            { nome: "Robocop: Rogue City", adquirido: true, avaliacao: 3, dataFinal: "21/12/2024", dataInicio: "21/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "14/28 - 44%", horas: 4.7, trofeusTipo: [0,2,6,6] },
+            { nome: "No Man's Sky", adquirido: true, avaliacao: 3, dataFinal: "15/12/2024", dataInicio: "15/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "11/28 - 25%", horas: null, trofeusTipo: [0,1,3,7] },
+            { nome: "Temtem", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/48 - 0%", horas: 0, trofeusTipo: [0,0,0,0] },
+            { nome: "Fall Guys", adquirido: true, avaliacao: 3, dataFinal: "07/12/2024", dataInicio: "07/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "11/35 - 17%", horas: 0.4, trofeusTipo: [0,0,1,10] },
+            { nome: "Assetto Corsa Competizione", adquirido: true, avaliacao: 3, dataFinal: "06/12/2024", dataInicio: "06/12/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/41 - 1%", horas: 20.6, trofeusTipo: [0,0,0,1] },
+            { nome: "Aliens: Dark Descent", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/46 - 0%", horas: 0.2, trofeusTipo: [0,0,0,0] },
+            { nome: "EA Sports FC 24", adquirido: true, avaliacao: 3, dataFinal: "30/11/2024", dataInicio: "30/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/41 - 10%", horas: null, trofeusTipo: [0,1,0,1] },
+            { nome: "Dying Light 2: Stay Human", adquirido: true, avaliacao: 3, dataFinal: "23/11/2024", dataInicio: "23/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "5/66 - 6%", horas: null, trofeusTipo: [0,0,0,5] },
+            { nome: "Grid Legends", adquirido: true, avaliacao: 3, dataFinal: "15/11/2024", dataInicio: "15/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "2/91 - 1%", horas: 0.1, trofeusTipo: [0,0,0,2] },
+            { nome: "Anno 1800", adquirido: true, avaliacao: 3, dataFinal: "13/11/2024", dataInicio: "13/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/31 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Dirt 5", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/41 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Hogwarts Legacy", adquirido: true, avaliacao: 3, dataFinal: "12/11/2024", dataInicio: "12/11/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/46 - 4%", horas: 2.7, trofeusTipo: [0,0,0,3] },
+            { nome: "Demon's Souls", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/37 - 0%", horas: 0.8, trofeusTipo: [0,0,0,0] },
+            { nome: "Alan Wake Remastered", adquirido: true, avaliacao: 3, dataFinal: "27/10/2024", dataInicio: "27/10/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/68 - 3%", horas: 0.8, trofeusTipo: [0,0,0,3] },
+            { nome: "Assassin's Creed Valhalla", adquirido: true, avaliacao: 3, dataFinal: "20/10/2024", dataInicio: "20/10/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/93 - 1%", horas: 1.9, trofeusTipo: [0,0,0,1] },
+            { nome: "Firefighting Simulator: The Squad", adquirido: true, avaliacao: 3, dataFinal: "18/10/2024", dataInicio: "18/10/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/31 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Dead Island 2", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/60 - 0%", horas: 0.4, trofeusTipo: [0,0,0,0] },
+            { nome: "Deliver Us the Moon", adquirido: true, avaliacao: 3, dataFinal: "12/10/2024", dataInicio: "12/10/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/33 - 1%", horas: 0.2, trofeusTipo: [0,0,0,1] },
+            { nome: "Little Nightmares II", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/35 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Moving Out 2", adquirido: true, avaliacao: 3, dataFinal: "08/08/2024", dataInicio: "08/08/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "6/29 - 8%", horas: 0.5, trofeusTipo: [0,0,0,6] },
+            { nome: "Star Wars Jedi: Survivor", adquirido: true, avaliacao: 3, dataFinal: "31/07/2024", dataInicio: "31/07/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "1/54 - 1%", horas: 1.9, trofeusTipo: [0,0,0,1] },
+            { nome: "Grand Theft Auto V", adquirido: true, avaliacao: 3, dataFinal: "26/07/2024", dataInicio: "26/07/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "24/78 - 31%", horas: null, trofeusTipo: [0,1,5,18] },
+            { nome: "Bus Simulator 21", adquirido: true, avaliacao: 3, dataFinal: "25/07/2024", dataInicio: "25/07/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "3/38 - 4%", horas: null, trofeusTipo: [0,0,0,3] },
+            { nome: "Ratchet & Clank: Rift Apart", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "0/47 - 0%", horas: 0.5, trofeusTipo: [0,0,0,0] },
+            { nome: "Marvel's Spider-Man: Miles Morales", adquirido: true, avaliacao: 3, dataFinal: "20/07/2024", dataInicio: "20/07/2024", dificuldade: "Normal", plataforma: "PS5", release: null, status: "Concluido", trofeus: "5/50 - 7%", horas: 2.4, trofeusTipo: [0,0,0,5] },
+            { nome: "Far Cry Primal", adquirido: true, avaliacao: 3, dataFinal: "30/09/2025", dataInicio: "30/09/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/51 - 2%", horas: 0.7, trofeusTipo: [0,0,1,0] },
+            { nome: "Stardew Valley", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/50 - 0%", horas: 0.3, trofeusTipo: [0,0,0,0] },
+            { nome: "Hollow Knight", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/35 - 0%", horas: 0.3, trofeusTipo: [0,0,0,0] },
+            { nome: "theHunter: Call of the Wild", adquirido: true, avaliacao: 3, dataFinal: "20/06/2025", dataInicio: "20/06/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/115 - 2%", horas: 0.7, trofeusTipo: [0,0,0,3] },
+            { nome: "Red Dead Redemption 2", adquirido: true, avaliacao: 3, dataFinal: "25/05/2025", dataInicio: "25/05/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "34/52 - 64%", horas: 311.6, trofeusTipo: [0,2,1,31] },
+            { nome: "The Forest", adquirido: true, avaliacao: 3, dataFinal: "15/03/2025", dataInicio: "15/03/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "12/38 - 25%", horas: 56.4, trofeusTipo: [0,1,0,11] },
+            { nome: "Fade to Silence", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/43 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "DayZ", adquirido: true, avaliacao: 3, dataFinal: "01/01/2025", dataInicio: "01/01/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/13 - 19%", horas: 9.9, trofeusTipo: [0,0,0,4] },
+            { nome: "The Texas Chain Saw Massacre", adquirido: true, avaliacao: 3, dataFinal: "02/04/2025", dataInicio: "02/04/2025", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/52 - 4%", horas: 0.1, trofeusTipo: [0,0,0,3] },
+            { nome: "Alien: Isolation", adquirido: true, avaliacao: 3, dataFinal: "21/12/2024", dataInicio: "21/12/2024", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/51 - 5%", horas: 3.4, trofeusTipo: [0,0,0,4] },
+            { nome: "Shadow of the Tomb Raider", adquirido: true, avaliacao: 3, dataFinal: "24/11/2024", dataInicio: "24/11/2024", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "20/100 - 14%", horas: 9.6, trofeusTipo: [0,0,1,19] },
+            { nome: "Tomb Raider: Definitive Edition", adquirido: true, avaliacao: 3, dataFinal: "21/02/2026", dataInicio: "17/02/2026", dificuldade: "Normal", plataforma: "PS4", release: 2014, status: "Concluido", trofeus: "13/51 - 20%", horas: 8.2, trofeusTipo: [0,0,1,12] },
+            { nome: "Rise of the Tomb Raider", adquirido: true, avaliacao: 3, dataFinal: "28/02/2026", dataInicio: "22/02/2026", dificuldade: "Normal", plataforma: "PS4", release: 2015, status: "Concluido", trofeus: "20/125 - 14%", horas: 7.9, trofeusTipo: [0,0,0,20] },
+            { nome: "Street Fighter 30th Anniversary Collection", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/17 - 0%", horas: 0.2, trofeusTipo: [0,0,0,0] },
+            { nome: "Tom Clancy's Ghost Recon Breakpoint", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/51 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Plants vs. Zombies: Battle for Neighborville", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/51 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Mad Max", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/50 - 0%", horas: 0.2, trofeusTipo: [0,0,0,0] },
+            { nome: "Roblox", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/8 - 0%", horas: 0, trofeusTipo: [0,0,0,0] },
+            { nome: "Minecraft", adquirido: true, avaliacao: 3, dataFinal: "23/02/2022", dataInicio: "23/02/2022", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/127 - 4%", horas: null, trofeusTipo: [0,0,3,4] },
+            { nome: "Monster Energy Supercross", adquirido: true, avaliacao: 3, dataFinal: "22/02/2022", dataInicio: "22/02/2022", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/51 - 2%", horas: 1.6, trofeusTipo: [0,0,0,2] },
+            { nome: "Sonic Forces", adquirido: true, avaliacao: 3, dataFinal: "10/02/2022", dataInicio: "10/02/2022", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/49 - 9%", horas: 21.2, trofeusTipo: [0,0,0,7] },
+            { nome: "Lego DC Super-Villains", adquirido: true, avaliacao: 3, dataFinal: "07/02/2022", dataInicio: "07/02/2022", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/76 - 8%", horas: 9.6, trofeusTipo: [0,0,0,8] },
+            { nome: "Tennis World Tour 2", adquirido: true, avaliacao: 3, dataFinal: "08/08/2021", dataInicio: "08/08/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/31 - 1%", horas: 0.1, trofeusTipo: [0,0,0,1] },
+            { nome: "Steep", adquirido: true, avaliacao: 3, dataFinal: "06/05/2021", dataInicio: "06/05/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/48 - 8%", horas: 7.2, trofeusTipo: [0,0,1,6] },
+            { nome: "Stranded Deep", adquirido: true, avaliacao: 3, dataFinal: "05/05/2021", dataInicio: "05/05/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/36 - 1%", horas: 1.8, trofeusTipo: [0,0,0,1] },
+            { nome: "Zombie Army 4: Dead War", adquirido: true, avaliacao: 3, dataFinal: "24/04/2021", dataInicio: "24/04/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/71 - 5%", horas: 1.4, trofeusTipo: [0,0,0,5] },
+            { nome: "LittleBigPlanet 3", adquirido: true, avaliacao: 3, dataFinal: "24/01/2021", dataInicio: "24/01/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/38 - 3%", horas: 12.2, trofeusTipo: [0,0,0,3] },
+            { nome: "Street Fighter V", adquirido: true, avaliacao: 3, dataFinal: "03/01/2021", dataInicio: "03/01/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/45 - 1%", horas: 0.7, trofeusTipo: [0,0,0,1] },
+            { nome: "Tiny Troopers Joint Ops", adquirido: true, avaliacao: 3, dataFinal: "03/01/2021", dataInicio: "03/01/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/15 - 3%", horas: 0.5, trofeusTipo: [0,0,0,1] },
+            { nome: "Rayman Legends", adquirido: true, avaliacao: 3, dataFinal: "01/01/2021", dataInicio: "01/01/2021", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "32/51 - 58%", horas: 153.8, trofeusTipo: [0,1,4,27] },
+            { nome: "Just Cause 4", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/61 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "PUBG: Battlegrounds", adquirido: true, avaliacao: 3, dataFinal: "12/12/2020", dataInicio: "12/12/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "6/38 - 11%", horas: 5.1, trofeusTipo: [0,0,2,4] },
+            { nome: "Kung Fu Panda: Showdown of Legendary Legends", adquirido: true, avaliacao: 3, dataFinal: "07/12/2020", dataInicio: "07/12/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/25 - 4%", horas: 4.7, trofeusTipo: [0,0,1,1] },
+            { nome: "Q*bert: Rebooted", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/9 - 0%", horas: 0, trofeusTipo: [0,0,0,0] },
+            { nome: "Color Guardians", adquirido: true, avaliacao: 3, dataFinal: "07/12/2020", dataInicio: "07/12/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/46 - 1%", horas: 0.3, trofeusTipo: [0,0,0,1] },
+            { nome: "Sonic Mania", adquirido: true, avaliacao: 3, dataFinal: "29/11/2020", dataInicio: "29/11/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/18 - 4%", horas: 1.6, trofeusTipo: [0,0,0,1] },
+            { nome: "Farming Simulator 19", adquirido: true, avaliacao: 3, dataFinal: "09/07/2020", dataInicio: "06/05/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "24/24 - 100%", horas: 640.4, trofeusTipo: [1,6,11,6] },
+            { nome: "Star Wars Battlefront II", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/44 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Call of Duty: WWII", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/91 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "eFootball PES 2020", adquirido: true, avaliacao: 3, dataFinal: "02/05/2020", dataInicio: "02/05/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "24/50 - 44%", horas: 165, trofeusTipo: [0,1,2,21] },
+            { nome: "DiRT Rally 2.0", adquirido: true, avaliacao: 3, dataFinal: "12/04/2020", dataInicio: "12/04/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/72 - 5%", horas: 9.6, trofeusTipo: [0,0,1,4] },
+            { nome: "Hitman 2", adquirido: true, avaliacao: 3, dataFinal: "22/03/2020", dataInicio: "22/03/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "16/125 - 8%", horas: 27.2, trofeusTipo: [0,0,2,14] },
+            { nome: "The Sims 4", adquirido: true, avaliacao: 3, dataFinal: "06/02/2020", dataInicio: "06/02/2020", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/51 - 1%", horas: 18.3, trofeusTipo: [0,0,0,1] },
+            { nome: "F1 2019", adquirido: true, avaliacao: 3, dataFinal: "27/09/2019", dataInicio: "27/09/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/51 - 11%", horas: null, trofeusTipo: [0,0,0,8] },
+            { nome: "Pro Evolution Soccer 2019", adquirido: true, avaliacao: 3, dataFinal: "07/09/2019", dataInicio: "07/09/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "21/50 - 38%", horas: null, trofeusTipo: [0,1,1,19] },
+            { nome: "Crash Team Racing: Nitro-Fueled", adquirido: true, avaliacao: 3, dataFinal: "08/07/2019", dataInicio: "08/07/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "16/48 - 25%", horas: 7, trofeusTipo: [0,0,1,15] },
+            { nome: "Tom Clancy's The Division 2", adquirido: true, avaliacao: 3, dataFinal: "14/04/2019", dataInicio: "14/04/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "16/68 - 15%", horas: null, trofeusTipo: [0,0,0,16] },
+            { nome: "For Honor", adquirido: true, avaliacao: 3, dataFinal: "04/03/2019", dataInicio: "04/03/2019", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/61 - 6%", horas: 4, trofeusTipo: [0,0,1,3] },
+            { nome: "Battlefield V", adquirido: true, avaliacao: 3, dataFinal: "30/12/2018", dataInicio: "30/12/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "9/22 - 34%", horas: 108.9, trofeusTipo: [0,2,4,3] },
+            { nome: "Friday the 13th: The Game", adquirido: true, avaliacao: 3, dataFinal: "20/09/2018", dataInicio: "20/09/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/51 - 4%", horas: null, trofeusTipo: [0,0,0,3] },
+            { nome: "F1 2018", adquirido: true, avaliacao: 3, dataFinal: "28/08/2018", dataInicio: "28/08/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "6/50 - 8%", horas: 6.7, trofeusTipo: [0,0,0,6] },
+            { nome: "Middle-earth: Shadow of War", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/73 - 0%", horas: 0.4, trofeusTipo: [0,0,0,0] },
+            { nome: "A Way Out", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/15 - 0%", horas: 0.9, trofeusTipo: [0,0,0,0] },
+            { nome: "F1 2017", adquirido: true, avaliacao: 3, dataFinal: "07/08/2018", dataInicio: "07/08/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/51 - 12%", horas: 44.5, trofeusTipo: [0,0,1,7] },
+            { nome: "Gran Turismo Sport", adquirido: true, avaliacao: 3, dataFinal: "24/06/2018", dataInicio: "24/06/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "14/41 - 21%", horas: null, trofeusTipo: [0,0,0,14] },
+            { nome: "Pro Evolution Soccer 2018", adquirido: true, avaliacao: 3, dataFinal: "28/01/2018", dataInicio: "28/01/2018", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/52 - 5%", horas: null, trofeusTipo: [0,0,0,4] },
+            { nome: "Assassin's Creed Origins", adquirido: true, avaliacao: 3, dataFinal: "24/12/2017", dataInicio: "24/12/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/68 - 5%", horas: 6.8, trofeusTipo: [0,0,0,5] },
+            { nome: "Project Cars 2", adquirido: true, avaliacao: 3, dataFinal: "15/10/2017", dataInicio: "15/10/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "6/47 - 8%", horas: 21.7, trofeusTipo: [0,0,0,6] },
+            { nome: "Project Cars", adquirido: true, avaliacao: 3, dataFinal: "23/07/2017", dataInicio: "23/07/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "9/45 - 14%", horas: null, trofeusTipo: [0,0,1,8] },
+            { nome: "Tom Clancy's Ghost Recon Wildlands", adquirido: true, avaliacao: 3, dataFinal: "10/07/2017", dataInicio: "10/07/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "44/58 - 71%", horas: 2.9, trofeusTipo: [1,3,8,32] },
+            { nome: "How to Survive 2", adquirido: true, avaliacao: 3, dataFinal: "19/02/2017", dataInicio: "19/02/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/50 - 11%", horas: 1.9, trofeusTipo: [0,0,0,8] },
+            { nome: "Resident Evil 7: Biohazard", adquirido: true, avaliacao: 3, dataFinal: "29/01/2017", dataInicio: "29/01/2017", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "22/59 - 24%", horas: 0.3, trofeusTipo: [0,0,3,19] },
+            { nome: "Battlefield 1", adquirido: true, avaliacao: 3, dataFinal: "11/12/2016", dataInicio: "11/12/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/51 - 9%", horas: 67.6, trofeusTipo: [0,1,0,4] },
+            { nome: "Driveclub", adquirido: true, avaliacao: 3, dataFinal: "03/08/2016", dataInicio: "03/08/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "24/128 - 14%", horas: null, trofeusTipo: [0,2,9,13] },
+            { nome: "Battlefield 4", adquirido: true, avaliacao: 3, dataFinal: "18/06/2016", dataInicio: "18/06/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "6/68 - 11%", horas: null, trofeusTipo: [0,1,1,4] },
+            { nome: "Tom Clancy's The Division", adquirido: true, avaliacao: 3, dataFinal: "22/05/2016", dataInicio: "22/05/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "41/66 - 59%", horas: 2.4, trofeusTipo: [0,2,5,34] },
+            { nome: "Tropico 5", adquirido: true, avaliacao: 3, dataFinal: "21/05/2016", dataInicio: "21/05/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "12/71 - 14%", horas: 21.2, trofeusTipo: [0,0,2,10] },
+            { nome: "Table Top Racing: World Tour", adquirido: true, avaliacao: 3, dataFinal: "15/05/2016", dataInicio: "15/05/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/37 - 14%", horas: 1.9, trofeusTipo: [0,0,3,5] },
+            { nome: "Pro Evolution Soccer 2016", adquirido: true, avaliacao: 3, dataFinal: "06/02/2016", dataInicio: "06/02/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "5/41 - 10%", horas: null, trofeusTipo: [0,0,2,3] },
+            { nome: "Until Dawn", adquirido: true, avaliacao: 3, dataFinal: "01/01/2016", dataInicio: "01/01/2016", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/19 - 22%", horas: 12.5, trofeusTipo: [0,1,3,3] },
+            { nome: "Metal Gear Solid V: The Phantom Pain", adquirido: true, avaliacao: 3, dataFinal: "13/12/2015", dataInicio: "13/12/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/43 - 10%", horas: 5.4, trofeusTipo: [0,0,0,7] },
+            { nome: "Resident Evil Revelations 2", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/44 - 0%", horas: 0.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Batman: Arkham Knight", adquirido: true, avaliacao: 3, dataFinal: "15/08/2015", dataInicio: "15/08/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "23/110 - 16%", horas: 25.9, trofeusTipo: [0,0,0,23] },
+            { nome: "Sherlock Holmes: Crimes and Punishments", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/25 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Lego Marvel Super Heroes", adquirido: true, avaliacao: 3, dataFinal: "09/07/2015", dataInicio: "09/07/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/46 - 4%", horas: 0.2, trofeusTipo: [0,0,0,3] },
+            { nome: "Mortal Kombat X", adquirido: true, avaliacao: 3, dataFinal: "09/07/2015", dataInicio: "09/07/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/74 - 8%", horas: null, trofeusTipo: [0,0,0,7] },
+            { nome: "Surgeon Simulator", adquirido: true, avaliacao: 3, dataFinal: "09/05/2015", dataInicio: "09/05/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/56 - 1%", horas: 0.3, trofeusTipo: [0,0,0,1] },
+            { nome: "Dying Light", adquirido: true, avaliacao: 3, dataFinal: "09/05/2015", dataInicio: "09/05/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "21/69 - 29%", horas: 28.8, trofeusTipo: [0,1,3,17] },
+            { nome: "Far Cry 4", adquirido: true, avaliacao: 3, dataFinal: "09/05/2015", dataInicio: "09/05/2015", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "22/58 - 32%", horas: 74.9, trofeusTipo: [0,0,5,17] },
+            { nome: "Bloodborne", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/40 - 0%", horas: 5.1, trofeusTipo: [0,0,0,0] },
+            { nome: "Battlefield Hardline", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/63 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Middle-earth: Shadow of Mordor", adquirido: true, avaliacao: 3, dataFinal: "24/12/2014", dataInicio: "24/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "38/75 - 53%", horas: 51.5, trofeusTipo: [0,1,8,29] },
+            { nome: "Pro Evolution Soccer 2015", adquirido: true, avaliacao: 3, dataFinal: "20/12/2014", dataInicio: "20/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/41 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "EA Sports UFC", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "3/33 - 7%", horas: 5, trofeusTipo: [0,0,2,1] },
+            { nome: "Injustice: Gods Among Us Ultimate Edition", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "7/51 - 11%", horas: 3.3, trofeusTipo: [0,0,1,6] },
+            { nome: "PvZ Garden Warfare", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "4/56 - 6%", horas: null, trofeusTipo: [0,0,1,3] },
+            { nome: "The Evil Within", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/72 - 1%", horas: 4.3, trofeusTipo: [0,0,0,2] },
+            { nome: "Dragon Age: Inquisition", adquirido: true, avaliacao: 3, dataFinal: "17/12/2014", dataInicio: "17/12/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/70 - 1%", horas: 3.7, trofeusTipo: [0,0,0,1] },
+            { nome: "FIFA 15", adquirido: true, avaliacao: 3, dataFinal: "26/10/2014", dataInicio: "26/10/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "9/46 - 21%", horas: 41, trofeusTipo: [0,1,0,8] },
+            { nome: "Diablo III: Reaper of Souls", adquirido: true, avaliacao: 3, dataFinal: "25/10/2014", dataInicio: "25/10/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/54 - 2%", horas: null, trofeusTipo: [0,0,0,2] },
+            { nome: "Destiny", adquirido: true, avaliacao: 3, dataFinal: "11/10/2014", dataInicio: "11/10/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/61 - 2%", horas: 1.3, trofeusTipo: [0,0,0,2] },
+            { nome: "Assassin's Creed IV: Black Flag", adquirido: true, avaliacao: 3, dataFinal: "30/08/2014", dataInicio: "30/08/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "1/61 - 1%", horas: 6.6, trofeusTipo: [0,0,0,1] },
+            { nome: "Watch Dogs", adquirido: true, avaliacao: 3, dataFinal: "30/08/2014", dataInicio: "30/08/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "11/50 - 24%", horas: 22.6, trofeusTipo: [0,1,3,7] },
+            { nome: "Lego The Hobbit", adquirido: true, avaliacao: 3, dataFinal: "30/08/2014", dataInicio: "30/08/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/40 - 2%", horas: 0, trofeusTipo: [0,0,0,2] },
+            { nome: "Call of Duty: Ghosts", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/92 - 0%", horas: 0, trofeusTipo: [0,0,0,0] },
+            { nome: "FIFA 14", adquirido: true, avaliacao: 3, dataFinal: "26/07/2014", dataInicio: "26/07/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "13/42 - 28%", horas: null, trofeusTipo: [0,1,1,11] },
+            { nome: "Dead Nation: Apocalypse Edition", adquirido: true, avaliacao: 3, dataFinal: "04/05/2014", dataInicio: "04/05/2014", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "8/41 - 11%", horas: 0.2, trofeusTipo: [0,0,0,8] },
+            { nome: "Pinball Arcade", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "0/118 - 0%", horas: 0.7, trofeusTipo: [0,0,0,0] },
+            { nome: "Knack", adquirido: true, avaliacao: 3, dataFinal: "24/12/2013", dataInicio: "24/12/2013", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "9/42 - 12%", horas: 5.6, trofeusTipo: [0,0,0,9] },
+            { nome: "Contrast", adquirido: true, avaliacao: 3, dataFinal: "01/12/2013", dataInicio: "01/12/2013", dificuldade: "Normal", plataforma: "PS4", release: null, status: "Concluido", trofeus: "2/21 - 9%", horas: 0.1, trofeusTipo: [0,0,0,2] },
+            { nome: "Gran Turismo 6", adquirido: true, avaliacao: 3, dataFinal: "18/04/2014", dataInicio: "18/04/2014", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "18/53 - 25%", horas: null, trofeusTipo: [0,0,0,18] },
+            { nome: "XCOM: Enemy Unknown", adquirido: true, avaliacao: 3, dataFinal: "26/08/2013", dataInicio: "26/08/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "4/56 - 4%", horas: null, trofeusTipo: [0,0,0,4] },
+            { nome: "Grid 2", adquirido: true, avaliacao: 3, dataFinal: "18/08/2013", dataInicio: "18/08/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "8/61 - 10%", horas: null, trofeusTipo: [0,0,1,7] },
+            { nome: "F1 2012", adquirido: true, avaliacao: 3, dataFinal: "24/07/2013", dataInicio: "24/07/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "12/50 - 18%", horas: null, trofeusTipo: [0,0,1,11] },
+            { nome: "The Last of Us", adquirido: true, avaliacao: 3, dataFinal: "13/07/2013", dataInicio: "13/07/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/50 - 4%", horas: null, trofeusTipo: [0,0,2,1] },
+            { nome: "Os Cavaleiros do Zodiaco: Batalha do Santuario", adquirido: true, avaliacao: 3, dataFinal: "04/07/2013", dataInicio: "03/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "50/50 - 100%", horas: null, trofeusTipo: [1,3,6,40] },
+            { nome: "Silent Hill Downpour", adquirido: true, avaliacao: 3, dataFinal: "04/05/2013", dataInicio: "04/05/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "8/42 - 14%", horas: null, trofeusTipo: [0,0,2,6] },
+            { nome: "Resident Evil 6", adquirido: true, avaliacao: 3, dataFinal: "27/04/2013", dataInicio: "27/04/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "12/71 - 10%", horas: null, trofeusTipo: [0,0,0,12] },
+            { nome: "Tomb Raider", adquirido: true, avaliacao: 3, dataFinal: "13/04/2013", dataInicio: "13/04/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "10/51 - 14%", horas: null, trofeusTipo: [0,0,0,10] },
+            { nome: "Dead Nation", adquirido: true, avaliacao: 3, dataFinal: "13/04/2013", dataInicio: "13/04/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "31/41 - 60%", horas: null, trofeusTipo: [0,2,7,22] },
+            { nome: "God of War: Ascension", adquirido: true, avaliacao: 3, dataFinal: "24/03/2013", dataInicio: "12/03/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "36/36 - 100%", horas: null, trofeusTipo: [1,5,10,20] },
+            { nome: "Far Cry 3", adquirido: true, avaliacao: 3, dataFinal: "06/03/2013", dataInicio: "23/12/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "51/51 - 100%", horas: null, trofeusTipo: [1,2,10,38] },
+            { nome: "Closure", adquirido: true, avaliacao: 3, dataFinal: "18/02/2013", dataInicio: "18/02/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/8 - 4%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Pro Evolution Soccer 2013", adquirido: true, avaliacao: 3, dataFinal: "16/02/2013", dataInicio: "12/10/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "29/29 - 100%", horas: null, trofeusTipo: [1,3,21,4] },
+            { nome: "CS:GO", adquirido: true, avaliacao: 3, dataFinal: "31/01/2013", dataInicio: "22/08/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "19/19 - 100%", horas: null, trofeusTipo: [1,9,6,3] },
+            { nome: "God of War III", adquirido: true, avaliacao: 3, dataFinal: "28/01/2013", dataInicio: "21/03/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "36/36 - 100%", horas: null, trofeusTipo: [1,5,10,20] },
+            { nome: "The Cave", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "0/20 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "The Walking Dead", adquirido: true, avaliacao: 3, dataFinal: "25/01/2013", dataInicio: "25/01/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "41/49 - 84%", horas: null, trofeusTipo: [1,5,5,30] },
+            { nome: "Tokyo Jungle", adquirido: true, avaliacao: 3, dataFinal: "22/01/2013", dataInicio: "22/01/2013", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/13 - 14%", horas: null, trofeusTipo: [0,0,0,3] },
+            { nome: "The Amazing Spider-Man", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "0/47 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Assassin's Creed III", adquirido: true, avaliacao: 3, dataFinal: "24/12/2012", dataInicio: "24/12/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "2/65 - 2%", horas: null, trofeusTipo: [0,0,0,2] },
+            { nome: "Castle Crashers", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "0/13 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "Resident Evil 5", adquirido: true, avaliacao: 3, dataFinal: "20/09/2012", dataInicio: "20/09/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "11/71 - 12%", horas: null, trofeusTipo: [0,0,0,11] },
+            { nome: "Gran Turismo 5", adquirido: true, avaliacao: 3, dataFinal: "30/08/2012", dataInicio: "30/08/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "26/59 - 41%", horas: null, trofeusTipo: [0,0,2,24] },
+            { nome: "Battlefield 3", adquirido: true, avaliacao: 3, dataFinal: "28/07/2012", dataInicio: "28/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "19/64 - 28%", horas: null, trofeusTipo: [0,1,4,14] },
+            { nome: "Dark Souls", adquirido: true, avaliacao: 3, dataFinal: "18/07/2012", dataInicio: "18/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/41 - 4%", horas: null, trofeusTipo: [0,0,0,3] },
+            { nome: "Resident Evil: Operation Raccoon City", adquirido: true, avaliacao: 3, dataFinal: "15/07/2012", dataInicio: "15/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "18/71 - 26%", horas: null, trofeusTipo: [0,1,2,15] },
+            { nome: "Batman: Arkham City", adquirido: true, avaliacao: 3, dataFinal: "15/07/2012", dataInicio: "15/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "12/71 - 15%", horas: null, trofeusTipo: [0,0,3,9] },
+            { nome: "AC Brotherhood", adquirido: true, avaliacao: 3, dataFinal: "15/07/2012", dataInicio: "15/07/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "6/61 - 10%", horas: null, trofeusTipo: [0,0,3,3] },
+            { nome: "Tom Clancy's Ghost Recon: Future Soldier", adquirido: true, avaliacao: 3, dataFinal: "29/06/2012", dataInicio: "29/06/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "5/60 - 6%", horas: null, trofeusTipo: [0,0,0,5] },
+            { nome: "FIFA 12", adquirido: true, avaliacao: 3, dataFinal: "05/05/2012", dataInicio: "05/05/2012", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/56 - 5%", horas: null, trofeusTipo: [0,0,1,2] },
+            { nome: "DiRT 3", adquirido: true, avaliacao: 3, dataFinal: "", dataInicio: "", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "0/67 - 0%", horas: null, trofeusTipo: [0,0,0,0] },
+            { nome: "F1 2011", adquirido: true, avaliacao: 3, dataFinal: "01/10/2011", dataInicio: "01/10/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "2/39 - 2%", horas: null, trofeusTipo: [0,0,0,2] },
+            { nome: "Back to the Future - Episode 4: Double Visions", adquirido: true, avaliacao: 3, dataFinal: "23/08/2011", dataInicio: "23/08/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "12/13 - 95%", horas: null, trofeusTipo: [0,1,3,8] },
+            { nome: "Back to the Future - Episode 3: Citizen Brown", adquirido: true, avaliacao: 3, dataFinal: "23/08/2011", dataInicio: "23/08/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "9/11 - 90%", horas: null, trofeusTipo: [0,1,5,3] },
+            { nome: "L.A. Noire", adquirido: true, avaliacao: 3, dataFinal: "23/08/2011", dataInicio: "23/08/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "20/61 - 24%", horas: null, trofeusTipo: [0,1,2,17] },
+            { nome: "Dead Rising 2", adquirido: true, avaliacao: 3, dataFinal: "02/07/2011", dataInicio: "02/07/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "8/51 - 13%", horas: null, trofeusTipo: [0,0,1,7] },
+            { nome: "inFamous", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/50 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Sonic the Hedgehog 2", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/12 - 5%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Killzone 3", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/79 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Back to the Future - Episode 2: Get Tannen", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "7/11 - 70%", horas: null, trofeusTipo: [0,1,2,4] },
+            { nome: "Shift 2 Unleashed", adquirido: true, avaliacao: 3, dataFinal: "11/06/2011", dataInicio: "11/06/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "10/49 - 11%", horas: null, trofeusTipo: [0,0,0,10] },
+            { nome: "Dragon Age II", adquirido: true, avaliacao: 3, dataFinal: "30/03/2011", dataInicio: "30/03/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/66 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Rock Band 3", adquirido: true, avaliacao: 3, dataFinal: "05/03/2011", dataInicio: "05/03/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "5/50 - 7%", horas: null, trofeusTipo: [0,0,0,5] },
+            { nome: "GTA IV", adquirido: true, avaliacao: 3, dataFinal: "05/03/2011", dataInicio: "05/03/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "3/66 - 3%", horas: null, trofeusTipo: [0,0,0,3] },
+            { nome: "Back to the Future - Episode 1: It's About Time", adquirido: true, avaliacao: 3, dataFinal: "27/02/2011", dataInicio: "27/02/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "11/12 - 95%", horas: null, trofeusTipo: [0,1,4,6] },
+            { nome: "Call of Duty: Black Ops", adquirido: true, avaliacao: 3, dataFinal: "30/01/2011", dataInicio: "30/01/2011", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "15/71 - 19%", horas: null, trofeusTipo: [0,0,3,12] },
+            { nome: "Sports Champions", adquirido: true, avaliacao: 3, dataFinal: "04/12/2010", dataInicio: "04/12/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "9/43 - 13%", horas: null, trofeusTipo: [0,0,0,9] },
+            { nome: "LittleBigPlanet", adquirido: true, avaliacao: 3, dataFinal: "04/12/2010", dataInicio: "04/12/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "5/70 - 5%", horas: null, trofeusTipo: [0,0,0,5] },
+            { nome: "Guitar Hero Metallica", adquirido: true, avaliacao: 3, dataFinal: "04/12/2010", dataInicio: "04/12/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "6/51 - 8%", horas: null, trofeusTipo: [0,0,0,6] },
+            { nome: "Medal of Honor", adquirido: true, avaliacao: 3, dataFinal: "20/11/2010", dataInicio: "20/11/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "35/51 - 61%", horas: null, trofeusTipo: [0,1,3,31] },
+            { nome: "F1 2010", adquirido: true, avaliacao: 3, dataFinal: "19/11/2010", dataInicio: "19/11/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "14/50 - 20%", horas: null, trofeusTipo: [0,0,0,14] },
+            { nome: "Rock Band 2", adquirido: true, avaliacao: 3, dataFinal: "09/10/2010", dataInicio: "09/10/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "10/51 - 17%", horas: null, trofeusTipo: [0,0,2,8] },
+            { nome: "Battlefield: Bad Company 2", adquirido: true, avaliacao: 3, dataFinal: "11/09/2010", dataInicio: "11/09/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "22/73 - 30%", horas: null, trofeusTipo: [0,1,2,19] },
+            { nome: "Green Day: Rock Band", adquirido: true, avaliacao: 3, dataFinal: "11/09/2010", dataInicio: "11/09/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/49 - 1%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Heavy Rain", adquirido: true, avaliacao: 3, dataFinal: "16/07/2010", dataInicio: "16/07/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "26/57 - 40%", horas: null, trofeusTipo: [0,0,2,24] },
+            { nome: "SOCOM: U.S. Navy SEALs Confrontation", adquirido: true, avaliacao: 3, dataFinal: "20/05/2010", dataInicio: "20/05/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "6/43 - 11%", horas: null, trofeusTipo: [0,0,3,3] },
+            { nome: "The Secret of Monkey Island: Special Edition", adquirido: true, avaliacao: 3, dataFinal: "25/04/2010", dataInicio: "25/04/2010", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "1/12 - 4%", horas: null, trofeusTipo: [0,0,0,1] },
+            { nome: "Modern Warfare 2", adquirido: true, avaliacao: 3, dataFinal: "30/12/2009", dataInicio: "30/12/2009", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "8/51 - 11%", horas: null, trofeusTipo: [0,0,0,8] },
+            { nome: "Assassin's Creed II", adquirido: true, avaliacao: 3, dataFinal: "25/12/2009", dataInicio: "25/12/2009", dificuldade: "Normal", plataforma: "PS3", release: null, status: "Concluido", trofeus: "23/51 - 50%", horas: null, trofeusTipo: [0,0,12,11] },
         ];
 
         const platformColors = { 'PS3': '#f5a623', 'PS4': '#003087', 'PS5': '#00439C', 'Switch 2': '#E60012' };
@@ -924,15 +993,17 @@
             updateProgressBar();
             applyFilters();
             renderPorAno();
+            renderTrofeus();
         }
 
         // ===== TABS =====
         function switchTab(tab) {
-            const isCol = tab === 'colecao';
-            document.getElementById('view-colecao').classList.toggle('active', isCol);
-            document.getElementById('view-ano').classList.toggle('active', !isCol);
-            document.getElementById('tabColecao').classList.toggle('active', isCol);
-            document.getElementById('tabAno').classList.toggle('active', !isCol);
+            const views = { colecao: 'view-colecao', ano: 'view-ano', trofeus: 'view-trofeus' };
+            const btns = { colecao: 'tabColecao', ano: 'tabAno', trofeus: 'tabTrofeus' };
+            for (const k in views) {
+                document.getElementById(views[k]).classList.toggle('active', k === tab);
+                document.getElementById(btns[k]).classList.toggle('active', k === tab);
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -952,7 +1023,7 @@
             const finished = games.filter(g => g.dataFinal && g.dataFinal.trim());
             const totalHoras = finished.reduce((a, g) => a + (g.horas || 0), 0);
             const totalTrof = finished.reduce((a, g) => a + trophyEarned(g.trofeus), 0);
-            const platinas = finished.filter(g => parseTrophyPercent(g.trofeus) === 100).length;
+            const platinas = finished.reduce((a, g) => a + (g.trofeusTipo ? g.trofeusTipo[0] : 0), 0);
             const semHoras = finished.filter(g => g.horas == null).length;
 
             document.getElementById('anoStats').innerHTML = `
@@ -1184,6 +1255,71 @@
                     <td class="cell-hours">${game.horas != null ? game.horas + 'h' : '--'}</td>
                     <td>${trophyHtml}</td>
                 </tr>`;
+            }).join('');
+        }
+
+        // ===== TROFEUS (dashboard + lista) =====
+        function trophyDefined(t) { if (!t) return 0; const m = t.match(/^\d+\/(\d+)/); return m ? parseInt(m[1]) : 0; }
+
+        function renderTrofeus() {
+            const comTrofeus = games.filter(g => g.trofeus && g.trofeusTipo);
+            // Totais por tipo [platina, ouro, prata, bronze]
+            const tot = [0, 0, 0, 0];
+            comTrofeus.forEach(g => g.trofeusTipo.forEach((n, i) => tot[i] += n));
+            const totalTrof = tot.reduce((a, b) => a + b, 0);
+            const earnedSum = comTrofeus.reduce((a, g) => a + trophyEarned(g.trofeus), 0);
+            const definedSum = comTrofeus.reduce((a, g) => a + trophyDefined(g.trofeus), 0);
+            const pctGeral = definedSum ? Math.round(earnedSum / definedSum * 100) : 0;
+            const platinados = comTrofeus.filter(g => parseTrophyPercent(g.trofeus) === 100).length;
+
+            document.getElementById('trofHero').innerHTML = `
+                <div class="trof-hero-total"><span class="trof-hero-num">${totalTrof.toLocaleString('pt-BR')}</span><span class="trof-hero-lbl">Troféus<br>conquistados</span></div>
+                <div class="trof-types">
+                    <div class="trof-type platina"><div class="trof-type-ico">&#128142;</div><div class="trof-type-num">${tot[0]}</div><div class="trof-type-lbl">Platina</div></div>
+                    <div class="trof-type ouro"><div class="trof-type-ico">&#129351;</div><div class="trof-type-num">${tot[1]}</div><div class="trof-type-lbl">Ouro</div></div>
+                    <div class="trof-type prata"><div class="trof-type-ico">&#129352;</div><div class="trof-type-num">${tot[2]}</div><div class="trof-type-lbl">Prata</div></div>
+                    <div class="trof-type bronze"><div class="trof-type-ico">&#129353;</div><div class="trof-type-num">${tot[3]}</div><div class="trof-type-lbl">Bronze</div></div>
+                </div>`;
+
+            document.getElementById('trofSubstats').innerHTML = `
+                <div class="trof-substat"><div class="trof-substat-num">${comTrofeus.length}</div><div class="trof-substat-lbl">Jogos com troféus</div></div>
+                <div class="trof-substat"><div class="trof-substat-num">${platinados}</div><div class="trof-substat-lbl">Jogos 100%</div></div>
+                <div class="trof-substat"><div class="trof-substat-num">${pctGeral}%</div><div class="trof-substat-lbl">Conclusão geral</div></div>
+                <div class="trof-substat"><div class="trof-substat-num">${earnedSum}/${definedSum}</div><div class="trof-substat-lbl">Ganhos / Disponíveis</div></div>`;
+
+            // Ordenacao
+            const sort = document.getElementById('trofSort').value;
+            const lista = [...comTrofeus];
+            lista.sort((a, b) => {
+                switch (sort) {
+                    case 'data-asc': return parseDate(a.dataFinal) - parseDate(b.dataFinal);
+                    case 'trofeus-desc': return trophyEarned(b.trofeus) - trophyEarned(a.trofeus);
+                    case 'pct-desc': return parseTrophyPercent(b.trofeus) - parseTrophyPercent(a.trofeus);
+                    case 'nome-asc': return a.nome.localeCompare(b.nome);
+                    default: return parseDate(b.dataFinal) - parseDate(a.dataFinal); // data-desc
+                }
+            });
+
+            document.getElementById('trofCount').textContent = `${lista.length} jogos`;
+            document.getElementById('trofList').innerHTML = lista.map(g => {
+                const color = getPlatformColor(g.plataforma);
+                const pct = parseTrophyPercent(g.trofeus);
+                const plat = pct === 100 ? '<img class="trof-plat-img" src="https://i.redd.it/ys23cmt5l0u61.png" alt="Platina">' : '';
+                const [p, o, s, b] = g.trofeusTipo;
+                const tt = `
+                    <span class="${p ? '' : 'z'}" title="Platina">&#128142;${p}</span>
+                    <span class="${o ? '' : 'z'}" title="Ouro">&#129351;${o}</span>
+                    <span class="${s ? '' : 'z'}" title="Prata">&#129352;${s}</span>
+                    <span class="${b ? '' : 'z'}" title="Bronze">&#129353;${b}</span>`;
+                return `<div class="trof-row" onclick="openModal(${games.indexOf(g)})">
+                    <div>
+                        <div class="trof-row-name"><span class="trof-plat-dot" style="background:${color}"></span>${g.nome}</div>
+                        <div class="trof-row-meta">${g.plataforma}</div>
+                    </div>
+                    <div class="trof-date">${g.dataFinal || '<span class="trof-muted">&mdash;</span>'}</div>
+                    <div class="trof-tt">${tt}</div>
+                    <div class="trof-trophies">${plat}<div class="trof-tbar"><div class="trof-tfill" style="width:${pct}%"></div></div><span class="trof-ttext">${g.trofeus}</span></div>
+                </div>`;
             }).join('');
         }
 

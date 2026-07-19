@@ -148,6 +148,25 @@
 
         /* Progress bar */
         .progress-container { margin-top: 1.5rem; }
+
+        /* ===== Topbar fixo que colapsa no scroll ===== */
+        .topbar { position: sticky; top: 0; z-index: 50; background: var(--bg-primary); transition: box-shadow 0.3s ease; }
+        .topbar.compact { box-shadow: var(--shadow-md); }
+        .header { transition: padding 0.35s ease; }
+        .header-top { transition: margin-bottom 0.35s ease; }
+        .title-section h1 { transition: font-size 0.3s ease, margin-bottom 0.3s ease; }
+        .title-section .subtitle { overflow: hidden; max-height: 2rem; transition: max-height 0.3s ease, opacity 0.25s ease; }
+        .stats-row { overflow: hidden; max-height: 400px; transition: max-height 0.4s ease, opacity 0.3s ease; }
+        .progress-container { overflow: hidden; max-height: 160px; transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.35s ease; }
+        .tabs { transition: margin-top 0.35s ease; }
+        .topbar.compact .header { padding-top: 0.7rem; padding-bottom: 0.7rem; }
+        .topbar.compact .header-top { margin-bottom: 0; }
+        .topbar.compact .title-section h1 { font-size: 1rem; margin-bottom: 0; }
+        .topbar.compact .title-section .subtitle { max-height: 0; opacity: 0; }
+        .topbar.compact .stats-row { max-height: 0; opacity: 0; }
+        .topbar.compact .progress-container { max-height: 0; opacity: 0; margin-top: 0; }
+        .topbar.compact .tabs { margin-top: 0.6rem; }
+
         .progress-label {
             font-family: 'Press Start 2P', cursive; font-size: 0.55rem;
             color: rgba(255,255,255,0.5); margin-bottom: 0.6rem; letter-spacing: 2px;
@@ -449,7 +468,12 @@
         .ano-row-main { min-width: 0; }
         .ano-row-name { font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
         .ano-plat-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+        .ano-plat-badge { display: inline-block; font-size: 0.6rem; font-weight: 700; padding: 0.12rem 0.4rem; border-radius: 5px; letter-spacing: 0.3px; flex-shrink: 0; text-transform: uppercase; }
         .ano-row-meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem; }
+        .ano-filter { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+        .ano-fbtn { font-size: 0.78rem; padding: 0.4rem 0.8rem; border: 1px solid var(--border-color); border-radius: 20px; background: var(--bg-secondary); color: var(--text-secondary); cursor: pointer; transition: all 0.15s ease; }
+        .ano-fbtn:hover { color: var(--text-primary); }
+        .ano-fbtn.on { background: var(--filter-active); color: var(--filter-active-text); border-color: var(--filter-active); }
         .ano-hours { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text-primary); white-space: nowrap; text-align: right; }
         .ano-hours small { color: var(--text-muted); font-weight: 400; }
         .ano-trophies { display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end; }
@@ -584,6 +608,7 @@
 <body data-theme="light">
     <div class="scanlines"></div>
 
+    <div id="topbar" class="topbar">
     <header class="header">
         <div class="header-content">
             <div class="header-top">
@@ -648,6 +673,7 @@
         <button class="tab-btn" id="tabTrofeus" onclick="switchTab('trofeus')">&#128142; Troféus</button>
         <button class="tab-btn" id="tabRdr2" onclick="switchTab('rdr2')">&#129312; RDR2</button>
     </nav>
+    </div><!-- /topbar -->
 
     <div id="view-colecao" class="tab-view active">
 
@@ -732,7 +758,7 @@
         <section class="ano-section">
             <p class="ano-intro">Jogos por ano &mdash; finalizados (PSN) e jogados (Steam), com horas e troféus/conquistas. Verde = Concluído, azul = Em andamento. Barra dourada = % de troféus; &#128142; = platinado.</p>
             <div class="ano-stats" id="anoStats"></div>
-            <div class="ano-note" id="anoNote"></div>
+            <div class="ano-filter" id="anoFilter"></div>
             <div id="anoContent"></div>
         </section>
     </div>
@@ -1329,40 +1355,51 @@
             return `${plat}<div class="ano-tbar"><div class="ano-tfill" style="width:${pct}%"></div></div><span class="ano-ttext">${g.trofeus}</span>`;
         }
 
+        let anoPlatform = 'Todos';
+        function setAnoPlatform(p) { anoPlatform = p; renderPorAno(); }
+        const platShort = { 'PS3': 'PS3', 'PS4': 'PS4', 'PS5': 'PS5', 'Switch 2': 'SW2', 'Steam': 'Steam' };
+        const platBadgeText = (p) => (p === 'Steam' || p === 'PS3') ? '#1a1a2e' : '#fff';
+
         function renderPorAno() {
-            const finished = games.filter(g => g.dataFinal && g.dataFinal.trim());
+            const withDate = games.filter(g => g.dataFinal && g.dataFinal.trim());
+            const finished = anoPlatform === 'Todos' ? withDate : withDate.filter(g => g.plataforma === anoPlatform);
+
             const concluidos = finished.filter(g => g.status === 'Concluido').length;
             const totalHoras = finished.reduce((a, g) => a + (g.horas || 0), 0);
             const totalTrof = finished.reduce((a, g) => a + trophyEarned(g.trofeus), 0);
             const platinas = finished.reduce((a, g) => a + (g.trofeusTipo ? g.trofeusTipo[0] : 0), 0);
-            const nSteam = finished.filter(g => g.plataforma === 'Steam').length;
+            const dts = finished.map(g => parseDate(g.dataInicio) || parseDate(g.dataFinal)).filter(t => t > 0);
+            const anosJornada = dts.length ? ((Date.now() - Math.min(...dts)) / (365.25 * 24 * 3600 * 1000)) : 0;
 
             document.getElementById('anoStats').innerHTML = `
                 <div class="ano-stat"><div class="ano-stat-icon">&#127937;</div><div><div class="ano-stat-num">${concluidos}</div><div class="ano-stat-lbl">Finalizados (Concluído)</div></div></div>
                 <div class="ano-stat"><div class="ano-stat-icon">&#9201;&#65039;</div><div><div class="ano-stat-num">${Math.round(totalHoras)}h</div><div class="ano-stat-lbl">Horas Jogadas</div></div></div>
                 <div class="ano-stat"><div class="ano-stat-icon">&#127942;</div><div><div class="ano-stat-num">${totalTrof}</div><div class="ano-stat-lbl">Troféus / Conquistas</div></div></div>
                 <div class="ano-stat"><div class="ano-stat-icon">&#128142;</div><div><div class="ano-stat-num">${platinas}</div><div class="ano-stat-lbl">Platinas (PSN)</div></div></div>
+                <div class="ano-stat"><div class="ano-stat-icon">&#128197;</div><div><div class="ano-stat-num">${anosJornada.toFixed(1).replace('.', ',')}</div><div class="ano-stat-lbl">Anos de jornada</div></div></div>
             `;
 
-            const note = document.getElementById('anoNote');
-            note.style.display = 'block';
-            note.innerHTML = `Inclui <strong>${nSteam}</strong> jogos da <strong>Steam</strong> (agrupados pelo ano da última vez jogada; badge azul = Em andamento). PS3 e alguns títulos antigos não têm horas registradas.`;
+            const plats = ['Todos', ...[...new Set(withDate.map(g => g.plataforma))].sort()];
+            document.getElementById('anoFilter').innerHTML = plats.map(p =>
+                `<button class="ano-fbtn ${p === anoPlatform ? 'on' : ''}" onclick="setAnoPlatform('${p}')">${p}</button>`
+            ).join('');
 
+            const stMap = { 'Concluido': 'ar-concluido', 'Em andamento': 'ar-andamento', 'Cancelado': 'ar-cancelado', 'Nao iniciada': 'ar-naoiniciada' };
             const anos = [...new Set(finished.map(g => anoFromData(g.dataFinal)))].filter(Boolean).sort((a, b) => b - a);
             document.getElementById('anoContent').innerHTML = anos.map(ano => {
                 const jogos = finished.filter(g => anoFromData(g.dataFinal) === ano)
                     .sort((a, b) => parseDate(b.dataFinal) - parseDate(a.dataFinal));
                 const h = jogos.reduce((s, g) => s + (g.horas || 0), 0);
                 const tr = jogos.reduce((s, g) => s + trophyEarned(g.trofeus), 0);
-                const stMap = { 'Concluido': 'ar-concluido', 'Em andamento': 'ar-andamento', 'Cancelado': 'ar-cancelado', 'Nao iniciada': 'ar-naoiniciada' };
                 const rows = jogos.map(g => {
                     const color = getPlatformColor(g.plataforma);
                     const stCls = stMap[g.status] || '';
                     const check = g.status === 'Concluido' ? '<span class="ano-check" title="Concluído">&#10003;</span> ' : '';
+                    const badge = `<span class="ano-plat-badge" style="background:${color};color:${platBadgeText(g.plataforma)}">${platShort[g.plataforma] || g.plataforma}</span>`;
                     return `<div class="ano-row ${stCls}" onclick="openModal(${games.indexOf(g)})">
                         <div class="ano-row-main">
-                            <div class="ano-row-name">${check}<span class="ano-plat-dot" style="background:${color}"></span>${g.nome}</div>
-                            <div class="ano-row-meta"><span class="status-badge ${getStatusClass(g.status)}">${g.status}</span>${g.plataforma} &middot; ${g.dataFinal}</div>
+                            <div class="ano-row-name">${check}${badge}${g.nome}</div>
+                            <div class="ano-row-meta"><span class="status-badge ${getStatusClass(g.status)}">${g.status}</span>${g.dataFinal}</div>
                         </div>
                         <div class="ano-hours">${fmtHoras(g.horas)}</div>
                         <div class="ano-trophies">${trophyCell(g)}</div>
@@ -1371,7 +1408,7 @@
                 return `<div class="ano-year">
                     <div class="ano-year-head">
                         <span class="ano-year-title">${ano}</span>
-                        <span class="ano-year-sub">${jogos.length} jogo(s) &middot; ${Math.round(h)}h &middot; ${tr} troféus</span>
+                        <span class="ano-year-sub">${jogos.length} jogo(s) &middot; ${Math.round(h)}h &middot; ${tr} troféus/conq.</span>
                     </div>
                     <div class="ano-list">${rows}</div>
                 </div>`;
@@ -1724,6 +1761,18 @@
             t.textContent = msg; t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2500);
         }
+
+        // Topbar: colapsa ao descer, expande ao subir
+        let lastScrollY = 0;
+        window.addEventListener('scroll', () => {
+            const y = window.scrollY || window.pageYOffset;
+            const tb = document.getElementById('topbar');
+            if (!tb) return;
+            if (y < 60) tb.classList.remove('compact');
+            else if (y > lastScrollY + 5) tb.classList.add('compact');
+            else if (y < lastScrollY - 5) tb.classList.remove('compact');
+            lastScrollY = y;
+        }, { passive: true });
 
         document.addEventListener('DOMContentLoaded', init);
     </script>

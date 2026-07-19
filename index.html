@@ -1906,16 +1906,30 @@
             setTimeout(() => t.classList.remove('show'), 2500);
         }
 
-        // Topbar: colapsa ao descer, expande ao subir
-        let lastScrollY = 0;
-        window.addEventListener('scroll', () => {
-            const y = window.scrollY || window.pageYOffset;
+        // Topbar: colapsa ao descer, expande ao subir (anti-flicker: rAF + limiar + lock durante a animacao)
+        let lastScrollY = window.scrollY || 0;
+        let tbTicking = false;
+        let tbLockUntil = 0;
+        function tbSet(tb, compact) {
+            if (tb.classList.contains('compact') === compact) return;
+            tb.classList.toggle('compact', compact);
+            // Ignora eventos de scroll gerados pela mudanca de altura durante a animacao
+            tbLockUntil = performance.now() + 480;
+        }
+        function tbOnScroll() {
+            tbTicking = false;
             const tb = document.getElementById('topbar');
             if (!tb) return;
-            if (y < 60) tb.classList.remove('compact');
-            else if (y > lastScrollY + 5) tb.classList.add('compact');
-            else if (y < lastScrollY - 5) tb.classList.remove('compact');
+            const y = window.scrollY || window.pageYOffset;
+            if (y < 60) { tbSet(tb, false); lastScrollY = y; return; }
+            if (performance.now() < tbLockUntil) { lastScrollY = y; return; }
+            const dy = y - lastScrollY;
+            if (dy > 8) tbSet(tb, true);
+            else if (dy < -8) tbSet(tb, false);
             lastScrollY = y;
+        }
+        window.addEventListener('scroll', () => {
+            if (!tbTicking) { tbTicking = true; requestAnimationFrame(tbOnScroll); }
         }, { passive: true });
 
         document.addEventListener('DOMContentLoaded', init);

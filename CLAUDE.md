@@ -2,12 +2,17 @@
 
 ## Resumo
 Site estatico com a colecao de jogos do Bruno, deployado no GitHub Pages.
-Single-page app (HTML+CSS+JS em um arquivo so) com ~273 jogos de PS3, PS4, PS5 e Switch 2.
+Single-page app (HTML+CSS+JS em um arquivo so). Cross-platform: ~411 jogos de
+PS3, PS4, PS5, Switch 2 e **Steam** (troféus da PSN + conquistas da Steam).
 
 - **Repo:** https://github.com/BrunexT3/game-list.git
 - **Site:** https://brunext3.github.io/game-list/
 - **Deploy:** Automatico via GitHub Actions (push na main)
-- **Layout:** Tabela sortavel estilo Notion (tema claro padrao)
+- **Layout:** 4 abas no topo:
+  - **Coleção** — tabela sortavel estilo Notion (todos os jogos)
+  - **Por Ano** — jogos finalizados agrupados por ano (horas + trofeus, destaque de status)
+  - **Troféus** — dashboard de trofeus PSN por tipo (platina/ouro/prata/bronze) + lista
+  - **RDR2** — pagina dedicada somando Red Dead Redemption 2 nas 3 versoes (PS4/PS5/Steam)
 - **Ordenacao padrao:** Status (Concluido > Em andamento > Cancelado > Nao iniciada)
 
 ---
@@ -35,8 +40,12 @@ Single-page app (HTML+CSS+JS em um arquivo so) com ~273 jogos de PS3, PS4, PS5 e
 
 ### Objeto de jogo (formato)
 ```javascript
-{ nome: "Nome do Jogo", adquirido: true/false, avaliacao: 0-5, dataFinal: "DD/MM/YYYY", dataInicio: "DD/MM/YYYY", dificuldade: "Normal", plataforma: "PS5", release: 2024, status: "Concluido", trofeus: "19/67 - 28%", horas: 12.5 }
+{ nome: "Nome do Jogo", adquirido: true/false, avaliacao: 0-5, dataFinal: "DD/MM/YYYY", dataInicio: "DD/MM/YYYY", dificuldade: "Normal", plataforma: "PS5", release: 2024, status: "Concluido", trofeus: "19/67 - 28%", horas: 12.5, trofeusTipo: [0,2,8,14] }
 ```
+- `plataforma`: PS3 | PS4 | PS5 | Switch 2 | **Steam**
+- `trofeus`: string `"ganhos/total - X%"`. Em jogos PSN = trofeus; em jogos **Steam** = conquistas.
+- `trofeusTipo`: `[platina, ouro, prata, bronze]` ganhos. **So jogos PSN** tem isso (Steam nao tem tipos). O dashboard da aba Troféus soma esse campo.
+- Jogos **Steam** entram com `plataforma: "Steam"`, sem `dataFinal` (nao aparecem em Por Ano), status "Em andamento" (jogados) ou "Nao iniciada".
 
 ### Jogos originais vs novos
 - **Linhas 543-580:** 39 jogos originais (importados do Notion CSV)
@@ -82,6 +91,7 @@ Single-page app (HTML+CSS+JS em um arquivo so) com ~273 jogos de PS3, PS4, PS5 e
 | PS4 | Azul escuro | `#003087` |
 | PS5 | Azul medio | `#00439C` |
 | Switch 2 | Vermelho | `#E60012` |
+| Steam | Azul claro | `#66c0f4` |
 
 ## Regras de dados
 - Jogos concluidos sem dificuldade especificada = **Normal**
@@ -142,6 +152,32 @@ Quando expirar, o Bruno precisa:
 4. Substituir o conteudo de `C:\Users\bruno\.credentials\psn-npsso.txt` (o server le dai automaticamente)
 
 **Token atual obtido em:** 19/07/2026 (expira ~57 dias depois)
+
+---
+
+## Steam Integration (MCP Server)
+
+### Conta Steam
+- **SteamID64:** 76561198069829993 (perfil BrunexT3, publico)
+- **126 jogos** na biblioteca (~93 jogados), ~2.336h, 706 conquistas
+
+### MCP Server `steam`
+- **Pasta:** `F:\Claude-Projetos\Claude-Infra\steam-mcp\`
+- **Config:** escopo **user** do `.claude.json`. Registrar: `claude mcp add steam --scope user -- node "F:/Claude-Projetos/Claude-Infra/steam-mcp/server.mjs"`
+- **Credenciais:** o server le `C:\Users\bruno\.credentials\steam-api-key.txt` e `steam-id.txt` (ou envs STEAM_API_KEY / STEAM_ID). A API key **nao expira** (diferente do NPSSO).
+
+### Tools disponiveis
+
+| Tool | Descricao |
+|------|-----------|
+| `list_games` | Jogos + horas (playtime_forever). Requer perfil publico ("Detalhes do jogo") |
+| `get_achievements` | Conquistas de um jogo (ganhas/totais). Parametro: appid |
+| `player_summary` | Perfil (nome, visibilidade). visibility 3 = publico |
+| `resolve_vanity` | Vanity name (steamcommunity.com/id/NOME) -> steamid64 |
+
+### Como os jogos Steam entram no game-list
+- `plataforma: "Steam"`, conquistas no campo `trofeus`, sem `trofeusTipo` (Steam nao tem tipos)
+- Linhas separadas por plataforma: jogo que existe em PSN e Steam aparece 2x (ex.: RDR2)
 
 ---
 

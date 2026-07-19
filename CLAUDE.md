@@ -35,7 +35,7 @@ Single-page app (HTML+CSS+JS em um arquivo so) com ~273 jogos de PS3, PS4, PS5 e
 
 ### Objeto de jogo (formato)
 ```javascript
-{ nome: "Nome do Jogo", adquirido: true/false, avaliacao: 0-5, dataFinal: "DD/MM/YYYY", dataInicio: "DD/MM/YYYY", dificuldade: "Normal", plataforma: "PS5", release: 2024, status: "Concluido", trofeus: "19/67 - 28%" }
+{ nome: "Nome do Jogo", adquirido: true/false, avaliacao: 0-5, dataFinal: "DD/MM/YYYY", dataInicio: "DD/MM/YYYY", dificuldade: "Normal", plataforma: "PS5", release: 2024, status: "Concluido", trofeus: "19/67 - 28%", horas: 12.5 }
 ```
 
 ### Jogos originais vs novos
@@ -100,10 +100,10 @@ Single-page app (HTML+CSS+JS em um arquivo so) com ~273 jogos de PS3, PS4, PS5 e
 - **Total de jogos na PSN:** 282
 
 ### MCP Server `psn`
-- **Pasta:** `E:\Claude-Projetos\psn-mcp\`
-- **Config:** Registrado em `C:\Users\bruno\.claude.json` (projeto `C:/Users/bruno/.local/bin`)
-- **Comando:** `node E:/Claude-Projetos/psn-mcp/server.mjs`
-- **Env:** `PSN_NPSSO` (token de autenticacao)
+- **Pasta:** `F:\Claude-Projetos\Claude-Infra\psn-mcp\`
+- **Config:** Registrado no escopo **user** do `.claude.json` (disponivel em todos os projetos). Registrar: `claude mcp add psn --scope user -- node "F:/Claude-Projetos/Claude-Infra/psn-mcp/server.mjs"`
+- **Comando:** `node F:/Claude-Projetos/Claude-Infra/psn-mcp/server.mjs`
+- **Token:** o server le o NPSSO de `C:\Users\bruno\.credentials\psn-npsso.txt` (ou da env `PSN_NPSSO`). Para renovar, basta substituir o conteudo desse arquivo.
 
 ### Tools disponiveis
 
@@ -113,6 +113,7 @@ Single-page app (HTML+CSS+JS em um arquivo so) com ~273 jogos de PS3, PS4, PS5 e
 | `search_game` | Busca jogo por nome na biblioteca PSN | Parametro: query |
 | `get_game_trophies` | Trofeus detalhados de um jogo | Parametro: npCommunicationId |
 | `trophy_summary` | Estatisticas gerais da conta PSN | Sem parametros |
+| `list_played_games` | Jogos com HORAS jogadas (playDuration) | Paginado (limit, offset, categories). Complementa list_games |
 
 ### Como usar os tools
 
@@ -138,9 +139,9 @@ Quando expirar, o Bruno precisa:
 1. Acessar https://store.playstation.com e logar
 2. Visitar https://ca.account.sony.com/api/v1/ssocookie
 3. Copiar o valor `npsso` do JSON retornado
-4. Atualizar em `C:\Users\bruno\.claude.json` > projects > psn > env > PSN_NPSSO
+4. Substituir o conteudo de `C:\Users\bruno\.credentials\psn-npsso.txt` (o server le dai automaticamente)
 
-**Token atual obtido em:** 09/02/2026
+**Token atual obtido em:** 19/07/2026 (expira ~57 dias depois)
 
 ---
 

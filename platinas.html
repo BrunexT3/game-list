@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caçador de platinas — Bruno DeMarco</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f4f5f9; --text: #16182b; --muted: #6b7280; --card: #ffffff;
+            --border: #e6e8ee; --accent: #b7791f; --accent-soft: rgba(183,121,31,0.12);
+            --plat: #6aa9d6; --gold: #e0a72a; --silver: #9aa0ab; --bronze: #c17f42;
+            --ok: #0f9d6b; --ok-soft: rgba(16,185,129,0.12);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, -apple-system, sans-serif; padding: 0 0 72px; }
+        .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        a { color: inherit; }
+
+        /* ---- header ---- */
+        header { padding: 40px 0 22px; }
+        .header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+        .eyebrow { font-family: 'Space Grotesk', sans-serif; text-transform: uppercase; letter-spacing: 0.18em; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+        h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 5vw, 44px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.05;
+            background: linear-gradient(120deg, #16182b 20%, #b7791f 120%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--muted); font-size: 14.5px; margin-top: 10px; max-width: 620px; line-height: 1.5; }
+        .user-chip { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border); border-radius: 999px; padding: 6px 8px 6px 16px; font-size: 13px; }
+        .user-chip .who { color: var(--muted); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .user-chip button { background: #f3f4f8; color: var(--text); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 500; cursor: pointer; }
+        .user-chip button:hover { background: #e9eaf1; }
+
+        /* ---- tabs ---- */
+        .tabs { position: sticky; top: 0; z-index: 40; background: rgba(244,245,249,0.86); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+        .tabs-inner { max-width: 1000px; margin: 0 auto; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; }
+        .tab { flex-shrink: 0; background: none; border: none; border-bottom: 2px solid transparent; padding: 14px 14px 12px; font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; transition: color .15s, border-color .15s; }
+        .tab:hover { color: var(--text); }
+        .tab.active { color: var(--accent); border-color: var(--accent); }
+
+        .panel { display: none; padding-top: 30px; }
+        .panel.active { display: block; }
+
+        /* ---- overview stats ---- */
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 30px; }
+        .stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+        .stat .n { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; line-height: 1; }
+        .stat .l { font-size: 12.5px; color: var(--muted); margin-top: 7px; }
+
+        .section-label { text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; color: var(--muted); font-weight: 600; margin: 30px 2px 14px; display: flex; align-items: center; gap: 8px; }
+        .section-label .hint { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); font-size: 12px; }
+
+        /* ---- game cards (overview) ---- */
+        .cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+        .gcard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 12px; transition: transform .16s, box-shadow .16s, border-color .16s; }
+        a.gcard:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(22,24,43,0.09); border-color: rgba(183,121,31,0.5); }
+        .gcard .top { display: flex; align-items: center; gap: 12px; }
+        .gcard .emoji { font-size: 26px; line-height: 1; flex-shrink: 0; }
+        .gcard .title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; line-height: 1.15; }
+        .gcard .plat { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .gcard .go { margin-left: auto; align-self: flex-start; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+        .go.on { background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(183,121,31,0.28); }
+        .go.soon { background: #f3f4f8; color: var(--muted); border: 1px solid var(--border); }
+        .go.done { background: var(--ok-soft); color: var(--ok); border: 1px solid rgba(16,185,129,0.28); }
+
+        .bar { height: 8px; border-radius: 999px; background: #edeef3; overflow: hidden; }
+        .bar > i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--gold), var(--accent)); }
+        .gcard .meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; }
+        .gcard .frac { font-weight: 600; }
+        .gcard .miss { color: var(--muted); }
+        .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+        .tchip { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--border); background: #fff; color: var(--muted); }
+        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .dot.plat { background: var(--plat); } .dot.gold { background: var(--gold); }
+        .dot.silver { background: var(--silver); } .dot.bronze { background: var(--bronze); }
+
+        /* ---- detail ---- */
+        .hero { border-radius: 18px; padding: 26px 28px; color: #fff; position: relative; overflow: hidden; margin-bottom: 22px; }
+        .hero h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 4vw, 34px); font-weight: 700; letter-spacing: -0.01em; }
+        .hero .plat-name { opacity: .9; font-size: 14px; margin-top: 6px; }
+        .hero .hero-emoji { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 92px; opacity: .18; line-height: 1; }
+        .hero .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+        .hero .htag { font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.18); padding: 4px 11px; border-radius: 999px; }
+
+        .prog-panel { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px; margin-bottom: 20px; }
+        .prog-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+        .prog-head .big { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; }
+        .prog-head .pct { color: var(--accent); font-weight: 700; }
+        .prog-panel .bar { height: 12px; margin: 6px 0 16px; }
+        .breakdown { display: flex; gap: 10px; flex-wrap: wrap; }
+        .bk { display: flex; align-items: center; gap: 7px; font-size: 13px; border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; }
+        .bk b { font-weight: 700; } .bk .lbl { color: var(--muted); }
+
+        .callout { border: 1px solid rgba(183,121,31,0.35); background: linear-gradient(180deg, rgba(183,121,31,0.07), rgba(183,121,31,0.02)); border-radius: 16px; padding: 20px 22px; margin-bottom: 22px; }
+        .callout .k { display: inline-flex; align-items: center; gap: 7px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: var(--accent); margin-bottom: 8px; }
+        .callout p { font-size: 14px; line-height: 1.55; color: var(--text); }
+        .callout p + p { margin-top: 8px; }
+        .callout b { color: var(--text); }
+
+        .plan { list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 12px; margin-bottom: 26px; }
+        .plan li { display: flex; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+        .plan li::before { counter-increment: step; content: counter(step); flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+        .plan .ph3 { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; margin-bottom: 3px; }
+        .plan .pd { font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+
+        .grp { margin-bottom: 22px; }
+        .grp-h { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; margin: 0 2px 12px; display: flex; align-items: center; gap: 9px; }
+        .grp-h .count { font-size: 12px; font-weight: 600; color: var(--muted); background: #f3f4f8; border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; }
+
+        .troList { display: flex; flex-direction: column; gap: 10px; }
+        .tro { background: var(--card); border: 1px solid var(--border); border-radius: 13px; padding: 15px 17px; display: flex; gap: 14px; align-items: flex-start; }
+        .tro .ttype { flex-shrink: 0; width: 40px; text-align: center; }
+        .tro .ttype .ring { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; margin: 0 auto; }
+        .ring.plat { background: rgba(106,169,214,0.16); } .ring.gold { background: rgba(224,167,42,0.16); }
+        .ring.silver { background: rgba(154,160,171,0.18); } .ring.bronze { background: rgba(193,127,66,0.16); }
+        .tro .ttype .tt { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-top: 4px; color: var(--muted); }
+        .tro .body { flex: 1; min-width: 0; }
+        .tro .name { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .tro .req { font-size: 13px; color: var(--muted); margin-top: 2px; }
+        .tro .how { font-size: 13.5px; line-height: 1.5; margin-top: 8px; padding-left: 11px; border-left: 2px solid var(--accent-soft); }
+        .tro .how b { color: var(--accent); }
+        .rare { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+        .rare.r1 { background: rgba(139,92,246,0.12); color: #7c3aed; }   /* ultra raro */
+        .rare.r2 { background: rgba(59,130,246,0.12); color: #2563eb; }   /* raro */
+        .rare.r3 { background: #f3f4f8; color: var(--muted); }           /* comum */
+        .easywin { background: var(--ok-soft); color: var(--ok); font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+
+        details.earned { margin-top: 8px; border: 1px solid var(--border); border-radius: 13px; background: var(--card); overflow: hidden; }
+        details.earned > summary { cursor: pointer; padding: 15px 18px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; list-style: none; display: flex; align-items: center; gap: 9px; }
+        details.earned > summary::-webkit-details-marker { display: none; }
+        details.earned > summary::after { content: '▾'; margin-left: auto; color: var(--muted); transition: transform .15s; }
+        details.earned[open] > summary::after { transform: rotate(180deg); }
+        .earned-list { padding: 0 18px 16px; display: flex; flex-direction: column; gap: 6px; }
+        .earned-row { display: flex; align-items: center; gap: 10px; font-size: 13.5px; padding: 7px 0; border-top: 1px solid var(--border); }
+        .earned-row .ok { color: var(--ok); flex-shrink: 0; }
+        .earned-row .er-date { margin-left: auto; color: var(--muted); font-size: 12px; }
+
+        .note-dlc { font-size: 13px; color: var(--muted); background: #f3f4f8; border: 1px dashed var(--border); border-radius: 12px; padding: 14px 16px; line-height: 1.5; margin-top: 4px; }
+
+        footer { margin-top: 44px; text-align: center; color: var(--muted); font-size: 13px; }
+        footer a { color: var(--muted); }
+        .src { font-size: 12px; color: var(--muted); margin: 4px 2px 0; }
+
+        @media (max-width: 560px) {
+            .hero .hero-emoji { font-size: 64px; opacity: .14; }
+            .tro { padding: 13px 14px; gap: 11px; }
+        }
+
+        /* ---- Clerk gate ---- */
+        #clerk-gate { position: fixed; inset: 0; z-index: 2147483647; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 24px; text-align: center; background: linear-gradient(135deg, #f3efe6 0%, #efe6cf 55%, #f6eede 100%); color: #16182b; font-family: 'Inter', system-ui, sans-serif; }
+        #clerk-gate .gate-emoji { font-size: 40px; }
+        #clerk-gate .gate-title { font-size: 22px; font-weight: 700; }
+        #clerk-gate .gate-sub { font-size: 14px; color: #6b7280; max-width: 360px; line-height: 1.5; }
+        #clerk-gate button { background: #b7791f; color: #fff; border: none; border-radius: 8px; padding: 11px 22px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        #clerk-gate button:hover { background: #9c6416; }
+    </style>
+    <style id="clerk-gate-style">body > *:not(#clerk-gate) { display: none !important; }</style>
+    <script defer crossorigin="anonymous" data-clerk-publishable-key="pk_test_bG9naWNhbC1rb2ktNDYuY2xlcmsuYWNjb3VudHMuZGV2JA" src="https://logical-koi-46.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js" type="text/javascript"></script>
+    <script>
+        const CLERK_ALLOWED_EMAILS = ['bruno.dm28@gmail.com'];
+        window.addEventListener('load', async function () {
+            const gate = document.getElementById('clerk-gate');
+            try { await Clerk.load(); }
+            catch (err) { gate.innerHTML = '<div class="gate-emoji">&#9888;&#65039;</div><div class="gate-title">Erro ao carregar o login</div><div class="gate-sub">Recarregue a página.</div>'; return; }
+            function evaluate() {
+                if (!Clerk.isSignedIn) { Clerk.redirectToSignIn(); return; }
+                const email = ((Clerk.user && Clerk.user.primaryEmailAddress && Clerk.user.primaryEmailAddress.emailAddress) || '').toLowerCase();
+                if (CLERK_ALLOWED_EMAILS.map(e => e.toLowerCase()).indexOf(email) !== -1) {
+                    var s = document.getElementById('clerk-gate-style'); if (s) s.remove();
+                    if (gate) gate.remove();
+                    var who = document.getElementById('user-who'); if (who) who.textContent = (Clerk.user.firstName || email);
+                    var out = document.getElementById('signout-btn'); if (out) out.onclick = function () { Clerk.signOut(); };
+                } else {
+                    gate.innerHTML = '<div class="gate-emoji">&#128274;</div><div class="gate-title">Acesso restrito</div><div class="gate-sub">A conta <b>' + email + '</b> não está liberada.</div><button id="clerk-signout-btn">Sair e trocar de conta</button>';
+                    var btn = document.getElementById('clerk-signout-btn'); if (btn) btn.onclick = function () { Clerk.signOut(); };
+                }
+            }
+            Clerk.addListener(evaluate); evaluate();
+        });
+    </script>
+</head>
+<body>
+    <div id="clerk-gate">
+        <div class="gate-emoji">&#127942;</div>
+        <div class="gate-title">Verificando acesso&hellip;</div>
+        <div class="gate-sub">Só um instante.</div>
+    </div>
+
+    <div class="wrap">
+        <header>
+            <div class="header-top">
+                <div>
+                    <div class="eyebrow">Bruno DeMarco · Games</div>
+                    <h1>Caçador de platinas</h1>
+                    <p class="subtitle" id="hero-sub">Os jogos que estou perseguindo até 100% dos troféus. Situação real puxada da PSN; roteiro de cada troféu com base no PowerPyx.</p>
+                </div>
+                <div class="user-chip">
+                    <span class="who" id="user-who">&nbsp;</span>
+                    <button id="signout-btn">Sair</button>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <nav class="tabs">
+        <div class="tabs-inner" id="tabs"></div>
+    </nav>
+
+    <div class="wrap">
+        <!-- Visão geral -->
+        <section class="panel active" id="panel-overview">
+            <div class="stats" id="stats"></div>
+
+            <div class="section-label">Em foco <span class="hint">— com roteiro troféu a troféu</span></div>
+            <div class="cards" id="cards-foco"></div>
+
+            <div class="section-label">Na fila <span class="hint">— guia detalhado depois</span></div>
+            <div class="cards" id="cards-fila"></div>
+
+            <p class="src">Progresso puxado das minhas contas PSN (BrunexT3). Última leitura: 19/07/2026.</p>
+        </section>
+        <!-- Painéis detalhados injetados via JS -->
+        <div id="detail-panels"></div>
+    </div>
+
+    <div class="wrap">
+        <footer>games.brunodemarco.com.br · <a href="/">voltar pro hub de games</a> · <a href="https://brunodemarco.com.br">hub</a></footer>
+    </div>
+
+<script>
+/* ============ DADOS ============ */
+
+// Visão geral — todos os 9 jogos na mira
+const OVERVIEW = [
+    { id:'bond',  nome:"007 First Light", emoji:"🕴️", plataforma:"PS5", earned:21, total:38, bk:{plat:[0,1],gold:[1,3],silver:[6,14],bronze:[14,20]}, detail:'bond', foco:true },
+    { id:'astro', nome:"Astro Bot", emoji:"🤖", plataforma:"PS5", earned:0, total:44, bk:{plat:[0,1],gold:[0,2],silver:[0,17],bronze:[0,24]}, detail:'astro', foco:true, naoIniciado:true },
+    { id:'spidey',nome:"Marvel's Spider-Man 2", emoji:"🕷️", plataforma:"PS5", earned:1, total:43, bk:{plat:[0,1],gold:[0,2],silver:[0,18],bronze:[1,22]}, detail:'spidey', foco:true },
+
+    { id:'re',    nome:"Resident Evil Requiem", emoji:"🧟", plataforma:"PS5", earned:5, total:50, bk:{plat:[0,1],gold:[0,3],silver:[0,6],bronze:[5,40]}, detail:null },
+    { id:'indy',  nome:"Indiana Jones and the Great Circle", emoji:"🏺", plataforma:"PS5", earned:24, total:56, bk:{plat:[0,1],gold:[1,2],silver:[10,18],bronze:[13,35]}, detail:null },
+    { id:'playroom', nome:"Astro's Playroom", emoji:"🎮", plataforma:"PS5", earned:9, total:51, bk:{plat:[0,1],gold:[0,5],silver:[2,14],bronze:[7,31]}, detail:null },
+    { id:'gow',   nome:"God of War (2018)", emoji:"🪓", plataforma:"PS4", earned:24, total:37, bk:{plat:[0,1],gold:[2,5],silver:[5,9],bronze:[17,22]}, detail:null },
+    { id:'gowr',  nome:"God of War Ragnarök", emoji:"⚔️", plataforma:"PS5", earned:25, total:48, bk:{plat:[0,1],gold:[1,4],silver:[10,16],bronze:[14,27]}, detail:null },
+    { id:'rayman',nome:"Rayman Legends", emoji:"🎨", plataforma:"PS4", earned:32, total:51, bk:{plat:[0,1],gold:[1,2],silver:[4,10],bronze:[27,38]}, detail:null },
+];
+
+// Painéis detalhados
+const DETAIL = {
+    bond: {
+        nome:"007 First Light", emoji:"🕴️", plataforma:"PS5", platina:"The name's Bond. James Bond",
+        heroGrad:"linear-gradient(120deg,#1c1f2e 0%,#3a3f57 60%,#b7791f 140%)",
+        earned:21, total:38, bk:{plat:[0,1],gold:[1,3],silver:[6,14],bronze:[14,20]},
+        tags:["Sem troféus missable","Coletáveis limpáveis via Chapter Select","TacSim online p/ 4 troféus"],
+        start:{
+            titulo:"Comece pelo TacSim — 4 troféus em menos de 1 hora",
+            paras:[
+                "Depois de zerar a história, vá em <b>Tela inicial › Tactical Simulations</b>. Faça <b>uma Escalation completa</b> (3 tiers): já destrava <i>A change of pace</i> e <i>The readiness is all</i>. Faça <b>uma Operation</b> → <i>What if...?</i>. Continue jogando o TacSim até o <b>Clearance Level 3</b> → <i>Keep moving forward</i>.",
+                "Ganho fácil de imediato: <b>He'll live</b> (75% dos jogadores já têm) e <b>Firestarter</b> (65%) são só feats de combate que você ainda não fez — pegue num replay rápido de capítulo. Deixe os coletáveis por último, limpando tudo via Chapter Select."
+            ]
+        },
+        plan:[
+            { h:"TacSim (30–60 min · 4 troféus)", d:"Tela inicial › Tactical Simulations. 1 Escalation completa + 1 Operation + chegar ao Clearance Level 3. É a maneira mais rápida de fechar 4 troféus faltantes." },
+            { h:"Feats de combate no Chapter Select (6 troféus)", d:"Replay dos capítulos indicados para os feats: Cap 5 (Soft landing), Cap 8/lavanderia (Positively shocking + Firestarter), Cap 10 (Damp squib), área restrita a partir do Cap 4 (Always have an exit plan), e He'll live em qualquer combate." },
+            { h:"Coletáveis — limpeza final (6 troféus + platina)", d:"Junte as 5 categorias (10 postcards, 23 arquivos MI6, 14 mementos, 36 cartas, 9 itens de legado). Fechar as 5 destrava A collector's habit (ouro) e a platina. Sem tracker por capítulo — use o guia de localização do PowerPyx." },
+        ],
+        grupos:[
+            { h:"⚡ Ganhos rápidos (TacSim, pós-história)", tros:[
+                { name:"A change of pace", type:"silver", req:"Complete uma Escalation no TacSim", how:"Tela inicial › Tactical Simulations. O 1º tier da 1ª Escalation é tutorial (~1 min).", rate:"35.7" },
+                { name:"The readiness is all", type:"gold", req:"Vença o tier 3 de uma Escalation no TacSim", how:"Complete os 3 tiers de uma Escalation. A 1ª é a mais fácil; cada tier leva 1–3 min.", rate:"21.7" },
+                { name:"What if...?", type:"silver", req:"Complete uma Operation no TacSim", how:"São encontros da história com objetivos modificados. Uma Operation leva ~3 min.", rate:"10.2" },
+                { name:"Keep moving forward", type:"silver", req:"Alcance o Clearance Level 3", how:"Ganhe XP em Escalations, Operations e Challenges do TacSim. 30–60 min. O troféu pode ter delay ou pedir o nível 4.", rate:"13.7" },
+            ]},
+            { h:"🥊 Feats de combate (Chapter Select)", tros:[
+                { name:"He'll live", type:"bronze", req:"Nocauteie um inimigo atirando nas pernas", how:"Atire repetidamente nas pernas até derrubá-lo; o tiro final tem que ser na perna. Fácil, em qualquer combate.", rate:"75.4", easy:true },
+                { name:"Firestarter", type:"bronze", req:"Empurre um inimigo contra um extintor de incêndio", how:"Segure R2 num inimigo perto de um extintor de parede. Tem um no canto tras-esquerdo da lavanderia no Cap 8 (checkpoint 05).", rate:"64.8", easy:true },
+                { name:"Positively shocking", type:"bronze", req:"Faça um inimigo dar choque em outro com o taser", how:"Em áreas com inimigos de taser, agarre outro inimigo (R2) e leve-o contra a linha azul de mira do taser. Cap 8, checkpoint 05 (lavanderia).", rate:"35.7" },
+                { name:"Always have an exit plan", type:"bronze", req:"Use um gadget para escapar de um confronto", how:"Entre numa área restrita e provoque o diálogo de confronto com civis; durante o diálogo segure L1 e use um gadget do Q-Watch para distrair. Precisa dos gadgets (Cap 4+).", rate:"22.2" },
+                { name:"Soft landing", type:"bronze", req:"Derrube um inimigo por cima de uma beirada", how:"Segure R2 num inimigo perto de uma beirada para empurrá-lo pra queda. Oportunidade cedo no Cap 5 (A New Home), checkpoint 10.", rate:"18.0" },
+                { name:"Damp squib", type:"bronze", req:"Hackeie uma granada antes de explodir", how:"Depois que um inimigo jogar a granada, segure L1 (Q-Watch) e hackeie com o botão indicado. Cap 10 (The Past Never Dies), checkpoint 11 (Ambush).", rate:"16.3" },
+            ]},
+            { h:"🗂️ Coletáveis + platina", tros:[
+                { name:"Casino Royale", type:"silver", req:"Colete todas as cartas de baralho", how:"36 cartas, achadas na progressão normal da história.", rate:"3.3" },
+                { name:"The world is not enough", type:"silver", req:"Colete todos os postcards", how:"10 postcards pelos capítulos. Use o guia de localização; limpe via Chapter Select depois.", rate:"3.5" },
+                { name:"For your eyes only", type:"silver", req:"Destranque todos os arquivos MI6", how:"23 arquivos MI6 espalhados pelos capítulos.", rate:"3.4" },
+                { name:"Recovered assets", type:"silver", req:"Colete todos os mementos", how:"14 mementos pelos capítulos, também acessíveis via Chapter Select.", rate:"3.4" },
+                { name:"A legacy of spycraft", type:"silver", req:"Descubra todos os itens de legado", how:"9 itens de legado ao longo dos 17 capítulos.", rate:"3.5" },
+                { name:"A collector's habit", type:"gold", req:"Encontre todos os coletáveis", how:"Todos os 92 itens das 5 categorias (postcards + MI6 + mementos + cartas + legado). Destrava ao fechar as 5.", rate:"3.3" },
+                { name:"The name's Bond. James Bond", type:"platinum", req:"Colete todos os troféus", how:"A platina — cai sozinha quando todos os outros estiverem feitos.", rate:"3.1" },
+            ]},
+        ],
+        done:[
+            {n:"Sleight of hand",t:"bronze",d:"04/06"},{n:"Icebreaker",t:"bronze",d:"04/06"},{n:"From Malta with love",t:"bronze",d:"04/06"},
+            {n:"Shaken not stirred",t:"bronze",d:"04/06"},{n:"I expect you to die",t:"bronze",d:"05/06"},{n:"Short fuse",t:"bronze",d:"05/06"},
+            {n:"Skyfall",t:"silver",d:"05/06"},{n:"Win, lose or die",t:"bronze",d:"05/06"},{n:"Nobody lives forever",t:"bronze",d:"05/06"},
+            {n:"Trigger Mortis",t:"silver",d:"05/06"},{n:"A hard man to kill",t:"bronze",d:"05/06"},{n:"You only live twice",t:"silver",d:"05/06"},
+            {n:"Agent under fire",t:"bronze",d:"05/06"},{n:"All time high",t:"bronze",d:"05/06"},{n:"Disarming personality",t:"bronze",d:"06/06"},
+            {n:"No time to die",t:"silver",d:"06/06"},{n:"Double or die",t:"bronze",d:"06/06"},{n:"You know my name",t:"silver",d:"06/06"},
+            {n:"Solo",t:"bronze",d:"06/06"},{n:"The writing is on the wall",t:"silver",d:"06/06"},{n:"For king and country",t:"gold",d:"06/06"},
+        ],
+    },
+
+    astro: {
+        nome:"Astro Bot", emoji:"🤖", plataforma:"PS5", platina:"Astro-nomical!",
+        heroGrad:"linear-gradient(120deg,#0b63c4 0%,#2f8fe0 55%,#7ac0ff 130%)",
+        earned:0, total:44, bk:{plat:[0,1],gold:[0,2],silver:[0,17],bronze:[0,24]}, naoIniciado:true,
+        tags:["Ainda não comecei","Nada é missable","Só 1 troféu difícil"],
+        start:{
+            titulo:"Comece do zero — colete TUDO já na primeira passada",
+            paras:[
+                "Como ainda não comecei, o plano é uma <b>única run de 100%</b>: colete os <b>300 bots</b>, as <b>120 puzzle pieces</b> e o máximo de <b>coins</b> (mira em ~15.000) já na primeira vez, seguindo o guia por fase. Nada é perdível — dá pra voltar em qualquer fase depois.",
+                "O único ponto de atenção é <b>The Golden Bot</b>, do <i>Great Master Challenge</i> (fase de plataforma difícil que usa os 300 bots resgatados). O resto é limpeza tranquila no hub (Crash Site)."
+            ]
+        },
+        plan:[
+            { h:"Run de 100% (coletar tudo)", d:"Zere as galáxias coletando os 300 bots, as 120 puzzle pieces e as 10 Lost Galaxies. Junte ~15.000 coins derrotando inimigos e abrindo baús. Siga o guia por fase pra não voltar depois." },
+            { h:"Golden Statue + Great Master Challenge", d:"Com as 120 puzzle pieces, destrave a Golden Statue no hub. Use os 300 bots pra montar a parede e vença o Great Master Challenge → resgata o Special Master Bot (The Golden Bot)." },
+            { h:"150 prêmios de Gatcha", d:"Gaste os coins no Gatcha Lab (destrava com 16 puzzle pieces) até tirar 150 prêmios. Se faltar coin, refarme fases (~300–400 coins cada)." },
+            { h:"Limpeza de troféus diversos", d:"Feche os troféus específicos no hub (Crash Site) que dependem de bots e seus itens de Gatcha, dos photo spots e das interações. Tudo é possível pós-história com a coleção completa." },
+            { h:"DLC (opcional)", d:"Stellar Speedway (corridas cronometradas) e Winter Wonder (presentes) rendem troféus extras — não contam pra platina base." },
+        ],
+        grupos:[
+            { h:"🏁 Progresso principal", tros:[
+                { name:"A Lot To Process", type:"gold", req:"Salvou o CPU Kid", how:"Fim da história principal." },
+                { name:"At The Top Of My Game", type:"bronze", req:"Chegou ao topo da Mothership", how:"Progresso natural da campanha." },
+                { name:"Unforgettable!", type:"silver", req:"Recuperou a Memory da Mothership", how:"Após completar a Gorilla Nebula." },
+                { name:"Solid Performance", type:"silver", req:"Recuperou o SSD da Mothership", how:"Após o Tentacle System." },
+                { name:"Doing It For You", type:"silver", req:"Recuperou a GPU da Mothership", how:"Após a Serpent Starway." },
+                { name:"Keep It Cool", type:"silver", req:"Recuperou o Cooling Fan da Mothership", how:"Após a Camo Cosmos." },
+                { name:"Take Cover!", type:"silver", req:"Recuperou as Protection Covers", how:"Após a Feather Cluster." },
+            ]},
+            { h:"🤖 Resgatar todos os bots", tros:[
+                { name:"One Bot Down…", type:"bronze", req:"Resgatou o 1º bot", how:"Sai logo no começo." },
+                { name:"Monkey See, Monkey Rescue", type:"silver", req:"Todos os bots da Gorilla Nebula", how:"100% dos bots da galáxia." },
+                { name:"Tentacular Spectacular", type:"silver", req:"Todos os bots do Tentacle System", how:"100% dos bots da galáxia." },
+                { name:"Fangs Very Much!", type:"silver", req:"Todos os bots da Serpent Starway", how:"100% dos bots da galáxia." },
+                { name:"Nowhere To Hide", type:"silver", req:"Todos os bots da Camo Cosmos", how:"100% dos bots da galáxia." },
+                { name:"Back To The Nest", type:"silver", req:"Todos os bots da Feather Cluster", how:"100% dos bots da galáxia." },
+                { name:"Lost And Found", type:"silver", req:"Todos os bots da Lost Galaxy", how:"100% dos bots das fases secretas." },
+            ]},
+            { h:"🧩 Puzzle pieces & hub", tros:[
+                { name:"A Puzzling Start", type:"bronze", req:"Achou a 1ª puzzle piece", how:"Sai natural." },
+                { name:"Licence To Spend", type:"silver", req:"Abriu o Gatcha Lab", how:"Precisa de 16 puzzle pieces." },
+                { name:"Splash My Dash", type:"silver", req:"Abriu a Dual Speeder Garage", how:"Precisa de 32 puzzle pieces." },
+                { name:"Time For A Change", type:"silver", req:"Abriu o Changing Room", how:"Precisa de 48 puzzle pieces." },
+                { name:"Animal Attraction", type:"silver", req:"Abriu o Safari Park", how:"Precisa de 64 puzzle pieces." },
+                { name:"Monumental Achievement", type:"silver", req:"Destravou a Golden Statue", how:"Precisa das 120 puzzle pieces." },
+            ]},
+            { h:"🎰 Gatcha & desafio", tros:[
+                { name:"First Prize", type:"bronze", req:"Pegou o 1º Gatcha", how:"Qualquer prêmio no Gatcha Lab." },
+                { name:"Money Well Spent", type:"silver", req:"Ganhou 150 prêmios de Gatcha", how:"Gaste os coins até tirar 150 prêmios. Refarme fases se faltar coin." },
+                { name:"The Golden Bot", type:"gold", req:"Resgatou o Special Master Bot no topo da Golden Statue", how:"O único troféu difícil: vença o Great Master Challenge (plataforma) usando os 300 bots." },
+            ]},
+            { h:"🎉 Momentos & interações", tros:[
+                { name:"Strike A Pose!", type:"bronze", req:"Tirou foto num Photo Spot", how:"Interaja com um ponto de foto." },
+                { name:"SingStars", type:"bronze", req:"Viu todas as partes da nave cantando", how:"No hub, veja cada peça da nave cantar." },
+                { name:"What Is He Saying?", type:"bronze", req:"Molhou a cara do Papa Tree durante a música", how:"Interação específica no hub." },
+                { name:"Um Jammer Slammy", type:"bronze", req:"Enterrou a bola de basquete", how:"Interação de basquete no hub." },
+                { name:"Net Profit", type:"bronze", req:"Pegou a borboleta dourada", how:"Cace a borboleta dourada." },
+                { name:"Eyes Of The All-Father", type:"bronze", req:"Achou/derrotou os 8 corvos", how:"Referência a God of War; ache os 8 corvos." },
+                { name:"The Lost Eggacy", type:"bronze", req:"Coletou os 3 artefatos de ovo", how:"Ache os 3 ovos." },
+                { name:"What A Trip!", type:"bronze", req:"Derrotou 7 inimigos com o Tripcaster", how:"Use a habilidade Tripcaster em 7 inimigos." },
+                { name:"Double Dug-in", type:"bronze", req:"Derrubou dois Wormys ao mesmo tempo", how:"Acerte 2 Wormys simultaneamente." },
+                { name:"Time To Cash In!", type:"bronze", req:"Jackpot nas 4 slot machines", how:"Ganhe o jackpot em cada uma das 4." },
+                { name:"Jumping Through Hoops", type:"bronze", req:"Pulou pelo anel numa fase", how:"Atravesse o anel." },
+                { name:"Thick As Thieves", type:"bronze", req:"Fotografou dois exploradores lendários", how:"Referência Uncharted; foto dos dois." },
+                { name:"Thaw, God of Thunder!", type:"bronze", req:"Congelou a divindade com o machado", how:"Interação temática no hub." },
+                { name:"Royally Stuck", type:"bronze", req:"Chegou perto da esfera pegajosa", how:"Referência Katamari." },
+                { name:"Let's Twist Again", type:"bronze", req:"Dançou com o marsupial icônico", how:"Referência Crash; dance com ele." },
+                { name:"Deep-Pocket Dragon", type:"bronze", req:"Fez o brutamontes soltar todos os itens", how:"Bata bastante no inimigo dos itens." },
+                { name:"KO!", type:"bronze", req:"Brigou com dois lutadores de rua", how:"Referência Tekken." },
+                { name:"Wall Buster", type:"bronze", req:"Quebrou a parede de Bots", how:"Interação no hub." },
+                { name:"Keep It Together!", type:"bronze", req:"Nocauteou um Bot sem desmontar", how:"Timing específico." },
+                { name:"Bot Bot Revolution", type:"bronze", req:"Dançou com 100 Bots", how:"Reúna 100 bots dançando no hub." },
+            ]},
+            { h:"🏆 Platina", tros:[
+                { name:"Astro-nomical!", type:"platinum", req:"Conquiste todos os outros troféus", how:"Cai quando o set base estiver completo (não precisa das DLCs)." },
+            ]},
+        ],
+        done:[],
+        dlc:"DLCs (opcional, não contam pra platina): Stellar Speedway — Fast and Found (prata, 10 bots) + 5 resgates de bronze nas corridas. Winter Wonder — 3 bronzes (fantasia festiva, topo da árvore, abrir todos os presentes).",
+    },
+
+    spidey: {
+        nome:"Marvel's Spider-Man 2", emoji:"🕷️", plataforma:"PS5", platina:"Dedicated",
+        heroGrad:"linear-gradient(120deg,#a11020 0%,#d32636 55%,#1a1d2b 140%)",
+        earned:1, total:43, bk:{plat:[0,1],gold:[0,2],silver:[0,18],bronze:[1,22]},
+        tags:["Sem troféus missable","New Game+ só pra 1 troféu","100% dos distritos = 160 coletáveis"],
+        start:{
+            titulo:"Comece jogando a campanha — a maior parte cai sozinha",
+            paras:[
+                "Você está no início (1/43). O caminho é claro: <b>termine a história</b> (31 missões, ~20h). Isso já entrega quase todos os troféus de história, o <b>nível máximo (Amazing)</b>, o <b>traje preto</b> e vários feats de combate no meio do caminho.",
+                "Depois vem o grosso: <b>100% dos distritos</b> (160 coletáveis) — que fecha um monte de troféus de prata/bronze de uma vez, incluindo <i>Superior</i> (ouro). Por último, os feats de combate/manobra e a run de <b>New Game+</b> (só pra <i>Once More, With Feeling</i>). Nada é missable."
+            ]
+        },
+        plan:[
+            { h:"História principal (~20h)", d:"Jogue as 31 missões em qualquer dificuldade. Destrava os troféus de campanha, o nível 60 (Amazing), o traje preto e feats como Overdrive, Home Run, Soar no meio do caminho." },
+            { h:"100% dos distritos (~10h · 160 coletáveis)", d:"Marko's Memories, Photo Ops, pedidos FNSM, esconderijos do Prowler, missões The Flame, Brooklyn Visions, Experimentos EMF, tocaias/bases de Caçador, Spider-Bots, Mysteriums, Museu, Alvos e Ninhos de Simbionte. Confira o contador no mapa a cada coletável (as tocaias às vezes não registram)." },
+            { h:"Feats de combate/manobra + upgrades", d:"Farme Surge, Evolved, Armed and Dangerous, Slack Line em Crimes pós-jogo. Compre todos os gadgets, trajes e upgrades de Suit Tech. Junte 10.000 Tech Parts." },
+            { h:"New Game+ (1 troféu)", d:"Termine a história de novo no modo New Game+ para Once More, With Feeling. Faça por último." },
+        ],
+        grupos:[
+            { h:"📖 História (cai jogando a campanha)", tros:[
+                { name:"Heal the World", type:"gold", req:"Termine a história principal", how:"31 missões, qualquer dificuldade.", rate:"50.2" },
+                { name:"A New Suit", type:"bronze", req:"Consiga o Traje Preto", how:"Acontece na campanha (chegada do simbionte).", rate:"61.3" },
+                { name:"Medicine", type:"silver", req:"Complete \"It Chose You\"", how:"Missão da história.", rate:"57.6" },
+                { name:"The Great Hunt", type:"silver", req:"Complete \"Anything Can Be Broken\"", how:"Missão da história.", rate:"55.0" },
+                { name:"Leave Us Alone", type:"silver", req:"Complete \"Don't Be Scared\"", how:"Missão da história.", rate:"54.7" },
+                { name:"Crimson Hour", type:"silver", req:"Complete \"It Was Meant for Me\"", how:"Missão da história.", rate:"39.9" },
+                { name:"Behind the Masks", type:"silver", req:"Complete \"Grand Finale\"", how:"Missão da história.", rate:"31.2" },
+                { name:"Another Way", type:"bronze", req:"Complete \"No Escape\"", how:"Missão da história.", rate:"56.0" },
+                { name:"I Quit", type:"bronze", req:"Complete \"This Isn't You\"", how:"Missão da história.", rate:"53.4" },
+                { name:"My Community", type:"bronze", req:"Complete \"Hard Bop\"", how:"Missão/atividade da campanha.", rate:"41.2" },
+                { name:"A New Adventure", type:"bronze", req:"Ajude o Howard", how:"Missão do pombo do Howard.", rate:"37.3" },
+                { name:"Brooklyn Pride", type:"bronze", req:"Complete \"A Gift\"", how:"Atividade da campanha.", rate:"35.4" },
+                { name:"You Know What to Do", type:"bronze", req:"Como Peter, visite o túmulo da tia May", how:"Vá ao túmulo com o Peter.", rate:"18.5" },
+                { name:"Just Let Go", type:"bronze", req:"Como Miles, ache o troféu de ciências dele e do Phin", how:"No quarto/casa do Miles.", rate:"16.8" },
+            ]},
+            { h:"🗺️ 100% dos distritos (160 coletáveis)", tros:[
+                { name:"Superior", type:"gold", req:"100% de todos os distritos", how:"Feche os 160 coletáveis. Confira o contador do mapa a cada um — as tocaias de Caçador às vezes não registram.", rate:"23.2" },
+                { name:"Exterminator", type:"silver", req:"Complete todos os Ninhos de Simbionte", how:"Os 10 ninhos.", rate:"34.2" },
+                { name:"Grains of Sand", type:"silver", req:"Junte as memórias quebradas", how:"As 14 Memórias do Marko.", rate:"37.4" },
+                { name:"Seek and Destroy", type:"silver", req:"Complete todas as Bases de Caçador", how:"4 bases + 11 tocaias.", rate:"35.3" },
+                { name:"Friendly Neighborhood Spider-Man", type:"silver", req:"Complete todos os pedidos FNSM", how:"Os 6 pedidos do bairro.", rate:"32.6" },
+                { name:"Data Collector", type:"silver", req:"Complete \"Target Identified\"", how:"Todos os 9 Alvos não identificados; o último aparece após os outros.", rate:"31.4" },
+                { name:"Foundational", type:"silver", req:"Complete todos os Experimentos EMF", how:"Os 9 experimentos.", rate:"28.5" },
+                { name:"New York, New York", type:"bronze", req:"Complete todas as Photo Ops", how:"As 23 Photo Ops.", rate:"31.1" },
+                { name:"Co-Signing", type:"bronze", req:"Ache todos os esconderijos (Prowler)", how:"Os 10 Tech Stashes.", rate:"31.4" },
+                { name:"Funky Wireless Protocols", type:"bronze", req:"Descubra a origem dos Spider-Bots", how:"Colete os 43 Spider-Bots.", rate:"24.4" },
+            ]},
+            { h:"⭐ Upgrades & nível", tros:[
+                { name:"Amazing", type:"silver", req:"Chegue ao nível máximo", how:"Vem sozinho ao zerar + fazer 100%. Sem grind.", rate:"34.3" },
+                { name:"Evolved", type:"silver", req:"Derrote 100 inimigos com Evolved Venom (Miles)", how:"Golpe final com Chain Lightning, Thunder Burst, Reverse Flux ou Galvanize. Farme em Crimes/Mysterium.", rate:"40.1" },
+                { name:"Armed and Dangerous", type:"silver", req:"Derrote 100 inimigos com Spider Arm (Peter)", how:"Equipe as 4 habilidades de braço e dê o golpe final em 100 inimigos (Crimes pós-jogo).", rate:"34.6" },
+                { name:"To the Max", type:"silver", req:"Compre todos os upgrades de Gadget", how:"Use os Tech Parts.", rate:"29.8" },
+                { name:"Kitted Out", type:"silver", req:"Compre todos os trajes disponíveis", how:"Compre todos com os pontos/recursos.", rate:"24.6" },
+                { name:"Fully Loaded", type:"bronze", req:"Compre todos os upgrades de Suit Tech do Spider-Man", how:"Árvore de Suit Tech completa.", rate:"29.3" },
+                { name:"Resourceful", type:"bronze", req:"Junte 10.000 Tech Parts no total", how:"Acumula naturalmente com os coletáveis.", rate:"38.9" },
+            ]},
+            { h:"🤸 Combate & manobras", tros:[
+                { name:"Surge", type:"silver", req:"Use habilidades de Simbionte 25x durante o Symbiote Surge", how:"Equipe 4 habilidades de Simbionte, carregue a barra amarela, ative com L3+R3 e use as 4 na janela.", rate:"22.5" },
+                { name:"Antidote", type:"bronze", req:"Derrote um Simbionte sob efeito de Anti-Venom", how:"Aplique Anti-Venom no inimigo e finalize.", rate:"53.0" },
+                { name:"Overdrive", type:"bronze", req:"Como Miles, puxe 6+ inimigos juntos com Reverse Flux", how:"Ative Reverse Flux (L1+Círculo) com 6 ou mais inimigos agrupados.", rate:"55.1" },
+                { name:"Splat", type:"bronze", req:"Falhe uma manobra aérea aterrissando no chão", how:"Faça manobras (Quadrado + direção) e erre, caindo no chão.", rate:"55.4" },
+                { name:"Home Run!", type:"bronze", req:"Corra as bases no Big Apple Ballers Stadium", how:"Estádio no sudeste do Brooklyn: passe pelas 4 bases brancas.", rate:"18.4" },
+                { name:"Soar", type:"bronze", req:"Planeie do Distrito Financeiro até Astoria só com as Web Wings", how:"Só planar (Triângulo) usando os túneis de vento e anéis verdes; sem dar balanço de teia.", rate:"15.8" },
+                { name:"Slack Line", type:"bronze", req:"25 takedowns furtivos a partir da Web Line", how:"Desbloqueia na Missão 8. Atire a Web Line na parede, ande nela e dê Quadrado nos inimigos abaixo. Miles invisível ajuda no pós-jogo.", rate:"30.9" },
+                { name:"Hang Ten", type:"bronze", req:"30 manobras aéreas seguidas sem tocar o chão", how:"Fique no ar dando Quadrado + direção sem encostar no chão.", rate:"22.5" },
+                { name:"Stylish", type:"bronze", req:"Equipe um estilo de traje", how:"No menu de Trajes, escolha um estilo (não o principal) e confirme.", rate:"73.9", easy:true },
+            ]},
+            { h:"🔁 New Game+ & platina", tros:[
+                { name:"Once More, With Feeling", type:"silver", req:"Termine a história no modo New Game+", how:"Feito por último. Foi adicionado depois; parte do 100%.", rate:"6.4" },
+                { name:"Dedicated", type:"platinum", req:"Colete todos os troféus", how:"A platina.", rate:"14.1" },
+            ]},
+        ],
+        done:[ {n:"You're Gonna Need Help",t:"bronze",d:"17/07"} ],
+    },
+};
+
+/* ============ RENDER ============ */
+const TYPE_LABEL = { platinum:"Platina", gold:"Ouro", silver:"Prata", bronze:"Bronze" };
+const TYPE_ICON = { platinum:"🏆", gold:"🥇", silver:"🥈", bronze:"🥉" };
+
+function rareTag(rate){
+    if(rate===undefined) return "";
+    const r = parseFloat(rate);
+    if(r < 5) return '<span class="rare r1">'+r+'% · ultra raro</span>';
+    if(r < 15) return '<span class="rare r2">'+r+'% · raro</span>';
+    return '<span class="rare r3">'+r+'%</span>';
+}
+
+function barPct(e,t){ return t ? Math.round(e/t*100) : 0; }
+
+function chipsHTML(bk){
+    const order=[['plat','plat'],['gold','gold'],['silver','silver'],['bronze','bronze']];
+    return '<div class="chips">'+order.map(([k,cls])=>{
+        const [e,t]=bk[k];
+        return '<span class="tchip"><span class="dot '+cls+'"></span>'+e+'/'+t+'</span>';
+    }).join('')+'</div>';
+}
+
+function overviewCard(g){
+    const pct = barPct(g.earned,g.total);
+    const miss = g.total - g.earned;
+    let badge;
+    if(g.detail) badge='<span class="go on">roteiro →</span>';
+    else badge='<span class="go soon">na fila</span>';
+    const missTxt = g.naoIniciado ? 'ainda não comecei' : ('faltam '+miss);
+    const inner =
+        '<div class="top"><span class="emoji">'+g.emoji+'</span>'+
+        '<div><div class="title">'+g.nome+'</div><div class="plat">'+g.plataforma+'</div></div>'+
+        badge+'</div>'+
+        '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+        '<div class="meta"><span class="frac">'+g.earned+'/'+g.total+' troféus</span><span class="miss">'+missTxt+'</span></div>'+
+        chipsHTML(g.bk);
+    if(g.detail) return '<a class="gcard" href="#'+g.detail+'" data-tab="'+g.detail+'">'+inner+'</a>';
+    return '<div class="gcard">'+inner+'</div>';
+}
+
+function troHTML(t){
+    const tags = [];
+    if(t.easy) tags.push('<span class="easywin">ganho fácil</span>');
+    if(t.rate!==undefined) tags.push(rareTag(t.rate));
+    return '<div class="tro">'+
+        '<div class="ttype"><div class="ring '+t.type+'">'+TYPE_ICON[t.type]+'</div><div class="tt">'+TYPE_LABEL[t.type]+'</div></div>'+
+        '<div class="body">'+
+            '<div class="name">'+t.name+' '+tags.join(' ')+'</div>'+
+            '<div class="req">'+t.req+'</div>'+
+            (t.how?'<div class="how"><b>Como fazer:</b> '+t.how+'</div>':'')+
+        '</div></div>';
+}
+
+function detailPanel(id,d){
+    const pct = barPct(d.earned,d.total);
+    const miss = d.total - d.earned;
+    const missTxt = d.naoIniciado ? 'roadmap completo (0 conquistados)' : ('faltam '+miss+' troféus');
+
+    let html = '<section class="panel" id="panel-'+id+'">';
+
+    // hero
+    html += '<div class="hero" style="background:'+d.heroGrad+'">'+
+        '<span class="hero-emoji">'+d.emoji+'</span>'+
+        '<h2>'+d.nome+'</h2>'+
+        '<div class="plat-name">Platina: '+d.platina+' · '+d.plataforma+'</div>'+
+        '<div class="tags">'+d.tags.map(t=>'<span class="htag">'+t+'</span>').join('')+'</div>'+
+        '</div>';
+
+    // progress
+    html += '<div class="prog-panel">'+
+        '<div class="prog-head"><span class="big">'+d.earned+'/'+d.total+' troféus <span class="pct">('+pct+'%)</span></span><span class="miss" style="color:var(--muted)">'+missTxt+'</span></div>'+
+        '<div class="bar"><i style="width:'+pct+'%"></i></div>'+
+        '<div class="breakdown">'+
+            ['plat','gold','silver','bronze'].map(k=>{
+                const [e,t]=d.bk[k]; const cls=k;
+                const lbl={plat:'Platina',gold:'Ouro',silver:'Prata',bronze:'Bronze'}[k];
+                return '<div class="bk"><span class="dot '+cls+'"></span><b>'+e+'/'+t+'</b> <span class="lbl">'+lbl+'</span></div>';
+            }).join('')+
+        '</div></div>';
+
+    // callout "comece por aqui"
+    html += '<div class="callout"><span class="k">🎯 '+d.start.titulo+'</span>'+
+        d.start.paras.map(p=>'<p>'+p+'</p>').join('')+'</div>';
+
+    // plano
+    html += '<div class="section-label">Plano de ataque</div><ol class="plan">'+
+        d.plan.map(s=>'<li><div><div class="ph3">'+s.h+'</div><div class="pd">'+s.d+'</div></div></li>').join('')+'</ol>';
+
+    // grupos de troféus faltantes
+    html += '<div class="section-label">'+(d.naoIniciado?'Todos os troféus (roteiro)':'Troféus que faltam')+'</div>';
+    d.grupos.forEach(gr=>{
+        html += '<div class="grp"><div class="grp-h">'+gr.h+' <span class="count">'+gr.tros.length+'</span></div>'+
+            '<div class="troList">'+gr.tros.map(troHTML).join('')+'</div></div>';
+    });
+
+    if(d.dlc){ html += '<div class="note-dlc">'+d.dlc+'</div>'; }
+
+    // conquistados
+    if(d.done && d.done.length){
+        html += '<details class="earned"><summary>✅ Já conquistados ('+d.done.length+')</summary><div class="earned-list">'+
+            d.done.map(t=>'<div class="earned-row"><span class="ok">'+TYPE_ICON[t.t]+'</span>'+t.n+'<span class="er-date">'+t.d+'</span></div>').join('')+
+            '</div></details>';
+    }
+
+    html += '<p class="src">Situação de troféus: minha conta PSN. Roteiro e descrições adaptados do guia do PowerPyx.</p>';
+    html += '</section>';
+    return html;
+}
+
+/* ---- montagem ---- */
+(function(){
+    // stats
+    const hunting = OVERVIEW.length;
+    const missTotal = OVERVIEW.reduce((a,g)=>a+(g.total-g.earned),0);
+    const closest = OVERVIEW.slice().sort((a,b)=>(a.total-a.earned)-(b.total-b.earned))[0];
+    document.getElementById('stats').innerHTML =
+        '<div class="stat"><div class="n">'+hunting+'</div><div class="l">jogos na mira</div></div>'+
+        '<div class="stat"><div class="n">0</div><div class="l">platinas fechadas</div></div>'+
+        '<div class="stat"><div class="n">'+missTotal+'</div><div class="l">troféus faltando no total</div></div>'+
+        '<div class="stat"><div class="n">'+(closest.total-closest.earned)+'</div><div class="l">mais perto: '+closest.nome.replace(/ \(.*\)/,'')+'</div></div>';
+
+    // cards
+    document.getElementById('cards-foco').innerHTML = OVERVIEW.filter(g=>g.foco).map(overviewCard).join('');
+    document.getElementById('cards-fila').innerHTML = OVERVIEW.filter(g=>!g.foco).map(overviewCard).join('');
+
+    // detail panels
+    document.getElementById('detail-panels').innerHTML =
+        Object.keys(DETAIL).map(id=>detailPanel(id,DETAIL[id])).join('');
+
+    // tabs
+    const tabsDef = [{id:'overview',label:'Visão geral'}].concat(
+        Object.keys(DETAIL).map(id=>({id, label:DETAIL[id].nome.replace(/^Marvel's /,'')}))
+    );
+    const tabsEl = document.getElementById('tabs');
+    tabsEl.innerHTML = tabsDef.map((t,i)=>'<button class="tab'+(i===0?' active':'')+'" data-tab="'+t.id+'">'+t.label+'</button>').join('');
+
+    function activate(id){
+        document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active', b.dataset.tab===id));
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+        const panel = document.getElementById('panel-'+id);
+        if(panel) panel.classList.add('active');
+        if(history.replaceState) history.replaceState(null,'', id==='overview' ? location.pathname : '#'+id);
+        window.scrollTo({top:0,behavior:'instant' in document.documentElement.style ? 'auto':'auto'});
+    }
+
+    tabsEl.addEventListener('click', e=>{ const b=e.target.closest('.tab'); if(b) activate(b.dataset.tab); });
+    document.addEventListener('click', e=>{ const c=e.target.closest('[data-tab]'); if(c && c.classList.contains('gcard')){ e.preventDefault(); activate(c.dataset.tab); } });
+
+    // deep-link via hash
+    const h = location.hash.replace('#','');
+    if(h && document.getElementById('panel-'+h)) activate(h);
+})();
+</script>
+</body>
+</html>
